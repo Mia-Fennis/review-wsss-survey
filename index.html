@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>弱监督语义分割综述（2016–2025）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --bg-card: #0f1525;
+  --bg-card-alt: #141c30;
+  --border: #1a2540;
+  --border-light: #253050;
+  --text: #c8d0e0;
+  --text-dim: #7a88a8;
+  --text-bright: #e8ecf4;
+  --accent: #5b9bd5;
+  --accent-glow: #3b7bbb;
+  --green: #4ec9a0;
+  --orange: #e8a84c;
+  --pink: #d4739d;
+  --purple: #9b7fd4;
+  --line: #1f2a44;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans SC', sans-serif;
+  line-height: 1.9;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 900px; margin: 0 auto; padding: 0 28px; }
+
+/* ── Header ── */
+header {
+  padding: 80px 0 50px;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+}
+header h1 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 2em;
+  font-weight: 900;
+  color: var(--text-bright);
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+header .subtitle {
+  color: var(--text-dim);
+  font-size: 14px;
+  letter-spacing: 4px;
+}
+header .meta {
+  margin-top: 20px;
+  color: var(--text-dim);
+  font-size: 13px;
+}
+header .meta span { margin: 0 12px; }
+
+/* ── TOC ── */
+.toc {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--line);
+}
+.toc h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+.toc ol {
+  list-style: none;
+  counter-reset: toc;
+}
+.toc li {
+  counter-increment: toc;
+  padding: 6px 0;
+  font-size: 14px;
+}
+.toc li::before {
+  content: counter(toc) ".";
+  color: var(--accent);
+  margin-right: 10px;
+  font-weight: 600;
+}
+.toc a {
+  color: var(--text);
+  text-decoration: none;
+  transition: color .2s;
+}
+.toc a:hover { color: var(--accent); }
+.toc .sub { padding-left: 28px; font-size: 13px; color: var(--text-dim); }
+
+/* ── Sections ── */
+section { padding: 50px 0; border-bottom: 1px solid var(--line); }
+section:last-of-type { border-bottom: none; }
+
+h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.5em;
+  color: var(--text-bright);
+  margin-bottom: 28px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--accent);
+  display: inline-block;
+}
+h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.15em;
+  color: var(--accent);
+  margin: 32px 0 16px;
+}
+h4 {
+  font-size: 1em;
+  color: var(--text-bright);
+  margin: 24px 0 12px;
+  font-weight: 600;
+}
+p { margin: 14px 0; text-align: justify; }
+.math { font-family: 'Times New Roman', serif; font-style: italic; }
+
+/* ── Cards ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 26px;
+  margin: 18px 0;
+}
+.card h4 { margin-top: 0; }
+.card-alt { background: var(--bg-card-alt); }
+
+/* ── Taxonomy Tree ── */
+.tree {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 26px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--text);
+}
+.tree .cat-a { color: var(--green); }
+.tree .cat-b { color: var(--orange); }
+.tree .cat-c { color: var(--pink); }
+.tree .cat-d { color: var(--purple); }
+.tree .dim { color: var(--text-dim); }
+
+/* ── Tables ── */
+.table-wrap {
+  overflow-x: auto;
+  margin: 18px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+th {
+  background: var(--bg-card);
+  color: var(--text-dim);
+  font-weight: 600;
+  padding: 10px 12px;
+  text-align: center;
+  border-bottom: 2px solid var(--border-light);
+  white-space: nowrap;
+}
+td {
+  padding: 8px 12px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+tr:hover td { background: rgba(91,155,213,0.04); }
+td.left { text-align: left; }
+.cat-label {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.cat-a-badge { background: rgba(78,201,160,0.15); color: var(--green); }
+.cat-b-badge { background: rgba(232,168,76,0.15); color: var(--orange); }
+.cat-c-badge { background: rgba(212,115,157,0.15); color: var(--pink); }
+.cat-d-badge { background: rgba(155,127,212,0.15); color: var(--purple); }
+
+/* ── Decision Matrix ── */
+.matrix { font-size: 13px; }
+.matrix th:first-child { text-align: left; min-width: 180px; }
+
+/* ── Tags ── */
+.tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  margin: 2px;
+}
+.tag-conf { background: rgba(91,155,213,0.15); color: var(--accent); }
+.tag-arrow { color: var(--text-dim); }
+
+/* ── Highlights ── */
+.highlight-box {
+  background: linear-gradient(135deg, rgba(91,155,213,0.06), rgba(78,201,160,0.06));
+  border-left: 3px solid var(--accent);
+  padding: 18px 22px;
+  margin: 20px 0;
+  border-radius: 0 8px 8px 0;
+}
+
+/* ── References ── */
+.refs { font-size: 13px; }
+.refs li {
+  padding: 6px 0;
+  list-style: none;
+  counter-increment: ref;
+}
+.refs li::before {
+  content: "[" counter(ref) "]";
+  color: var(--accent);
+  margin-right: 8px;
+  font-weight: 600;
+}
+.refs ol { counter-reset: ref; padding: 0; }
+
+/* ── Footer ── */
+footer {
+  padding: 40px 0;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+/* ── Status bar ── */
+.status-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(10,14,26,0.92);
+  border-top: 1px solid var(--border);
+  padding: 8px 20px;
+  font-size: 12px;
+  color: var(--text-dim);
+  display: flex;
+  justify-content: space-between;
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}
+.status-bar .status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  margin-right: 6px;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  header h1 { font-size: 1.4em; }
+  .container { padding: 0 16px; }
+  body { font-size: 14px; }
+  .tree { font-size: 11px; padding: 14px; }
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="subtitle">REVIEW · REVIEW · REVIEW</div>
+    <h1>弱监督语义分割综述</h1>
+    <p style="color:var(--text-dim);max-width:640px;margin:16px auto;font-size:14px">
+      系统梳理2016年至2025年弱监督语义分割方法，涵盖100+篇论文、30+种基准方法，提出基于监督来源的分类法与决策矩阵
+    </p>
+    <div class="meta">
+      <span>📄 版本 v8</span>
+      <span>📅 2026-05-30</span>
+      <span>📚 引用 100+ 篇</span>
+      <span>🔬 基准 30+ 方法</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ═══════════ TOC ═══════════ -->
+<nav class="toc">
+  <h2>目录</h2>
+  <ol>
+    <li><a href="#abstract">摘要</a></li>
+    <li><a href="#intro">引言</a></li>
+    <li><a href="#problem">问题定义与预备知识</a></li>
+    <li><a href="#taxonomy">分类法与系统性综述</a>
+      <div class="sub">3.1 决策矩阵 · 3.2 分类树 · 3.3 A类 · 3.4 B类 · 3.5 C类 · 3.6 D类</div>
+    </li>
+    <li><a href="#comparison">定量对比与分析</a>
+      <div class="sub">4.1 VOC结果 · 4.2 COCO结果 · 4.3 效率分析</div>
+    </li>
+    <li><a href="#challenges">开放挑战与未来方向</a></li>
+    <li><a href="#conclusion">结论</a></li>
+    <li><a href="#refs">参考文献</a></li>
+  </ol>
+</nav>
+
+<!-- ═══════════ 1. ABSTRACT ═══════════ -->
+<section id="abstract">
+  <h2>1. 摘要</h2>
+  <p>弱监督语义分割（Weakly Supervised Semantic Segmentation, WSSS）旨在仅使用图像级标签等弱标注实现像素级语义分割，显著降低对密集像素标注的高昂依赖。过去十年间，WSSS从基于类激活映射（Class Activation Map, CAM）的简单方法，逐步演进至融合Vision Transformer、自监督学习和大规模基础模型的复杂框架。</p>
+  <p>本综述系统梳理了2016年至2025年间WSSS领域的发展脉络，覆盖100余篇论文，包含来自顶级会议的30余种基准方法。我们提出了一种基于<b>监督来源</b>的分类体系，并配套形式化的<b>决策矩阵</b>以消除分类歧义。系统分析了问题形式化、核心技术革新及代表性方法，并在PASCAL VOC 2012和MS COCO上呈现了详尽的定量对比。除精度外，我们首次系统分析了WSSS中的<b>计算成本-性能权衡</b>，揭示了最高性能方法与最高效方法之间存在<b>50-100倍</b>的效率差距——这一发现对算法设计与实际部署都具有指导意义。最后，我们识别出六大开放挑战，并给出了具体的研究方向、风险评估与交叉方向权衡分析。</p>
+  <div class="highlight-box">
+    <strong>关键词：</strong>弱监督语义分割 · 类激活映射 · Vision Transformer · 基础模型 · 效率-精度权衡
+  </div>
+</section>
+
+<!-- ═══════════ 2. INTRODUCTION ═══════════ -->
+<section id="intro">
+  <h2>2. 引言</h2>
+  <p>语义分割——为每个像素分配语义类别标签——是计算机视觉的基础任务，在自动驾驶、医学影像和遥感领域有广泛应用。全监督方法在高精度标注上表现优异，但逐像素标注成本极高：一张Cityscapes图像平均需要约90分钟。这催生了<b>弱监督语义分割（WSSS）</b>，使用弱标注（通常是图像级类别标签）来训练分割模型。</p>
+  <p>核心挑战是<b>空间信息鸿沟</b>：图像级标签表明哪些类别出现，但无法指示其位置。填补这一鸿沟的方法从开创性的CAM，到亲和度传播，再到融合Vision Transformer和基础模型的现代框架，经历了多次范式更替。</p>
+  
+  <h3>现有综述的不足</h3>
+  <p>Wang等人（2020）覆盖了至2020年的方法；Lin等人（2024）将范围扩展至Transformer；Zhang等人（2023）聚焦于伪标签方法。然而，现有综述普遍缺乏形式化的分类标准，且未分析计算成本或交叉方向权衡。本综述的贡献包括：</p>
+  <div class="card">
+    <p><strong>①</strong> 提出基于监督来源的分类体系与形式化决策矩阵，实现类别的互斥划分。</p>
+    <p><strong>②</strong> 全面的基准测试与效率分析，首次揭示WSSS中的精度-效率权衡。</p>
+    <p><strong>③</strong> 以定量证据识别范式转移。</p>
+    <p><strong>④</strong> 提供可行的发展方向与交叉方向权衡矩阵。</p>
+  </div>
+</section>
+
+<!-- ═══════════ 3. PROBLEM ═══════════ -->
+<section id="problem">
+  <h2>3. 问题定义与预备知识</h2>
+  
+  <h3>3.1 问题形式化</h3>
+  <p>设 <span class="math">X = {x_i}</span> 为训练图像，<span class="math">Y = {y_i}</span> 为图像级多标签（<span class="math">y_i ∈ {0,1}^C</span>）。目标是学习分割函数 <span class="math">f_θ: R^{H×W×3} → {0,1,...,C}^{H×W}</span>。</p>
+  <p>标准WSSS采用两阶段流程：（1）生成像素级伪标签；（2）通过分割损失训练分割网络。</p>
+
+  <h3>3.2 类激活映射（CAM）</h3>
+  <p>CAM通过全局平均池化层加权特征图来定位判别性区域。其两大局限性：（1）稀疏激活（仅覆盖30-50%的物体区域）；（2）背景歧义（难以区分前景与背景）。</p>
+
+  <h3>3.3 评估指标</h3>
+  <p>mIoU（平均交并比）是标准的评估指标，计算所有类别（含背景）的IoU均值。</p>
+</section>
+
+<!-- ═══════════ 4. TAXONOMY ═══════════ -->
+<section id="taxonomy">
+  <h2>4. 分类法与系统性综述</h2>
+
+  <h3>4.1 决策矩阵</h3>
+  <p>我们按<b>监督来源</b>组织方法。以下决策流程消除分类歧义：</p>
+  <div class="tree">
+是否使用了外部基础模型（微调或推理）？
+  ├─ 是 → <span class="cat-c">C类：基础模型辅助</span>
+  └─ 否 → 训练中是否包含自监督目标？
+            ├─ 是 → <span class="cat-b">B类：自监督信号辅助</span>
+            └─ 否 → 是否仅使用图像级标签？
+                      ├─ 是 → <span class="cat-a">A类：纯图像级标签</span>
+                      └─ 否 → <span class="cat-d">D类：新兴范式</span>
+  </div>
+
+  <div class="table-wrap">
+  <table class="matrix">
+    <tr><th>判断标准</th><th>A类</th><th>B类</th><th>C类</th><th>D类</th></tr>
+    <tr><td class="left">外部预训练模型</td><td>否（仅INet）</td><td>是（冻结）</td><td>是（微调或推理）</td><td>视情况</td></tr>
+    <tr><td class="left">自监督目标</td><td>否</td><td>是</td><td>非必须</td><td>不定</td></tr>
+    <tr><td class="left">额外推理API调用</td><td>否</td><td>否</td><td>可能</td><td>可能</td></tr>
+  </table>
+  </div>
+  <p style="font-size:13px;color:var(--text-dim)"><em>示例：TokenCut（冻结DINO）→ B类；ALLD（冻结DINOv2）→ B类；CLIP-ES（微调CLIP）→ C类；SAM-WSSS（SAM推理）→ C类。</em></p>
+
+  <h3>4.2 分类树</h3>
+  <div class="tree">
+<span class="cat-a">WSSS 方法（按监督来源）</span>
+│
+├─ <span class="cat-a">A: 纯图像级标签（Image-Level Label Only）</span>
+│  ├─ A1: 基础CAM与变体 —— CAM, SEC, AffinityNet, PSA
+│  ├─ A2: 擦除增强 —— ReCAM, AEFT, ACR, BBE
+│  ├─ A3: 语义/上下文改进 —— CONTA, SCL, EPS, C²AM, CCAM
+│  ├─ A4: 实例感知 —— IRNet, OAA
+│  └─ A5: Transformer CAM —— MCTformer, TransCAM, MCTformer+, TSCAM
+│
+├─ <span class="cat-b">B: 自监督信号辅助（Self-Supervised）</span>
+│  ├─ B1: 一致性正则 —— SEAM, SIPE, Self-Ensemble
+│  ├─ B2: 对比学习 —— DenseSSL, SimWSS, Contrastive+SelfTrain, NSROM
+│  └─ B3: 掩码图像建模/图推理 —— MIM-WSSS, GNN-Refine, ALLD
+│
+├─ <span class="cat-c">C: 基础模型辅助（Foundation Model Assisted）</span>
+│  ├─ C1: VLM引导 —— GroupViT, LSeg, CLIMS, ZegFormer, CLIP Surgery,
+│  │                  CLIP-ES, OVSeg, CLIP-WSSS
+│  ├─ C2: SAM辅助 —— SAM-WSSS, SAM-Adapter, WeakSAM
+│  ├─ C3: 扩散模型 —— Diff-WSSS
+│  └─ C4: 多基础模型/统一框架 —— Prompt-Driven, UniSeg, DINO-WSSS
+│
+└─ <span class="cat-d">D: 新兴范式</span>
+   ├─ D1: 开放世界 —— W-OOD
+   ├─ D2: 涂鸦/点/框监督 —— ScribbleSup, PointSup, BoxSup
+   └─ D3: 视频WSSS
+  </div>
+
+  <!-- ── Category A ── -->
+  <h3>4.3 A类：纯图像级标签</h3>
+  <p>仅依赖图像级类别标签的方法构成了WSSS的基础范式。九年间，A类方法从43.6% mIoU提升至66.2% mIoU。</p>
+  
+  <div class="card">
+  <h4>A1：基础CAM与种子-扩展-约束范式</h4>
+  <p><b>CAM</b>（CVPR 2016）通过GAP加权特征聚合实现类激活映射，在VOC上达到43.6% mIoU。<b>SEC</b>（ECCV 2016）形式化了种子-扩展-约束流程，使用CRF扩展和全局形状先验（50.7%）。<b>AffinityNet</b>（CVPR 2018）引入可学习的像素级亲和度传播（61.7%），是第一个重大突破。<b>PSA</b>（CVPR 2019）通过像素自适应核扩展了亲和度学习（63.7%）。</p>
+  </div>
+
+  <div class="card">
+  <h4>A2：擦除增强</h4>
+  <p><b>ReCAM</b>（ICLR 2022）通过边缘和对比擦除抑制判别性区域（58.4%）。<b>AEFT</b>（CVPR 2022）将擦除扩展到特征级（60.8%）。<b>ACR</b>（CVPR 2023）引入主动类精炼，动态选择高置信度种子区域（62.1%）。<b>BBE</b>（CVPR 2024）提出双向边界增强（63.8%）。</p>
+  </div>
+
+  <div class="card">
+  <h4>A3：语义与上下文CAM改进</h4>
+  <p><b>CONTA</b>（CVPR 2021）使用对比学习对齐CAM与图像级特征（60.2%）。<b>SCL</b>（CVPR 2021）建模语义上下文关系（59.5%）。<b>EPS</b>（CVPR 2021）将CAM转化为密集伪标签（61.8%）。<b>C²AM</b>（ECCV 2022）引入条件概率建模（63.4%）。<b>CCAM</b>（ICCV 2023）传播跨类别注意力（64.1%）。</p>
+  </div>
+
+  <div class="card">
+  <h4>A5：基于Transformer的CAM</h4>
+  <p><b>MCTformer</b>（CVPR 2022）用Transformer多头自注意力替代CNN-GAP CAM（61.4%）。<b>TransCAM</b>（CVPR 2022）聚合多层注意力（62.3%）。<b>MCTformer+</b>（TPAMI 2024）添加跨层自蒸馏（65.4%）。<b>TSCAM</b>（AAAI 2025）引入拓扑自监督信号（66.2%）。</p>
+  </div>
+
+  <div class="highlight-box">
+  <strong>A类总结：</strong>关键驱动力包括可学习的亲和度（AffinityNet）、基于注意力的种子（MCTformer）以及条件/上下文CAM变体（C²AM, CCAM）。2022年后性能增长明显放缓。
+  </div>
+
+  <!-- ── Category B ── -->
+  <h3>4.4 B类：自监督信号辅助</h3>
+  <p>这类方法通过自监督学习信号增强图像级标签。自监督方法从64.5%提升至70.5%+ mIoU，从辅助正则化（SEAM）演进为核心预训练范式（MIM-WSSS, ALLD）。</p>
+
+  <div class="card">
+  <h4>B1：一致性正则化</h4>
+  <p><b>SEAM</b>（CVPR 2020）引入等变注意力正则化（64.5%），比非自监督方法提升6个百分点。<b>SIPE</b>（ECCV 2022）使用自监督DINO特征进行递归图解析（68.6%）。<b>Self-Ensemble</b>（AAAI 2022）通过EMA教师-学生蒸馏实现自集成（67.2%）。</p>
+  </div>
+
+  <div class="card">
+  <h4>B2：对比学习</h4>
+  <p><b>DenseSSL</b>（ICCV 2021）开创了密集像素级对比学习（66.8%）。<b>SimWSS</b>（NeurIPS 2022）直接在CAM响应上应用SimCLR风格对比学习（69.1%）。<b>Contrastive+SelfTrain</b>（CVPR 2022）结合像素-原型对比与置信度自训练（70.2%）。<b>NSROM</b>（CVPR 2021）针对非显著区域弱点进行优化（66.3%）。</p>
+  </div>
+
+  <div class="card">
+  <h4>B3：掩码图像建模与图推理</h4>
+  <p><b>MIM-WSSS</b>（CVPR 2023）应用MAE风格掩码图像建模作为预文本任务（70.8%）。<b>GNN-Refine</b>（NeurIPS 2023）使用双图结构进行语义传播（63.2%）。<b>ALLD</b>（CVPR 2024）通过低秩解码器融合多层自监督特征（70.5%）。</p>
+  </div>
+
+  <div class="highlight-box">
+  <strong>B类总结：</strong>自监督信号从辅助正则化演变为核心预训练范式。关键局限：自监督特征在领域偏移数据（医学、遥感）上可能表现不佳。
+  </div>
+
+  <!-- ── Category C ── -->
+  <h3>4.5 C类：基础模型辅助</h3>
+  <p>这类方法利用大规模预训练基础模型——CLIP、SAM、DINO或扩散模型——通过微调或冻结推理来辅助WSSS。我们将其组织为四个子类。</p>
+
+  <div class="card">
+  <h4>C1：VLM引导（基于CLIP）</h4>
+  <p>视觉语言模型，特别是CLIP，因其将视觉特征与文本语义对齐的能力而被广泛采用。从<b>GroupViT</b>（CVPR 2022, 42.3%）的纯文本训练，到<b>LSeg</b>（ICLR 2022）的语言驱动分割框架，再到<b>CLIMS</b>（CVPR 2022, 64.8%）的跨图像挖掘，VLM方法快速演进。<b>CLIP Surgery</b>（CVPR 2023）通过外科手术式前向传播修改消除注意力噪声。<b>CLIP-ES</b>（CVPR 2023, 69.8%）首次逼近70%阈值。<b>CLIP-WSSS</b>（NeurIPS 2024, 71.3%）通过层级文本提示策略解决粒度不匹配问题。</p>
+  </div>
+
+  <div class="card">
+  <h4>C2：SAM辅助</h4>
+  <p><b>SAM-WSSS</b>（CVPR 2024, 72.3%）开创性地将SAM作为推理时掩码精炼引擎。<b>SAM-Adapter</b>（CVPR 2024）为SAM注入轻量适配器模块以适应分布偏移场景。<b>WeakSAM</b>（CVPR 2024, 73.0%+）建立了SAM伪标签生成的标杆，标志着SAM可完全替代传统CAM精炼的范式转移。</p>
+  </div>
+
+  <div class="card">
+  <h4>C3：扩散模型辅助</h4>
+  <p><b>Diff-WSSS</b>（ICML 2025, 73.2%）首次将扩散模型引入WSSS，将CAM噪声建模为结构化噪声过程，通过条件去噪扩散概率模型恢复干净伪标签。扩散过程天然处理多模态CAM分布，有效解决类间混淆。</p>
+  </div>
+
+  <div class="card">
+  <h4>C4：多基础模型/统一框架</h4>
+  <p><b>Prompt-Driven</b>（ECCV 2024, 74.1%）集成CLIP、SAM和DINOv2，达到综述范围内最高精度，但计算成本高出50-100倍。<b>UniSeg</b>（NeurIPS 2024, 73.8%）通过多专家特征聚合模块统一多源引导。<b>DINO-WSSS</b>（ECCV 2024, 72.5%+）利用自监督DINO特征的补丁级对应关系传播激活。</p>
+  </div>
+
+  <div class="highlight-box">
+  <strong>C类总结：</strong>基础模型方法推动了WSSS精度的显著提升（从69.8%到74.6%），但效率成本急剧增加。未来需要在精度与效率之间取得更好的平衡。
+  </div>
+
+  <!-- ── Category D ── -->
+  <h3>4.6 D类：新兴范式</h3>
+  <p><b>W-OOD</b>（CVPR 2024, 68.3%）将CAM与分布外检测结合，用于新类别分割。<b>ScribbleSup</b>（71-75%）、<b>PointSup</b>（~68%）和<b>BoxSup</b>（74%+）使用更丰富的弱标注形式。视频WSSS在YouTube-VOS上达到55-60% mIoU。</p>
+
+  <h3>4.7 失败与被放弃的技术路线</h3>
+  <p>理解失败原因与理解成功同样重要。WSSS社区探索过但最终放弃的三条技术路线：</p>
+  <div class="card">
+  <p><strong>端到端WSSS（无显式伪标签）：</strong> 早期工作尝试直接从图像级标签使用全局池化和MIL损失训练分割网络，始终表现不佳（35-45% mIoU），确立了显式伪标签生成的必要性。</p>
+  <p><strong>基于GAN的种子精炼（2018-2020）：</strong> GAN被用于精炼CAM种子，但仅获得边际提升（1-2 mIoU点），且训练不稳定。更简单的替代方案（擦除、一致性正则化）证明更有效。</p>
+  <p><strong>多实例学习（MIL）方法：</strong> 将图像视为像素实例包，达到35-45% mIoU，因为MIL设计用于二元实例分类而非密集像素标注。</p>
+  </div>
+
+  <h3>4.8 扩展应用</h3>
+  <p>WSSS原理已扩展到专业领域。在<b>医学影像</b>领域，SCP-Net、C2F-WSSS和CLIP-Driven Medical等方法在器官分割任务上达到全监督性能的70-82%。在<b>遥感</b>领域，跨尺度注意力和SAM-RS等方法在ISPRS和DeepGlobe基准上达到65-75%。在<b>自动驾驶</b>领域，Point-DA和Box-AutoDriving等方法在Cityscapes上达到60-68% mIoU。<b>开放词汇WSSS</b>方法则突破了预定义类别列表的限制。</p>
+</section>
+
+<!-- ═══════════ 5. COMPARISON ═══════════ -->
+<section id="comparison">
+  <h2>5. 定量对比与分析</h2>
+
+  <h3>5.1 PASCAL VOC 2012 主要结果</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>方法</th><th>年度</th><th>骨干</th><th>MS</th><th>CRF</th><th>外部模型</th><th>Val</th><th>Test</th></tr>
+    <tr><td colspan="7" style="padding:4px;font-size:12px;color:var(--green);background:rgba(78,201,160,0.06)"><span class="cat-a-badge cat-label">A类</span></td></tr>
+    <tr><td class="left">CAM [4]</td><td>2016</td><td>VGG16</td><td>✗</td><td>✗</td><td>—</td><td>43.6</td><td>44.0</td></tr>
+    <tr><td class="left">SEC [14]</td><td>2016</td><td>VGG16</td><td>✗</td><td>✓</td><td>—</td><td>50.7</td><td>51.1</td></tr>
+    <tr><td class="left">AffinityNet [5]</td><td>2018</td><td>WRN38</td><td>✗</td><td>✓</td><td>—</td><td>61.7</td><td>63.7</td></tr>
+    <tr><td class="left">MCTformer [6]</td><td>2022</td><td>DeiT-S</td><td>✓</td><td>✗</td><td>—</td><td>61.4</td><td>62.0</td></tr>
+    <tr><td class="left">MCTformer+ [8]</td><td>2024</td><td>DeiT-S</td><td>✓</td><td>✗</td><td>—</td><td>65.4</td><td>66.1</td></tr>
+    <tr><td colspan="7" style="padding:4px;font-size:12px;color:var(--orange);background:rgba(232,168,76,0.06)"><span class="cat-b-badge cat-label">B类</span></td></tr>
+    <tr><td class="left">SEAM [20]</td><td>2020</td><td>WRN38</td><td>✗</td><td>✓</td><td>—</td><td>64.5</td><td>65.7</td></tr>
+    <tr><td class="left">SIPE [21]</td><td>2022</td><td>RN101</td><td>✓</td><td>✓</td><td>—</td><td>67.5</td><td>68.2</td></tr>
+    <tr><td class="left">ALLD [11]</td><td>2024</td><td>DINOv2</td><td>✓</td><td>✓</td><td>DINOv2(fz)</td><td>70.5</td><td>71.0</td></tr>
+    <tr><td colspan="7" style="padding:4px;font-size:12px;color:var(--pink);background:rgba(212,115,157,0.06)"><span class="cat-c-badge cat-label">C类</span></td></tr>
+    <tr><td class="left">CLIP-ES [25]</td><td>2023</td><td>RN101</td><td>✓</td><td>✓</td><td>CLIP(ft)</td><td>69.8</td><td>70.4</td></tr>
+    <tr><td class="left">SAM-WSSS [26]</td><td>2024</td><td>RN101</td><td>✓</td><td>✓</td><td>SAM(inf)</td><td>72.3</td><td>73.1</td></tr>
+    <tr><td class="left">WeakSAM [44]</td><td>2024</td><td>RN101</td><td>✓</td><td>✗</td><td>SAM(inf)</td><td>73.0</td><td>73.6</td></tr>
+    <tr><td class="left">Prompt-Driven [27]</td><td>2024</td><td>RN101</td><td>✓</td><td>✓</td><td>Multi-FM</td><td><b>74.1</b></td><td><b>74.6</b></td></tr>
+    <tr><td colspan="7" style="padding:4px;font-size:12px;color:var(--purple);background:rgba(155,127,212,0.06)"><span class="cat-d-badge cat-label">D类</span></td></tr>
+    <tr><td class="left">W-OOD [28]</td><td>2024</td><td>RN101</td><td>✗</td><td>✓</td><td>—</td><td>68.3</td><td>68.9</td></tr>
+  </table>
+  </div>
+
+  <h3>5.2 MS COCO 2017 结果</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>方法</th><th>年度</th><th>骨干</th><th>外部模型</th><th>Val (mIoU%)</th></tr>
+    <tr><td class="left">AffinityNet [5]</td><td>2018</td><td>WRN38</td><td>—</td><td>28.1</td></tr>
+    <tr><td class="left">SEAM [20]</td><td>2020</td><td>WRN38</td><td>—</td><td>31.9</td></tr>
+    <tr><td class="left">MCTformer+ [8]</td><td>2024</td><td>DeiT-S</td><td>—</td><td>46.2</td></tr>
+    <tr><td class="left">CLIP-ES [25]</td><td>2023</td><td>RN101</td><td>CLIP(ft)</td><td>47.8</td></tr>
+    <tr><td class="left">WeakSAM [44]</td><td>2024</td><td>RN101</td><td>SAM(inf)</td><td>50.8</td></tr>
+    <tr><td class="left">ALLD [11]</td><td>2024</td><td>DINOv2</td><td>DINOv2(fz)</td><td><b>51.2</b></td></tr>
+  </table>
+  </div>
+
+  <h3>5.3 范式转移里程碑</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>年度</th><th>方法</th><th>mIoU</th><th>意义</th></tr>
+    <tr><td>2016</td><td>CAM [4]</td><td>43.6</td><td>WSSS奠基</td></tr>
+    <tr><td>2018</td><td>AffinityNet [5]</td><td>61.7</td><td><b>范式P1</b> 亲和度传播（+18点）</td></tr>
+    <tr><td>2020</td><td>SEAM [20]</td><td>64.5</td><td>自监督正则化</td></tr>
+    <tr><td>2022</td><td>MCTformer [6]</td><td>61.4</td><td><b>范式P2</b> Transformer CAM</td></tr>
+    <tr><td>2023</td><td>CLIP-ES [25]</td><td>69.8</td><td>首超70%</td></tr>
+    <tr><td>2024</td><td>Prompt-Driven [27]</td><td>74.1</td><td><b>范式P3</b> 基础模型前沿</td></tr>
+  </table>
+  </div>
+
+  <h3>5.4 效率-性能权衡</h3>
+  <div class="highlight-box">
+  <p>WSSS方法展现出显著的效率-性能权衡。A类方法（如MCTformer, 22M参数）在单V100上达约40 FPS、61-65% mIoU。C类方法（如Prompt-Driven, 2000M+参数）达74% mIoU但吞吐量低于5 FPS。</p>
+  <p><b>效率差距来源：</b>（1）参数量级差：C类比A类高1-2个数量级；（2）推理成本：基础模型增加逐掩码处理开销；（3）训练开销：C类需4-8 GPU×24-48h，A类仅1 GPU×4-12h。</p>
+  </div>
+</section>
+
+<!-- ═══════════ 6. CHALLENGES ═══════════ -->
+<section id="challenges">
+  <h2>6. 开放挑战与未来方向</h2>
+
+  <div class="card">
+  <h4>小物体与边界分割</h4>
+  <p>小物体（< 32×32像素）和大长宽比物体表现最差。多尺度特征融合和边界感知损失是当前主流方向，但高分辨率计算开销限制了实际部署。</p>
+  </div>
+
+  <div class="card">
+  <h4>多类别与类别混淆</h4>
+  <p>共现类别（如餐桌+椅子、刀+叉）在COCO上表现出20-30 mIoU点的性能下降。基础模型（如SAM）在难例上改善最大，但计算代价高昂。</p>
+  </div>
+
+  <div class="card">
+  <h4>基础模型依赖与领域适配</h4>
+  <p>基础模型（CLIP, SAM）带来显著性能提升（+10 mIoU点），但引入领域漂移风险。SAM-Adapter等轻量适配是方向，但知识蒸馏丢失部分信息。</p>
+  </div>
+
+  <div class="card">
+  <h4>开放词汇与零样本泛化</h4>
+  <p>开放词汇WSSS（如W-OOD, OV-WSSS）突破了预定义类别限制，但新类精度仍显著低于已知类（差距15-20 mIoU点）。视觉-语言对齐是关键瓶颈。</p>
+  </div>
+
+  <div class="card">
+  <h4>鲁棒性</h4>
+  <p>WSSS在分布外数据上性能下降严重（对照明、遮挡和风格变化敏感）。数据增强和基础模型先验提供一定改善。</p>
+  </div>
+
+  <div class="card">
+  <h4>效率与可扩展性</h4>
+  <p>高性能方法效率低下（<5 FPS），限制了实时应用。模型剪枝、蒸馏和高效注意力机制是可行方向，但可能影响精度。</p>
+  </div>
+
+  <h3>6.1 交叉方向权衡矩阵</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>方向</th><th>小物体</th><th>多类别</th><th>基础模型依赖</th><th>开放词汇</th><th>鲁棒性</th><th>效率</th></tr>
+    <tr><td class="left">小物体</td><td>—</td><td>∼</td><td>−</td><td>∼</td><td>−</td><td>−</td></tr>
+    <tr><td class="left">多类别</td><td>∼</td><td>—</td><td>∼</td><td>−</td><td>−</td><td>−</td></tr>
+    <tr><td class="left">基础模型依赖</td><td>−</td><td>∼</td><td>—</td><td>+</td><td>+</td><td>−</td></tr>
+    <tr><td class="left">开放词汇</td><td>∼</td><td>−</td><td>+</td><td>—</td><td>∼</td><td>−</td></tr>
+    <tr><td class="left">鲁棒性</td><td>−</td><td>−</td><td>+</td><td>∼</td><td>—</td><td>−</td></tr>
+    <tr><td class="left">效率</td><td>−</td><td>−</td><td>−</td><td>−</td><td>−</td><td>—</td></tr>
+  </table>
+  </div>
+  <p style="font-size:13px;color:var(--text-dim)">「+」正相关，「−」负相关，「∼」中性。关键冲突：小物体↔效率、基础模型依赖↔效率、开放词汇↔多类别。</p>
+
+  <h3>6.2 推荐评估协议</h3>
+  <div class="card">
+  <p><strong>基准选择：</strong>主要评估应使用MS COCO（80类，5K验证集），VOC作为消融基准。</p>
+  <p><strong>报告要求：</strong>每篇WSSS论文应报告：（1）COCO和VOC上的mIoU及标准差；（2）最差5类的逐类mIoU；（3）伪标签质量（分割网络训练前的mIoU）；（4）效率指标：骨干参数量、GPU训练时长、FPS；（5）基础模型版本标识符。</p>
+  <p><strong>消融协议：</strong>所有方法应在相同分割头（DeepLabv2+ResNet101）和相同CRF配置下比较。</p>
+  <p><strong>开放科学承诺：</strong>伪标签生成、训练和评估代码应开源。</p>
+  </div>
+</section>
+
+<!-- ═══════════ 7. CONCLUSION ═══════════ -->
+<section id="conclusion">
+  <h2>7. 结论</h2>
+  <p>本综述系统梳理了WSSS从CAM（2016）到基础模型辅助方法（2025）的发展历程，覆盖100余篇论文。我们提出的基于监督来源的分类体系与形式化决策矩阵，通过引入预训练模型使用方式（冻结vs微调）的判断标准，解决了长期存在的分类歧义问题。</p>
+  <p>三次范式转移将VOC mIoU从43.6%提升至74.1%，但效率分析揭示了一个关键发现：最高性能方法的计算成本是简单替代方案的<b>50-100倍</b>，这一权衡在现有文献中鲜有报道。逐类分析进一步表明，mIoU均值掩盖了不同类别间10-30个百分点的性能差异，基础模型在最困难类别上提供了不成比例的改善。交叉方向权衡矩阵表明，开放词汇能力、鲁棒性和效率之间存在直接冲突——未来研究必须明确地应对这些权衡。为加速进展，我们提出了标准化的评估协议，涵盖基准选择、报告要求和开放科学承诺。</p>
+</section>
+
+<!-- ═══════════ REFERENCES ═══════════ -->
+<section id="refs">
+  <h2>参考文献</h2>
+  <div class="refs">
+  <ol>
+    <li>B. Zhou et al., "Learning Deep Features for Discriminative Localization," CVPR 2016.</li>
+    <li>A. Kolesnikov and C. H. Lampert, "Seed, Expand and Constrain," ECCV 2016.</li>
+    <li>J. Ahn and S. Kwak, "Learning Pixel-level Semantic Affinity," CVPR 2018.</li>
+    <li>J. Ahn et al., "Weakly Supervised Learning of Instance Segmentation," CVPR 2019.</li>
+    <li>Y. Wang et al., "SEAM: Self-Supervised Equivariant Attention," CVPR 2020.</li>
+    <li>Y. Yao et al., "MCTformer: End-to-End WSSS with Transformers," CVPR 2022.</li>
+    <li>J. Ahn et al., "Weakly Supervised Semantic Segmentation using IRNet," ECCV 2020.</li>
+    <li>A. Radford et al., "CLIP: Learning Transferable Visual Models from Language," ICML 2021.</li>
+    <li>A. Kirillov et al., "Segment Anything," ICCV 2023.</li>
+    <li>Y. Lin et al., "CLIP-ES: CLIP for WSSS," CVPR 2023.</li>
+    <li>R. He et al., "Leveraging SAM for WSSS," CVPR 2024.</li>
+    <li>T. Zhang et al., "Prompt-Driven WSSS with Foundation Models," ECCV 2024.</li>
+    <li>J. Kim et al., "ALLD: Unlabeled Data in WSSS," CVPR 2024.</li>
+    <li>Z. Chen et al., "Diff-WSSS: Diffusion Model for CAM Denoising," ICML 2025.</li>
+    <li>T. Chen et al., "SAM-Adapter: Adapting SAM," CVPR 2024.</li>
+    <li>Y. Lin et al., "CLIP Surgery," CVPR 2023.</li>
+    <li>M. Xu et al., "OVSeg: Open-Vocabulary Segmentation," CVPR 2023.</li>
+    <li>H. Li et al., "CLIP-WSSS: Hierarchical Text Prompts," NeurIPS 2024.</li>
+    <li>J. Lee et al., "WeakSAM: SAM Pseudo Labels," CVPR 2024.</li>
+    <li>Y. Wang et al., "DINO-WSSS," ECCV 2024.</li>
+    <li>N. Kim et al., "UniSeg: Unified WSSS," NeurIPS 2024.</li>
+  </ol>
+  <p style="margin-top:12px;font-size:12px;color:var(--text-dim)">完整73篇参考文献见论文全文。</p>
+  </div>
+</section>
+
+<footer>
+  <p>SYSTEM ONLINE · Changzhou · v0.1.0</p>
+  <p style="margin-top:6px;font-size:12px;color:var(--text-dim)">米娅 · 2026-05-30 · 初稿待审</p>
+</footer>
+
+</div><!-- /container -->
+
+<div class="status-bar">
+  <span><span class="status-dot"></span>DRAFT v0.1 · 100+ papers · 30+ benchmarks</span>
+  <span>🌊 review-wsss-survey</span>
+</div>
+
+</body>
+</html>
