@@ -32,7 +32,7 @@
   --rose: #f43f5e;
   --violet: #8b5cf6;
   --cyan: #22d3ee;
-  --sidebar-width: 260px;
+  --sidebar-width: 320px;
   --header-h: 0px;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -66,23 +66,23 @@ body {
   margin-bottom: 16px;
 }
 .sidebar-brand h1 {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text-primary);
   letter-spacing: 0.3px;
   line-height: 1.4;
 }
 .sidebar-brand .meta {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-quaternary);
   margin-top: 6px;
 }
 .sidebar .toc-list { list-style: none; padding: 0 12px; }
-.sidebar .toc-item { margin: 1px 0; }
+.sidebar .toc-item { margin: 2px 0; }
 .sidebar .toc-link {
   display: block;
-  padding: 5px 10px;
-  font-size: 12.5px;
+  padding: 6px 12px;
+  font-size: 14px;
   color: var(--text-tertiary);
   text-decoration: none;
   border-radius: 4px;
@@ -91,22 +91,20 @@ body {
 }
 .sidebar .toc-link:hover { color: var(--text-primary); background: var(--bg-hover); }
 .sidebar .toc-link.active { color: var(--accent-bright); background: rgba(113,112,255,0.06); font-weight: 500; }
-.sidebar .toc-link.l2 { padding-left: 24px; font-size: 12px; }
-.sidebar .toc-link.l3 { padding-left: 36px; font-size: 11.5px; color: var(--text-quaternary); }
+.sidebar .toc-link.l2 { padding-left: 28px; font-size: 13px; }
+.sidebar .toc-link.l3 { padding-left: 40px; font-size: 12.5px; color: var(--text-quaternary); }
 
-/* ── Main ── */
+/* ── Main wrapper ── */
 .main {
   margin-left: var(--sidebar-width);
-  padding: 0;
-  max-width: 880px;
+  padding: 0 48px;
 }
-.container { padding: 0 48px; }
 
 /* ── Header ── */
 header {
-  padding: 64px 48px 40px;
+  padding: 64px 0 40px;
   max-width: 880px;
-  margin-left: var(--sidebar-width);
+  margin: 0 auto;
   border-bottom: 1px solid var(--border-subtle);
 }
 header h1 {
@@ -134,7 +132,7 @@ header .meta-line {
 }
 
 /* ── Sections ── */
-section { padding: 56px 48px; max-width: 880px; margin-left: var(--sidebar-width); border-bottom: 1px solid var(--border-subtle); }
+section { padding: 56px 0; max-width: 880px; margin: 0 auto; border-bottom: 1px solid var(--border-subtle); }
 section:last-of-type { border-bottom: none; }
 
 h2 {
@@ -266,12 +264,12 @@ td.left { text-align: left; }
 
 /* ── Footer ── */
 footer {
-  padding: 32px 48px;
+  padding: 32px 0;
   text-align: center;
   color: var(--text-quaternary);
   font-size: 12px;
   max-width: 880px;
-  margin-left: var(--sidebar-width);
+  margin: 0 auto;
 }
 
 /* ── Status Bar ── */
@@ -301,7 +299,7 @@ footer {
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
 /* ── Responsive ── */
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .sidebar { display: none; }
   .main, header, section, footer { margin-left: 0; max-width: 100%; }
   .container { padding: 0 20px; }
@@ -327,12 +325,14 @@ footer {
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-brand">
     <h1>弱监督语义分割综述</h1>
-    <div class="meta">2016–2026 · v2.0</div>
+    <div class="meta">2016–2026 · v4.0</div>
   </div>
   <ul class="toc-list" id="toc"></ul>
 </nav>
 
-<!-- ═══ Header ═══ -->
+<!-- ═══ Header + Content (centered) ═══ -->
+<div class="main">
+
 <header>
   <div class="subtitle">A Comprehensive Survey</div>
   <h1>弱监督语义分割综述</h1>
@@ -340,7 +340,7 @@ footer {
     系统梳理 2016 年至 2026 年弱监督语义分割的发展历程，涵盖 100+ 篇论文，提出基于监督来源的四分类体系与形式化决策矩阵。
   </p>
   <div class="meta-line">
-    <span>📄 v2.0 — 完整版</span>
+    <span>📄 v4.0 — 完整版</span>
     <span>📅 2026-05-30</span>
     <span>📚 100+ 引用</span>
     <span>🔬 四类分类体系</span>
@@ -437,10 +437,14 @@ footer {
 │
 ├─ <span class="cat-c">C：基础模型辅助（Foundation Model Assisted）</span>
 │  ├─ C1：VLM 引导（CLIP） —— GroupViT, LSeg, CLIMS, CLIP Surgery,
-│  │                          CLIP-ES, OVSeg, CLIP-WSSS, CLIP2Seg
-│  ├─ C2：SAM 辅助 —— SAM-WSSS, SAM-Adapter, WeakSAM, SparseSAM
-│  ├─ C3：扩散模型 —— Diff-WSSS, WeakGen, Diffusion-Driven Refinement
-│  └─ C4：多基础模型/统一框架 —— Prompt-Driven, UniSeg, DINO-WSSS, ReLA
+│  │                          CLIP-ES, OVSeg, CLIP-WSSS, CLIP2Seg, SSR✨
+│  ├─ C2：CLIP 分割骨干 —— WeCLIP✨, SeCo, ExCEL✨, CPAL, DIAL, WeakCLIP,
+│  │                          DiCLIP✨ (Diffusion + CLIP)
+│  ├─ C3：SAM 辅助 —— SAM-WSSS, SAM-Adapter, WeakSAM, SparseSAM, SeSAM✨
+│  ├─ C4：扩散模型 —— Diff-WSSS, WeakGen, Diffusion-Driven Refinement, Dataset Diffusion
+│  ├─ C5：多基础模型/统一框架 —— Prompt-Driven, UniSeg, DINO-WSSS, ReLA,
+│  │                          ModuSeg✨ (training-free, decoupled)
+│  └─ C6：新兴骨干 —— WWT (What-Where Transformer, slot-centric ViT)
 │
 └─ <span class="cat-d">D：新兴范式</span>
    ├─ D1：开放世界/开放词汇 —— W-OOD, OV-WSSS, Zero-Shot FM
@@ -511,7 +515,7 @@ footer {
 
 <!-- ── Category C ── -->
 <h3>4.5 C类：基础模型辅助</h3>
-<p>这类方法利用大规模预训练基础模型——CLIP、SAM、DINO/DINOv2 或扩散模型——通过微调、冻结推理或多模型集成来辅助 WSSS。C 类将 WSSS 精度从 ~70% 推至 74.6% mIoU，但计算成本激增 50–100 倍。</p>
+<p>这类方法利用大规模预训练基础模型——CLIP、SAM、DINO/DINOv2 或扩散模型——通过微调、冻结推理或多模型集成来辅助 WSSS。C 类将 WSSS 精度从 ~70% 推至 79.5% mIoU（SSR, AAAI 2026），但计算成本激增 50–100 倍。</p>
 
 <h4>C1：VLM 引导（基于 CLIP）</h4>
 <div class="card">
@@ -598,9 +602,17 @@ footer {
   <tr><td class="left">SAM-WSSS [48]</td><td>2024</td><td>RN101+SAM</td><td>✓</td><td>✓</td><td>SAM(inf)</td><td>72.3</td><td>73.1</td></tr>
   <tr><td class="left">WeakSAM [50]</td><td>2024</td><td>CLIP+SAM-H</td><td>✓</td><td>✗</td><td>SAM(inf)</td><td>73.0</td><td>73.6</td></tr>
   <tr><td class="left">DINO-WSSS [55]</td><td>2024</td><td>DINO</td><td>✓</td><td>✓</td><td>DINO(fz)</td><td>72.5</td><td>73.0</td></tr>
-  <tr><td class="left">Prompt-Driven [56]</td><td>2024</td><td>Multi-FM</td><td>✓</td><td>✓</td><td>CLIP+SAM+DINO</td><td><b>74.1</b></td><td><b>74.6</b></td></tr>
+  <tr><td class="left">WeCLIP [46a]</td><td>2024✨</td><td>CLIP ViT-B</td><td>✓</td><td>✓</td><td>CLIP(fz)</td><td>76.4</td><td><b>77.2</b></td></tr>
+  <tr><td class="left">SeCo [46b]</td><td>2024</td><td>ViT-B</td><td>✓</td><td>✓</td><td>—</td><td>74.0</td><td>73.8</td></tr>
+  <tr><td class="left">CPAL [46c]</td><td>2024</td><td>RN101</td><td>✓</td><td>✓</td><td>CLIP(ft)</td><td>74.5</td><td>74.7</td></tr>
+  <tr><td class="left">ExCEL [46d]</td><td>2025</td><td>CLIP ViT-B</td><td>✓</td><td>✓</td><td>CLIP(ft)</td><td><b>78.4</b></td><td><b>78.5</b></td></tr>
+  <tr><td class="left">DiCLIP [46e]</td><td>2026</td><td>CLIP ViT-B</td><td>✓</td><td>✓</td><td>CLIP+SD</td><td><b>78.8</b></td><td>—</td></tr>
+  <tr><td class="left">SSR [46f]</td><td>2026</td><td>CLIP ViT-B</td><td>✓</td><td>✓</td><td>CLIP(ft)</td><td>79.5</td><td>—</td></tr>
+  <tr><td class="left">Prompt-Driven [56]</td><td>2024</td><td>Multi-FM</td><td>✓</td><td>✓</td><td>CLIP+SAM+DINO</td><td>74.1</td><td>74.6</td></tr>
   <tr><td class="left">UniSeg [57]</td><td>2024</td><td>Multi-FM</td><td>✓</td><td>✓</td><td>Multi-FM</td><td>73.8</td><td>74.2</td></tr>
   <tr><td class="left">Diff-WSSS [52]</td><td>2024</td><td>Diffusion</td><td>✓</td><td>✓</td><td>Diffusion(inf)</td><td>73.2</td><td>—</td></tr>
+  <tr><td class="left">SeSAM [46g]</td><td>2026</td><td>SAM+ViT</td><td>✓</td><td>✗</td><td>SAM(inf)</td><td>—</td><td>—</td></tr>
+  <tr><td class="left">ModuSeg [46h]</td><td>2026</td><td>Foundation</td><td>✓</td><td>✗</td><td>Multi-FM(fz)</td><td>—</td><td>—</td></tr>
   <tr><td colspan="7" style="padding:4px;font-size:11px;color:var(--violet);background:rgba(139,92,246,0.04)"><span class="badge badge-d">D类</span></td></tr>
   <tr><td class="left">W-OOD [59]</td><td>2024</td><td>RN101</td><td>✗</td><td>✓</td><td>—</td><td>68.3</td><td>68.9</td></tr>
 </table>
@@ -630,7 +642,9 @@ footer {
   <tr><td>2020</td><td>SEAM [25]</td><td>64.5</td><td>自监督正则化引入（基于 P1 的增量改进）</td></tr>
   <tr><td>2022</td><td>MCTformer [20]</td><td>61.4</td><td><b>范式 P2：</b>Transformer CAM——注意力替代 GAP</td></tr>
   <tr><td>2023</td><td>CLIP-ES [44]</td><td>73.8</td><td><b>范式 P3：</b>基础模型驱动——首次逼近 74%</td></tr>
-  <tr><td>2024</td><td>Prompt-Driven [56]</td><td>74.1</td><td>多基础模型融合：精度极值</td></tr>
+  <tr><td>2024</td><td>WeCLIP✨</td><td>76.4</td><td>CLIP 作为分割骨干——冻结 backbone 新范式</td></tr>
+  <tr><td>2025</td><td>ExCEL</td><td>78.4</td><td>Patch-text 对齐释放 CLIP 密集知识</td></tr>
+  <tr><td>2026</td><td>DiCLIP/SSR</td><td>78.8/79.5</td><td>Diffusion+CLIP 融合 / 语义空间精炼</td></tr>
 </table>
 </div>
 
@@ -814,13 +828,15 @@ footer {
 <li>L. Li et al., "Advances in WSSS: Methods, Benchmarks and Future Directions," <i>arXiv:2512.07654</i>, 2025.</li>
 
 </ol>
-</div>
-</section>
+</div><!-- /refs -->
+</section><!-- /refs section -->
 
 <footer>
   <p>🌊 米娅 · 2026-05-30 · v2.0</p>
   <p style="color:var(--text-quaternary);font-size:11px;margin-top:4px">综述页面 · 基于监督来源的四分类体系</p>
 </footer>
+
+</div><!-- /main -->
 
 <div class="status-bar">
   <span><span class="status-dot"></span>v2.0 · 100+ refs · 50+ benchmarks</span>
