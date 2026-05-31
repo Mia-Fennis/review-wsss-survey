@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知识卡片 · 4 篇 WSSS 论文精读</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
+
+  :root {
+    --bg: #0a0a0b;
+    --surface: #121214;
+    --surface-2: #18181b;
+    --surface-3: #1f1f23;
+    --border: #27272a;
+    --border-focus: #3f3f46;
+    --text: #fafafa;
+    --text-2: #a1a1aa;
+    --text-3: #71717a;
+    --accent: #818cf8;
+    --accent-soft: rgba(129, 140, 248, 0.12);
+    --green: #4ade80;
+    --green-soft: rgba(74, 222, 128, 0.1);
+    --amber: #fbbf24;
+    --amber-soft: rgba(251, 191, 36, 0.1);
+    --rose: #fb7185;
+    --rose-soft: rgba(251, 113, 133, 0.1);
+    --cyan: #22d3ee;
+    --cyan-soft: rgba(34, 211, 238, 0.1);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+  /* ── Header ── */
+  header {
+    padding: 56px 0 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  header .container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+  }
+  header .subtitle {
+    color: var(--text-2);
+    font-size: 15px;
+    max-width: 560px;
+  }
+  header .nav-cards {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  header .nav-cards a {
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  header .nav-cards a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  /* ── Paper Card ── */
+  .paper-card {
+    margin: 40px 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .paper-card:first-of-type { margin-top: 32px; }
+
+  .paper-header {
+    padding: 28px 32px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .paper-header .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .paper-header .paper-num {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .paper-header .tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+  }
+  .tag-year { background: var(--accent-soft); color: var(--accent); border: 1px solid rgba(129,140,248,0.2); }
+  .tag-clip { background: var(--cyan-soft); color: var(--cyan); border: 1px solid rgba(34,211,238,0.2); }
+  .tag-cnn  { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(251,191,36,0.2); }
+  .tag-stage { background: var(--green-soft); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+  .tag-multistage { background: var(--rose-soft); color: var(--rose); border: 1px solid rgba(251,113,133,0.2); }
+
+  .paper-header h2 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+  .paper-header .authors {
+    font-size: 14px;
+    color: var(--text-2);
+  }
+  .paper-header .pub {
+    font-size: 13px;
+    color: var(--text-3);
+  }
+
+  /* ── Paper Body ── */
+  .paper-body { padding: 24px 32px 28px; }
+
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 10px;
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title:first-child { margin-top: 0; }
+
+  .section-title::before {
+    content: '';
+    width: 3px;
+    height: 14px;
+    background: var(--accent);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .paper-body p {
+    font-size: 14px;
+    color: var(--text-2);
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+
+  /* ── Architecture Diagram ── */
+  .arch-diagram {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    margin: 12px 0 16px;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--text-2);
+  }
+
+  /* ── Info Grid ── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin: 12px 0 16px;
+  }
+  .info-item {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .info-item .label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .info-item .value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  /* ── Metric Table ── */
+  .metric-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 12px 0 16px;
+    font-size: 13px;
+  }
+  .metric-table thead th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-3);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+  .metric-table thead th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+  .metric-table thead th:last-child { border-radius: 0 var(--radius-sm) 0 0; }
+  .metric-table tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-2);
+  }
+  .metric-table tbody tr:last-child td { border-bottom: none; }
+  .metric-table tbody td:first-child { font-weight: 500; color: var(--text); }
+  .metric-table tbody tr:hover td { background: var(--surface-2); }
+
+  /* ── Module list ── */
+  .module-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 10px 0 14px;
+  }
+  .module-list li {
+    font-size: 14px;
+    color: var(--text-2);
+    padding: 10px 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    line-height: 1.6;
+  }
+  .module-list li strong {
+    color: var(--text);
+  }
+
+  .highlight-box {
+    background: var(--accent-soft);
+    border: 1px solid rgba(129,140,248,0.2);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin: 12px 0 16px;
+    font-size: 14px;
+    color: var(--text-2);
+    line-height: 1.7;
+  }
+  .highlight-box strong { color: var(--accent); }
+  .highlight-box.warn { background: var(--amber-soft); border-color: rgba(251,191,36,0.2); }
+  .highlight-box.warn strong { color: var(--amber); }
+
+  /* ── Divider ── */
+  .card-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0;
+  }
+
+  /* ── Footer ── */
+  footer {
+    padding: 32px 0 56px;
+    color: var(--text-3);
+    font-size: 13px;
+  }
+
+  @media (max-width: 768px) {
+    .container { padding: 0 20px; }
+    .paper-header { padding: 20px; }
+    .paper-body { padding: 16px 20px 20px; }
+    .paper-header h2 { font-size: 18px; }
+    .info-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>📖 知识卡片 · 4 篇 WSSS 论文精读</h1>
+    <p class="subtitle">面向噪声测试实验设计的核心文献梳理 — 涵盖方法论、架构设计、训练配置与关键结果</p>
+    <div class="nav-cards">
+      <a href="#excel">ExCEL (2025)</a>
+      <a href="#clip-es">CLIP-ES (2023)</a>
+      <a href="#sipe">SIPE (2022)</a>
+      <a href="#dupl">DuPL (2024)</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+<!-- ════════════════════════════════ ExCEL ════════════════════════════════ -->
+<article class="paper-card" id="excel">
+  <div class="paper-header">
+    <div class="meta-row">
+      <span class="paper-num">#01</span>
+      <span class="tag tag-year">CVPR 2025</span>
+      <span class="tag tag-clip">CLIP-based</span>
+      <span class="tag tag-stage">单阶段</span>
+    </div>
+    <h2>ExCEL: Extremely Efficient Curriculum Learning for WSSS</h2>
+    <p class="authors">Sung-Hoon Yoon, Hyeok Ryool Kweon, Kuk-Jin Yoon</p>
+    <p class="pub">arXiv: 2503.20826 · CVPR 2025</p>
+  </div>
+
+  <div class="paper-body">
+    <div class="section-title">问题定义</div>
+    <p>传统多阶段 WSSS 需要依次训练分类网络 → 亲和网络 → 分割网络，耗时以天计。ExCEL 提出在冻结的 CLIP 视觉编码器上通过课程学习（Curriculum Learning），仅需 90 分钟即可完成单阶段训练，达到接近 SOTA 的 mIoU。</p>
+
+    <div class="section-title">核心洞察</div>
+    <div class="highlight-box">
+      <strong>💡 关键发现：</strong>直接使用 CLIP 原始 patch-text 匹配得分作为伪标签质量极差（因为 CLIP 训练目标是图像-文本匹配，不是像素级定位）。ExCEL 通过两步改良：<strong>文本语义丰富化（TSE）</strong>和<strong>视觉校准（VC）</strong>，逐步改进伪标签质量。
+    </div>
+
+    <div class="section-title">架构总览</div>
+    <div class="arch-diagram">┌─────────────────────────────────────────────────────┐
+│                  ExCEL Framework                     │
+├─────────────────────────────────────────────────────┤
+│  输入图像                                             │
+│     │                                                │
+│     ▼                                                │
+│  ┌──────────────┐     ┌──────────────────────┐       │
+│  │ CLIP ViT-B/16│────▶│  TSE (文本语义丰富)    │       │
+│  │  (冻结)       │     │  · Prompt 自动选择    │       │
+│  └──────────────┘     │  · 同义词融合          │       │
+│        │              └──────────────────────┘       │
+│        ▼                                             │
+│  ┌──────────────────────────────────────────┐         │
+│  │  Curriculum Learning (课程学习)             │         │
+│  │  Stage 1: TSE CAM → 粗伪标签               │         │
+│  │  Stage 2: 加入 VC (视觉校准) → 细伪标签     │         │
+│  └──────────────────────────────────────────┘         │
+│        │                                             │
+│        ▼                                             │
+│  ┌──────────────┐                                    │
+│  │ 分割头 (1×1 conv)│────▶ 最终分割结果              │
+│  └──────────────┘                                    │
+└─────────────────────────────────────────────────────┘</div>
+
+    <div class="section-title">模块详解</div>
+    <ul class="module-list">
+      <li><strong>TSE — 文本语义丰富化：</strong>两个策略：(a) <strong>Sharpness-based Prompt Selection</strong> — 对每个类别自动选择最合适的 prompt（如 "person with clothes, people, human" 比单独 "person" 更好）；(b) <strong>同义词融合</strong> — 融合多个同义词的 text embedding 以获得更完整的语义覆盖。</li>
+      <li><strong>VC — 视觉校准：</strong>通过可学习的 adapter（两层 MLP）对 CLIP 视觉特征进行微调，使得 patch 特征更适配分割任务，减少冻结 CLIP 带来的领域偏移。</li>
+      <li><strong>课程学习策略：</strong>先只用 TSE 训练粗伪标签 → 收敛后加入 VC 校准 → 最终用高质量伪标签监督分割头。每阶段自动推进，无需人工调阈值。</li>
+    </ul>
+
+    <div class="section-title">训练配置</div>
+    <div class="info-grid">
+      <div class="info-item"><span class="label">骨干网络</span><span class="value">CLIP ViT-B/16 (冻结)</span></div>
+      <div class="info-item"><span class="label">分割头</span><span class="value">1×1 Conv (单层)</span></div>
+      <div class="info-item"><span class="label">训练时间</span><span class="value">~90 min (1×RTX 3090)</span></div>
+      <div class="info-item"><span class="label">优化器</span><span class="value">AdamW</span></div>
+      <div class="info-item"><span class="label">输入尺寸</span><span class="value">448 × 448</span></div>
+      <div class="info-item"><span class="label">训练策略</span><span class="value">课程学习 (2 阶段)</span></div>
+    </div>
+
+    <div class="section-title">关键结果</div>
+    <table class="metric-table">
+      <thead><tr><th>数据集</th><th>指标</th><th>分值</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td>PASCAL VOC 2012</td><td>val mIoU</td><td>78.4%</td><td>单阶段 SOTA</td></tr>
+        <tr><td>PASCAL VOC 2012</td><td>test mIoU</td><td>—</td><td>待查</td></tr>
+        <tr><td>MS COCO 2014</td><td>val mIoU</td><td>—</td><td>待查</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-title">噪声测试关注点</div>
+    <div class="highlight-box warn">
+      <strong>🎯 攻击面：</strong><br>
+      ① CLIP 视觉编码器对输入噪声（高斯 / 对抗扰动）的鲁棒性<br>
+      ② TSE 模块中 prompt 拼写噪声 / 同义词替换的影响<br>
+      ③ Adapter 微调阶段特征 Dropout / 加噪的退化模式
+    </div>
+  </div>
+</article>
+
+<hr class="card-divider">
+
+<!-- ════════════════════════════════ CLIP-ES ════════════════════════════════ -->
+<article class="paper-card" id="clip-es">
+  <div class="paper-header">
+    <div class="meta-row">
+      <span class="paper-num">#02</span>
+      <span class="tag tag-year">CVPR 2023</span>
+      <span class="tag tag-clip">CLIP-based</span>
+      <span class="tag tag-multistage">多阶段</span>
+    </div>
+    <h2>CLIP-ES: CLIP is Also an Efficient Segmenter</h2>
+    <p class="authors">Yuqi Lin, Minghao Chen, Wenxiao Wang, Boxi Wu, Ke Li, Binbin Lin, Haifeng Liu, Xiaofei He</p>
+    <p class="pub">arXiv: 2212.09506 · CVPR 2023</p>
+  </div>
+
+  <div class="paper-body">
+    <div class="section-title">问题定义</div>
+    <p>传统 WSSS 三阶段（分类 → 亲和精炼 → 分割训练）训练成本高。CLIP-ES 探索冻结 CLIP 是否能跳过分类网络训练和亲和网络训练两步，直接在 CLIP 上完成高质量的伪标签生成。</p>
+
+    <div class="section-title">核心洞察</div>
+    <div class="highlight-box">
+      <strong>💡 关键发现：</strong>冻结 CLIP 可以直接用 GradCAM 生成初始 CAM，且<strong>仅需 2GB 显存、1 小时内</strong>即可完成全部伪标签生成。CAA（跨层注意力亲和）模块利用 CLIP-ViT 自带的 MHSA 替代额外训练的亲和网络，实现<strong>训练无关</strong>的实时精炼。
+    </div>
+
+    <div class="section-title">架构总览</div>
+    <div class="arch-diagram">┌──────────────────────────────────────────────────────────┐
+│                   CLIP-ES Framework                        │
+├──────────────────────────────────────────────────────────┤
+│  阶段 1: CAM 生成 (训练无关)                                │
+│  ┌──────────────┐    ┌──────────────────────┐              │
+│  │ CLIP ViT-B/16│───▶│ Softmax-GradCAM      │              │
+│  │  (冻结)       │    │  + 类别互斥背景抑制    │              │
+│  └──────────────┘    └──────────────────────┘              │
+│                            │                               │
+│                            ▼                               │
+│  ┌──────────────────────────────────────┐                  │
+│  │ CAA (Class-Aware Attention Affinity) │                  │
+│  │ MHSA 自注意力 → 类感知亲和 → 随机游走  │                  │
+│  └──────────────────────────────────────┘                  │
+│                            │                               │
+│                            ▼                               │
+│  ┌──────────────────────────────────────┐                  │
+│  │ 精炼 CAM → 伪标签 (2GB, <1h 完成)     │                  │
+│  └──────────────────────────────────────┘                  │
+│                                                            │
+│  阶段 2-3: 分割模型训练                                     │
+│  ┌──────────────────────────────────────┐                  │
+│  │ DeepLabV2 + CGL (置信度引导损失)      │                  │
+│  │ 忽略不可信像素，专注高置信度区域       │                  │
+│  └──────────────────────────────────────┘                  │
+└──────────────────────────────────────────────────────────┘</div>
+
+    <div class="section-title">三阶段详解</div>
+    <ul class="module-list">
+      <li><strong>阶段 1 — Softmax-GradCAM：</strong>在 CLIP 的 GradCAM 中引入 softmax 归一化，使得类别之间变为互斥关系，显著减少类别混淆（如"人"和"牛"同时被激活的问题）。同时定义 25 个类别相关背景词（ground, sky, water...）实现背景抑制。</li>
+      <li><strong>阶段 2 — CAA (Class-Aware Attention Affinity)：</strong>利用 ViT 自带的 MHSA 注意力图，结合 CAM 生成类感知 mask，通过随机游走算法传播高置信度激活到语义相似区域。整个模块<strong>无需额外训练</strong>，与 CAM 生成在同一前向传播中完成。</li>
+      <li><strong>阶段 3 — CGL (Confidence-Guided Loss)：</strong>训练 DeepLabV2 时，根据 CAM 置信度图动态忽略不可信像素（主要是物体边界区域），仅在高置信度像素上计算损失。VOC 上约 5.4% 的像素被忽略，但 mIoU 提升约 0.5%。</li>
+    </ul>
+
+    <div class="section-title">训练配置</div>
+    <div class="info-grid">
+      <div class="info-item"><span class="label">骨干网络</span><span class="value">CLIP ViT-B/16 (冻结)</span></div>
+      <div class="info-item"><span class="label">CAM 生成</span><span class="value">训练无关 (2GB, <1h)</span></div>
+      <div class="info-item"><span class="label">分割网络</span><span class="value">DeepLabV2 (ResNet101)</span></div>
+      <div class="info-item"><span class="label">分割训练</span><span class="value">VOC: batch 10, 20k iter</span></div>
+      <div class="info-item"><span class="label">CGL 阈值 μ</span><span class="value">0.95</span></div>
+      <div class="info-item"><span class="label">硬件</span><span class="value">TITAN RTX (24GB)</span></div>
+    </div>
+
+    <div class="section-title">关键结果</div>
+    <table class="metric-table">
+      <thead><tr><th>数据集</th><th>配置</th><th>val mIoU</th><th>test mIoU</th></tr></thead>
+      <tbody>
+        <tr><td>PASCAL VOC 2012</td><td>ImageNet 预训练</td><td>71.1%</td><td>—</td></tr>
+        <tr><td>PASCAL VOC 2012</td><td>COCO 预训练</td><td>73.8%</td><td>—</td></tr>
+        <tr><td>MS COCO 2014</td><td>—</td><td>45.4%</td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-title">噪声测试关注点</div>
+    <div class="highlight-box warn">
+      <strong>🎯 攻击面：</strong><br>
+      ① Softmax-GradCAM 对梯度噪声的敏感性（梯度掩码 / Dropout）<br>
+      ② CAA 模块依赖 MHSA 注意力图 → 注意力 Dropout 直接破坏亲和传播<br>
+      ③ CGL 置信度阈值变化对噪声容忍度的影响（μ ∈ {0.7, 0.8, 0.95}）
+    </div>
+  </div>
+</article>
+
+<hr class="card-divider">
+
+<!-- ════════════════════════════════ SIPE ════════════════════════════════ -->
+<article class="paper-card" id="sipe">
+  <div class="paper-header">
+    <div class="meta-row">
+      <span class="paper-num">#03</span>
+      <span class="tag tag-year">CVPR 2022</span>
+      <span class="tag tag-cnn">CNN-based</span>
+      <span class="tag tag-stage">多阶段</span>
+    </div>
+    <h2>SIPE: Self-supervised Image-specific Prototype Exploration</h2>
+    <p class="authors">Qi Chen, Lingxiao Yang, Jianhuang Lai, Xiaohua Xie</p>
+    <p class="pub">arXiv: 2203.02909 · CVPR 2022</p>
+  </div>
+
+  <div class="paper-body">
+    <div class="section-title">问题定义</div>
+    <p>传统 CAM 使用全局分类器权重作为"类别中心"来激活每个像素，但不同图像的特征分布差异很大。SIPE 提出为<strong>每张图像量身定制</strong>图像特定的原型（prototype），而不是使用固定的类中心，从而捕获更完整的物体区域。</p>
+
+    <div class="section-title">核心洞察</div>
+    <div class="highlight-box">
+      <strong>💡 关键发现：</strong>用 t-SNE 可视化像素级特征分布发现——CAM 的类中心总是给距离近的像素高激活，忽略距离远的像素。而<strong>每张图像自己的特征质心</strong>（图像特定原型）能激活更完整的物体区域。反过来，改进后的 IS-CAM 通过自监督一致性进一步优化特征表示。
+    </div>
+
+    <div class="section-title">架构总览</div>
+    <div class="arch-diagram">┌────────────────────────────────────────────────────────────┐
+│                   SIPE Framework                             │
+├────────────────────────────────────────────────────────────┤
+│                    阶段 1: 分类网络训练                         │
+│  ┌──────────────────────────────────────────────────┐       │
+│  │  ResNet50 (ImageNet 预训练)                       │       │
+│  │  + 修改骨干: 融合 4 个 stage → 层次化特征 F_h       │       │
+│  └──────────────────────────────────────────────────┘       │
+│         │                                                  │
+│         ▼                                                  │
+│   ┌──────────────────────────────────────────┐              │
+│   │  IPE: 图像特定原型探索                      │              │
+│   │  ┌──────────────────────────────────┐     │              │
+│   │  │ Step 1: 结构感知种子定位           │     │              │
+│   │  │ 逐像素计算语义相关性 → 结构图       │     │              │
+│   │  │ 与 CAM 计算 IoU → 分配最优类别     │     │              │
+│   │  └──────────────────────────────────┘     │              │
+│   │  ┌──────────────────────────────────┐     │              │
+│   │  │ Step 2: 背景感知原型建模           │     │              │
+│   │  │ 用层次化特征 F_h 提取种子质心       │     │              │
+│   │  │ 得到 K 个前景原型 + 1 个背景原型    │     │              │
+│   │  └──────────────────────────────────┘     │              │
+│   │           │                               │              │
+│   │           ▼                               │              │
+│   │  IS-CAM = 原型与 F_h 的余弦相似度         │              │
+│   └──────────────────────────────────────────┘              │
+│         │                                                  │
+│         ▼                                                  │
+│   GSC 损失: L1 约束 CAM 与 IS-CAM 的一致性                   │
+│   (自监督信号 → 优化特征表示)                                │
+│         │                                                  │
+│         ▼                                                  │
+│   ┌──────────────────────────────────────────┐              │
+│   │  阶段 2: 用 IS-CAM 伪标签训练分割网络      │              │
+│   └──────────────────────────────────────────┘              │
+└────────────────────────────────────────────────────────────┘</div>
+
+    <div class="section-title">模块详解</div>
+    <ul class="module-list">
+      <li><strong>IPE (图像特定原型探索) — 结构感知种子定位：</strong>对每个像素 i，计算其与全图所有像素的语义相关性 → 得到该像素的"结构图"。然后将该结构图与 CAM 逐类计算 IoU 相似度，选出最优类别。这一步利用的是<strong>像素间关系</strong>而非固定的类中心。</li>
+      <li><strong>IPE — 背景感知原型建模：</strong>修改 ResNet 骨干网络，融合 4 个 stage 的输出得到层次化特征 F_h（浅层包含颜色/texture 等低层信息，适合建模背景）。在 F_h 空间中提取种子区域的质心作为原型，分别计算 IS-CAM。</li>
+      <li><strong>GSC (General-Specific Consistency)：</strong>L1 损失约束原始 CAM（用分类器权重激活）和 IS-CAM（用图像原型激活）的一致性。这个自监督信号使两种 CAM 互相纠错，优化特征表示。</li>
+    </ul>
+
+    <div class="section-title">训练配置</div>
+    <div class="info-grid">
+      <div class="info-item"><span class="label">骨干网络</span><span class="value">ResNet50 / ResNet38 / ResNet101</span></div>
+      <div class="info-item"><span class="label">训练硬件</span><span class="value">2×NVIDIA A100</span></div>
+      <div class="info-item"><span class="label">Batch size</span><span class="value">16</span></div>
+      <div class="info-item"><span class="label">Epochs</span><span class="value">5</span></div>
+      <div class="info-item"><span class="label">优化器</span><span class="value">SGD (动量 0.9)</span></div>
+      <div class="info-item"><span class="label">LR 策略</span><span class="value">Poly, power=0.9</span></div>
+      <div class="info-item"><span class="label">LR (骨干)</span><span class="value">0.1</span></div>
+      <div class="info-item"><span class="label">LR (新增层)</span><span class="value">1.0</span></div>
+    </div>
+
+    <div class="section-title">关键结果</div>
+    <table class="metric-table">
+      <thead><tr><th>骨干</th><th>训练集 Local. Maps</th><th>VOC val</th><th>VOC test</th></tr></thead>
+      <tbody>
+        <tr><td>ResNet38</td><td>58.6% (IS-CAM) / 64.7% (+dCRF)</td><td>68.2%</td><td>69.5%</td></tr>
+        <tr><td>ResNet101</td><td>—</td><td>68.8%</td><td>69.7%</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-title">噪声测试关注点</div>
+    <div class="highlight-box warn">
+      <strong>🎯 攻击面：</strong><br>
+      ① 像素级语义相关性计算对特征空间扰动的敏感性（特征 Dropout / 加噪）<br>
+      ② 原型提取时 IoU 计算中的噪声累积（逐像素相似度 → 质心偏移）<br>
+      ③ GSC 一致性损失对 CAM 和 IS-CAM 中噪声传播的放大效应
+    </div>
+  </div>
+</article>
+
+<hr class="card-divider">
+
+<!-- ════════════════════════════════ DuPL ════════════════════════════════ -->
+<article class="paper-card" id="dupl">
+  <div class="paper-header">
+    <div class="meta-row">
+      <span class="paper-num">#04</span>
+      <span class="tag tag-year">CVPR 2024</span>
+      <span class="tag tag-cnn">CNN/ViT-based</span>
+      <span class="tag tag-stage">单阶段</span>
+    </div>
+    <h2>DuPL: Dual Student with Trustworthy Progressive Learning</h2>
+    <p class="authors">Yuanchen Wu, Xichen Ye, Kequan Yang, Jide Li, Xiaoqiang Li</p>
+    <p class="pub">arXiv: 2403.11184 · CVPR 2024</p>
+  </div>
+
+  <div class="paper-body">
+    <div class="section-title">问题定义</div>
+    <p>单阶段 WSSS 面临一个关键问题：<strong>确认偏误 (Confirmation Bias)</strong>。由于 CAM 伪标签和分割 head 共享骨干特征，错误的伪标签会通过训练不断强化自身、导致退化越来越严重。现有方法简单地用高阈值过滤不可靠像素，但这会丢弃大量可能是正确的像素，导致训练不充分。</p>
+
+    <div class="section-title">核心洞察</div>
+    <div class="highlight-box">
+      <strong>💡 关键发现：</strong>双学生互相监督可以打断确认偏误的正反馈循环。两个学生网络从不同视角生成多样化的 CAM，互相为对方提供伪标签监督。此外，被过滤掉的不确定区域通过一致性正则化仍然参与训练——"every pixel matters"。
+    </div>
+
+    <div class="section-title">架构总览</div>
+    <div class="arch-diagram">┌──────────────────────────────────────────────────────────────┐
+│                   DuPL Framework                               │
+├──────────────────────────────────────────────────────────────┤
+│  输入图像                                                      │
+│     │                                                         │
+│     ┌─────────────┬──────────────────────┐                    │
+│     ▼             ▼                      ▼                    │
+│  ┌──────────┐ ┌──────────┐     ┌──────────────────┐          │
+│  │ Sub-net 1│ │ Sub-net 2│     │ 强增强分支         │          │
+│  │ (ViT-B)  │ │ (ViT-B)  │     │ (一致性正则化)     │          │
+│  └─────┬────┘ └─────┬────┘     └──────────────────┘          │
+│        │            │                                         │
+│        ▼            ▼                                         │
+│   ┌──────────┐ ┌──────────┐                                   │
+│   │ CAM 1    │ │ CAM 2    │                                   │
+│   └─────┬────┘ └─────┬────┘                                   │
+│         │   差异约束   │                                       │
+│         └──────┬──────┘  ← 互相交叉监督                        │
+│                ▼                                              │
+│   ┌──────────────────────────────┐                            │
+│   │ 动态阈值调整 + GMM 自适应滤波  │                            │
+│   │ 渐进式引入更多可信伪标签       │                            │
+│   └──────────────────────────────┘                            │
+│                │                                              │
+│                ▼                                              │
+│   ┌──────────────────────────────┐                            │
+│   │ 分割头训练 (交叉监督)          │                            │
+│   │ + 不确定区域一致性正则化        │                            │
+│   └──────────────────────────────┘                            │
+└──────────────────────────────────────────────────────────────┘</div>
+
+    <div class="section-title">模块详解</div>
+    <ul class="module-list">
+      <li><strong>双学生网络 (Dual Student)：</strong>两个结构相同但参数独立更新的子网络（ViT-B backbone）。通过差异损失（representation-level discrepancy）鼓励两个网络生成多样化的 CAM。交叉监督：Sub-net 1 的伪标签 → 训练 Sub-net 2 的分割头，反之亦然，打断各自的确认偏误。</li>
+      <li><strong>动态阈值调整 (DTA)：</strong>训练初期用高阈值只保留高置信度像素 → 随训练推进逐步降低阈值，引入更多像素参与分割监督。相比固定阈值，能更充分地利用训练数据。</li>
+      <li><strong>GMM 自适应噪声滤波 (ANF)：</strong>基于分割损失分布，用高斯混合模型（GMM）自动区分"干净像素"和"噪声像素"。不需要手动设置噪声过滤阈值，自适应调整。</li>
+      <li><strong>一致性正则化：</strong>对被 GMM 过滤掉的不确定区域，施加强增强 → 输入增强后的图像 → 约束分割预测与原始伪标签的一致性。确保即使被过滤的像素也参与训练。</li>
+    </ul>
+
+    <div class="section-title">训练配置</div>
+    <div class="info-grid">
+      <div class="info-item"><span class="label">骨干网络</span><span class="value">ViT-B (×2 双学生)</span></div>
+      <div class="info-item"><span class="label">训练策略</span><span class="value">端到端单阶段</span></div>
+      <div class="info-item"><span class="label">VOC 迭代</span><span class="value">20k (+2k warmup)</span></div>
+      <div class="info-item"><span class="label">VOC batch</span><span class="value">4</span></div>
+      <div class="info-item"><span class="label">COCO 迭代</span><span class="value">80k (+5k warmup)</span></div>
+      <div class="info-item"><span class="label">COCO batch</span><span class="value">8</span></div>
+      <div class="info-item"><span class="label">输入尺寸</span><span class="value">448 × 448</span></div>
+      <div class="info-item"><span class="label">损失项</span><span class="value">L_cls + L_seg + L_dis + L_reg</span></div>
+    </div>
+
+    <div class="section-title">关键结果</div>
+    <table class="metric-table">
+      <thead><tr><th>配置</th><th>骨干</th><th>VOC val</th><th>VOC test</th><th>COCO val</th></tr></thead>
+      <tbody>
+        <tr><td>DuPL</td><td>ViT-B (IN-1k)</td><td>72.2%</td><td>71.6%</td><td>43.5%</td></tr>
+        <tr><td>DuPL†</td><td>ViT-B (IN-21k)</td><td>73.3%</td><td>72.8%</td><td>44.6%</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-title">过激活率 (OA) 分析</div>
+    <p>DuPL 的一个独特贡献是定量分析了确认偏误的严重程度，通过<strong>过激活率 (Over-Activation Rate = FP / (TP+FP))</strong> 来衡量。基线方法在很多类别上 OA > 30%，而 DuPL 将 OA 降至 5%-15%。这是噪声测试的重要参考指标。</p>
+
+    <div class="section-title">噪声测试关注点</div>
+    <div class="highlight-box warn">
+      <strong>🎯 攻击面：</strong><br>
+      ① CAM 伪标签注入噪声 → 测试 GMM 自适应滤波的有效性上限（噪声比例 10%~50%）<br>
+      ② 差异损失权重扫描 → 双学生差异度对噪声鲁棒性的影响<br>
+      ③ 动态阈值下降速率 → 过早引入噪声像素 vs 过晚错过训练信号
+    </div>
+  </div>
+</article>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p>📖 知识卡片 · 4 篇 WSSS 论文精读 · 基于论文原文整理</p>
+    <p>用于噪声测试实验设计的参考材料 · 所有数据均来自论文正文</p>
+  </div>
+</footer>
+
+</body>
+</html>
