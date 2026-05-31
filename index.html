@@ -32,7 +32,8 @@
   --rose: #f43f5e;
   --violet: #8b5cf6;
   --cyan: #22d3ee;
-  --sidebar-width: 320px;
+  --sidebar-width: 280px;
+  --right-panel-width: 320px;
   --header-h: 0px;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -47,7 +48,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Sidebar ── */
+/* ── Sidebar (left) ── */
 .sidebar {
   position: fixed;
   top: 0;
@@ -66,23 +67,23 @@ body {
   margin-bottom: 16px;
 }
 .sidebar-brand h1 {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
   letter-spacing: 0.3px;
   line-height: 1.4;
 }
 .sidebar-brand .meta {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-quaternary);
   margin-top: 6px;
 }
 .sidebar .toc-list { list-style: none; padding: 0 12px; }
-.sidebar .toc-item { margin: 2px 0; }
+.sidebar .toc-item { margin: 1px 0; }
 .sidebar .toc-link {
   display: block;
-  padding: 6px 12px;
-  font-size: 14px;
+  padding: 5px 12px;
+  font-size: 13px;
   color: var(--text-tertiary);
   text-decoration: none;
   border-radius: 4px;
@@ -91,25 +92,197 @@ body {
 }
 .sidebar .toc-link:hover { color: var(--text-primary); background: var(--bg-hover); }
 .sidebar .toc-link.active { color: var(--accent-bright); background: rgba(113,112,255,0.06); font-weight: 500; }
-.sidebar .toc-link.l2 { padding-left: 28px; font-size: 13px; }
-.sidebar .toc-link.l3 { padding-left: 40px; font-size: 12.5px; color: var(--text-quaternary); }
+.sidebar .toc-link.l2 { padding-left: 24px; font-size: 12px; }
+.sidebar .toc-link.l3 { padding-left: 36px; font-size: 11.5px; color: var(--text-quaternary); }
+
+/* ── Right Panel (timeline + chart) ── */
+.right-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: var(--right-panel-width);
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--bg-panel);
+  border-left: 1px solid var(--border-subtle);
+  padding: 24px 16px;
+  z-index: 50;
+}
+.right-panel::-webkit-scrollbar { width: 4px; }
+.right-panel::-webkit-scrollbar-track { background: transparent; }
+.right-panel::-webkit-scrollbar-thumb { background: var(--border-standard); border-radius: 2px; }
+
+.rp-section {
+  margin-bottom: 28px;
+}
+.rp-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-quaternary);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Timeline */
+.timeline { position: relative; padding-left: 24px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--emerald), var(--accent-bright), var(--rose));
+  border-radius: 1px;
+}
+.tl-item {
+  position: relative;
+  padding: 0 0 14px 0;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.tl-item:last-child { padding-bottom: 0; }
+.tl-item:hover { opacity: 0.8; }
+.tl-dot {
+  position: absolute;
+  left: -20px;
+  top: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid;
+  background: var(--bg-panel);
+  z-index: 2;
+}
+.tl-dot.a { border-color: var(--emerald); }
+.tl-dot.b { border-color: var(--amber); }
+.tl-dot.c { border-color: var(--rose); }
+.tl-dot.d { border-color: var(--violet); }
+.tl-dot.p3 { border-color: var(--accent-bright); }
+.tl-year {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  margin-bottom: 2px;
+}
+.tl-method {
+  font-size: 12px;
+  color: var(--text-primary);
+  font-weight: 500;
+  line-height: 1.3;
+}
+.tl-miou {
+  font-size: 11px;
+  color: var(--text-quaternary);
+  display: inline-block;
+  margin-top: 1px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.03);
+}
+.tl-milestone {
+  position: relative;
+  padding: 6px 0 14px 0;
+}
+.tl-milestone::before { display: none; }
+.tl-milestone .tl-dot {
+  width: 14px; height: 14px;
+  left: -22px;
+  top: 4px;
+  background: var(--accent-bright);
+  border-color: var(--accent-bright);
+}
+.tl-milestone .tl-year { color: var(--accent-bright); font-size: 12px; }
+.tl-milestone .tl-miou {
+  background: rgba(113,112,255,0.1);
+  color: var(--accent-bright);
+}
+
+/* Tags */
+.tl-tag {
+  display: inline-block;
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 2px;
+  margin-right: 4px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.tl-tag.a { background: rgba(16,185,129,0.15); color: var(--emerald); }
+.tl-tag.b { background: rgba(245,158,11,0.15); color: var(--amber); }
+.tl-tag.c { background: rgba(244,63,94,0.15); color: var(--rose); }
+.tl-tag.p3 { background: rgba(94,106,210,0.15); color: var(--accent-bright); }
+
+/* Chart */
+.chart-wrap {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-standard);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.chart-wrap svg { width: 100%; height: auto; display: block; }
+
+/* Chart legend */
+.chart-legend {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 10px;
+  color: var(--text-quaternary);
+  margin-top: 8px;
+}
+.chart-legend span { display: flex; align-items: center; gap: 4px; }
+.legend-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+.legend-dot.a { background: var(--emerald); }
+.legend-dot.b { background: var(--amber); }
+.legend-dot.c { background: var(--rose); }
+
+/* Stats cards */
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.stat-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-standard);
+  border-radius: 6px;
+  padding: 10px;
+  text-align: center;
+}
+.stat-num {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+}
+.stat-label {
+  font-size: 10px;
+  color: var(--text-quaternary);
+  margin-top: 2px;
+}
 
 /* ── Main wrapper ── */
 .main {
   margin-left: var(--sidebar-width);
+  margin-right: var(--right-panel-width);
   padding: 0 48px;
 }
 
 /* ── Header ── */
 header {
-  padding: 64px 0 40px;
-  max-width: 880px;
+  padding: 48px 0 32px;
+  max-width: 800px;
   margin: 0 auto;
   border-bottom: 1px solid var(--border-subtle);
 }
 header h1 {
   font-family: 'Noto Serif SC', serif;
-  font-size: 2em;
+  font-size: 1.9em;
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: 1px;
@@ -132,31 +305,31 @@ header .meta-line {
 }
 
 /* ── Sections ── */
-section { padding: 56px 0; max-width: 880px; margin: 0 auto; border-bottom: 1px solid var(--border-subtle); }
+section { padding: 48px 0; max-width: 800px; margin: 0 auto; border-bottom: 1px solid var(--border-subtle); }
 section:last-of-type { border-bottom: none; }
 
 h2 {
   font-family: 'Noto Serif SC', serif;
-  font-size: 1.4em;
+  font-size: 1.35em;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   padding-bottom: 8px;
 }
 h3 {
   font-family: 'Noto Serif SC', serif;
-  font-size: 1.1em;
+  font-size: 1.05em;
   font-weight: 600;
   color: var(--text-secondary);
-  margin: 32px 0 16px;
+  margin: 28px 0 14px;
 }
 h4 {
-  font-size: 0.95em;
+  font-size: 0.92em;
   font-weight: 600;
   color: var(--accent-bright);
-  margin: 24px 0 12px;
+  margin: 20px 0 10px;
 }
-p { margin: 12px 0; }
+p { margin: 10px 0; }
 a { color: var(--accent-bright); text-decoration: none; }
 a:hover { color: var(--accent-hover); text-decoration: underline; }
 
@@ -168,21 +341,21 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
   background: rgba(255,255,255,0.02);
   border: 1px solid var(--border-standard);
   border-radius: 8px;
-  padding: 20px 24px;
-  margin: 16px 0;
+  padding: 16px 20px;
+  margin: 14px 0;
 }
 .card h4 { margin-top: 0; }
-.card p { margin: 6px 0; font-size: 14px; }
+.card p { margin: 5px 0; font-size: 14px; }
 
 /* ── Tree ── */
 .tree-block {
   background: rgba(255,255,255,0.02);
   border: 1px solid var(--border-standard);
   border-radius: 8px;
-  padding: 20px 24px;
+  padding: 16px 20px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  line-height: 1.7;
+  font-size: 12.5px;
+  line-height: 1.65;
   overflow-x: auto;
   white-space: pre;
   color: var(--text-secondary);
@@ -196,27 +369,27 @@ a:hover { color: var(--accent-hover); text-decoration: underline; }
 /* ── Tables ── */
 .table-wrap {
   overflow-x: auto;
-  margin: 16px 0;
+  margin: 14px 0;
   border: 1px solid var(--border-standard);
   border-radius: 8px;
 }
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: 12px;
 }
 th {
   background: var(--bg-panel);
   color: var(--text-quaternary);
   font-weight: 500;
-  padding: 10px 12px;
+  padding: 8px 10px;
   text-align: center;
   border-bottom: 1px solid var(--border-strong);
   white-space: nowrap;
-  font-size: 12px;
+  font-size: 11px;
 }
 td {
-  padding: 8px 12px;
+  padding: 6px 10px;
   text-align: center;
   border-bottom: 1px solid var(--border-subtle);
 }
@@ -225,9 +398,9 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 td.left { text-align: left; }
 .badge {
   display: inline-block;
-  padding: 1px 7px;
+  padding: 1px 6px;
   border-radius: 3px;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
 }
 .badge-a { background: rgba(16,185,129,0.12); color: var(--emerald); }
@@ -238,17 +411,17 @@ td.left { text-align: left; }
 /* ── Highlight ── */
 .highlight {
   border-left: 2px solid var(--accent);
-  padding: 16px 20px;
-  margin: 20px 0;
+  padding: 14px 18px;
+  margin: 18px 0;
   background: linear-gradient(90deg, rgba(94,106,210,0.04), transparent);
   border-radius: 0 6px 6px 0;
 }
 
 /* ── References ── */
-.refs { font-size: 13px; }
+.refs { font-size: 12.5px; }
 .refs ol { counter-reset: ref; padding: 0; }
 .refs li {
-  padding: 5px 0;
+  padding: 4px 0;
   list-style: none;
   counter-increment: ref;
   line-height: 1.5;
@@ -256,19 +429,19 @@ td.left { text-align: left; }
 .refs li::before {
   content: "[" counter(ref) "]";
   color: var(--accent);
-  margin-right: 8px;
+  margin-right: 6px;
   font-weight: 500;
-  font-size: 11px;
+  font-size: 10px;
 }
 .refs li:hover { background: rgba(255,255,255,0.01); }
 
 /* ── Footer ── */
 footer {
-  padding: 32px 0;
+  padding: 28px 0;
   text-align: center;
   color: var(--text-quaternary);
   font-size: 12px;
-  max-width: 880px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -277,10 +450,10 @@ footer {
   position: fixed;
   bottom: 0;
   left: var(--sidebar-width);
-  right: 0;
+  right: var(--right-panel-width);
   background: rgba(15,16,17,0.95);
   border-top: 1px solid var(--border-subtle);
-  padding: 6px 24px;
+  padding: 5px 20px;
   font-size: 11px;
   color: var(--text-quaternary);
   display: flex;
@@ -299,13 +472,18 @@ footer {
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
 /* ── Responsive ── */
+@media (max-width: 1300px) {
+  .right-panel { display: none; }
+  .main { margin-right: 0; }
+  .status-bar { right: 0; }
+}
 @media (max-width: 1000px) {
   .sidebar { display: none; }
   .main, header, section, footer { margin-left: 0; max-width: 100%; }
   .container { padding: 0 20px; }
-  header { padding: 40px 20px; }
-  section { padding: 36px 20px; }
-  footer { padding: 24px 20px; }
+  header { padding: 36px 20px; }
+  section { padding: 32px 20px; }
+  footer { padding: 20px 20px; }
   header h1 { font-size: 1.5em; }
   .status-bar { left: 0; }
 }
@@ -314,6 +492,9 @@ footer {
 .sidebar::-webkit-scrollbar { width: 4px; }
 .sidebar::-webkit-scrollbar-track { background: transparent; }
 .sidebar::-webkit-scrollbar-thumb { background: var(--border-standard); border-radius: 2px; }
+.right-panel::-webkit-scrollbar { width: 4px; }
+.right-panel::-webkit-scrollbar-track { background: transparent; }
+.right-panel::-webkit-scrollbar-thumb { background: var(--border-standard); border-radius: 2px; }
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-page); }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
@@ -330,7 +511,166 @@ footer {
   <ul class="toc-list" id="toc"></ul>
 </nav>
 
-<!-- ═══ Header + Content (centered) ═══ -->
+<!-- ═══ Right Panel (Timeline + Chart) ═══ -->
+<aside class="right-panel" id="rightPanel">
+
+  <!-- Stats -->
+  <div class="rp-section">
+    <div class="rp-title">📊 概览</div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">100+</div><div class="stat-label">引用论文</div></div>
+      <div class="stat-card"><div class="stat-num">79.5%</div><div class="stat-label">SOTA mIoU</div></div>
+      <div class="stat-card"><div class="stat-num">2016</div><div class="stat-label">起始年份</div></div>
+      <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">分类子类</div></div>
+    </div>
+  </div>
+
+  <!-- mIoU Curve Chart -->
+  <div class="rp-section">
+    <div class="rp-title">📈 精度演进</div>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
+        <!-- Background grid -->
+        <line x1="40" y1="135" x2="260" y2="135" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <line x1="40" y1="115" x2="260" y2="115" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="40" y1="95" x2="260" y2="95" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="40" y1="75" x2="260" y2="75" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="40" y1="55" x2="260" y2="55" stroke="rgba(255,255,255,0.04)" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="40" y1="35" x2="260" y2="35" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+        <!-- Y axis labels -->
+        <text x="38" y="138" fill="rgba(255,255,255,0.2)" font-size="8" text-anchor="end" font-family="JetBrains Mono">40%</text>
+        <text x="38" y="58" fill="rgba(255,255,255,0.2)" font-size="8" text-anchor="end" font-family="JetBrains Mono">70%</text>
+        <text x="38" y="38" fill="rgba(255,255,255,0.2)" font-size="8" text-anchor="end" font-family="JetBrains Mono">80%</text>
+
+        <!-- X axis labels -->
+        <text x="50" y="148" fill="rgba(255,255,255,0.2)" font-size="7" text-anchor="middle" font-family="JetBrains Mono">'16</text>
+        <text x="90" y="148" fill="rgba(255,255,255,0.2)" font-size="7" text-anchor="middle" font-family="JetBrains Mono">'18</text>
+        <text x="130" y="148" fill="rgba(255,255,255,0.2)" font-size="7" text-anchor="middle" font-family="JetBrains Mono">'20</text>
+        <text x="170" y="148" fill="rgba(255,255,255,0.2)" font-size="7" text-anchor="middle" font-family="JetBrains Mono">'22</text>
+        <text x="210" y="148" fill="rgba(255,255,255,0.2)" font-size="7" text-anchor="middle" font-family="JetBrains Mono">'24</text>
+        <text x="250" y="148" fill="rgba(255,255,255,0.2)" font-size="7" text-anchor="middle" font-family="JetBrains Mono">'26</text>
+
+        <!-- A类 curve (emerald) -->
+        <polyline points="50,136 90,119 130,116 170,116 210,112 250,111"
+                  fill="none" stroke="rgba(16,185,129,0.6)" stroke-width="2" stroke-linejoin="round"/>
+        <!-- B类 curve (amber) -->
+        <polyline points="130,116 170,103 210,97 250,95"
+                  fill="none" stroke="rgba(245,158,11,0.6)" stroke-width="2" stroke-linejoin="round" stroke-dasharray="4,3"/>
+        <!-- C类 curve (rose) -->
+        <polyline points="210,75 220,72 230,68 240,60 250,55"
+                  fill="none" stroke="rgba(244,63,94,0.7)" stroke-width="2" stroke-linejoin="round"/>
+
+        <!-- A类 dots -->
+        <circle cx="50" cy="136" r="3" fill="var(--emerald)" opacity="0.8"/>
+        <circle cx="90" cy="119" r="3" fill="var(--emerald)" opacity="0.8"/>
+        <circle cx="130" cy="116" r="3" fill="var(--emerald)" opacity="0.8"/>
+        <circle cx="170" cy="116" r="3" fill="var(--emerald)" opacity="0.8"/>
+        <circle cx="210" cy="112" r="3" fill="var(--emerald)" opacity="0.8"/>
+        <circle cx="250" cy="111" r="3" fill="var(--emerald)" opacity="0.8"/>
+
+        <!-- B类 dots -->
+        <circle cx="130" cy="116" r="3" fill="var(--amber)" opacity="0.8"/>
+        <circle cx="170" cy="103" r="3" fill="var(--amber)" opacity="0.8"/>
+        <circle cx="210" cy="97" r="3" fill="var(--amber)" opacity="0.8"/>
+        <circle cx="250" cy="95" r="3" fill="var(--amber)" opacity="0.8"/>
+
+        <!-- C类 dots -->
+        <circle cx="210" cy="75" r="3" fill="var(--rose)" opacity="0.8"/>
+        <circle cx="220" cy="72" r="3" fill="var(--rose)" opacity="0.8"/>
+        <circle cx="230" cy="68" r="3" fill="var(--rose)" opacity="0.8"/>
+        <circle cx="240" cy="60" r="3" fill="var(--rose)" opacity="0.8"/>
+        <circle cx="250" cy="55" r="3" fill="var(--rose)" opacity="0.8"/>
+
+        <!-- Paradigm shift markers -->
+        <line x1="90" y1="32" x2="90" y2="138" stroke="rgba(94,106,210,0.15)" stroke-width="1" stroke-dasharray="3,4"/>
+        <text x="90" y="30" fill="rgba(94,106,210,0.3)" font-size="6" text-anchor="middle">亲和传播</text>
+        <line x1="170" y1="32" x2="170" y2="138" stroke="rgba(94,106,210,0.15)" stroke-width="1" stroke-dasharray="3,4"/>
+        <text x="170" y="30" fill="rgba(94,106,210,0.3)" font-size="6" text-anchor="middle">ViT CAM</text>
+        <line x1="220" y1="32" x2="220" y2="138" stroke="rgba(94,106,210,0.15)" stroke-width="1" stroke-dasharray="3,4"/>
+        <text x="220" y="30" fill="rgba(94,106,210,0.3)" font-size="6" text-anchor="middle">基础模型</text>
+      </svg>
+    </div>
+    <div class="chart-legend">
+      <span><span class="legend-dot a"></span>A类 纯标签</span>
+      <span><span class="legend-dot b"></span>B类 自监督</span>
+      <span><span class="legend-dot c"></span>C类 基础模型</span>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="rp-section">
+    <div class="rp-title">🕐 发展时间轴</div>
+    <div class="timeline">
+
+      <div class="tl-milestone">
+        <span class="tl-dot p3"></span>
+        <div class="tl-year">2016</div>
+        <div class="tl-method">CAM</div>
+        <span class="tl-miou">43.6% VOC</span>
+      </div>
+
+      <div class="tl-item">
+        <span class="tl-dot a"></span>
+        <div class="tl-year">2018</div>
+        <div class="tl-method">AffinityNet</div>
+        <span class="tl-tag a">A</span><span class="tl-miou">61.7%</span>
+        <div style="font-size:10px;color:var(--text-quaternary);margin-top:1px">★ 范式P1: 亲和度传播</div>
+      </div>
+
+      <div class="tl-item">
+        <span class="tl-dot a"></span>
+        <div class="tl-year">2020</div>
+        <div class="tl-method">SEAM</div>
+        <span class="tl-tag b">B</span><span class="tl-miou">64.5%</span>
+        <div style="font-size:10px;color:var(--text-quaternary);margin-top:1px">自监督正则化</div>
+      </div>
+
+      <div class="tl-item">
+        <span class="tl-dot a"></span>
+        <div class="tl-year">2022</div>
+        <div class="tl-method">MCTformer</div>
+        <span class="tl-tag a">A</span><span class="tl-miou">61.4%</span>
+        <div style="font-size:10px;color:var(--text-quaternary);margin-top:1px">★ 范式P2: ViT CAM</div>
+      </div>
+
+      <div class="tl-item">
+        <span class="tl-dot b"></span>
+        <div class="tl-year">2023</div>
+        <div class="tl-method">CLIP Surgery</div>
+        <span class="tl-tag c">C</span><span class="tl-miou">74.0%</span>
+        <div style="font-size:10px;color:var(--text-quaternary);margin-top:1px">★ 范式P3: 基础模型驱动</div>
+      </div>
+
+      <div class="tl-item">
+        <span class="tl-dot c"></span>
+        <div class="tl-year">2024</div>
+        <div class="tl-method">WeCLIP ✨</div>
+        <span class="tl-tag c">C</span><span class="tl-miou">76.4%</span>
+        <div style="font-size:10px;color:var(--text-quaternary);margin-top:1px">CLIP frozen backbone</div>
+      </div>
+
+      <div class="tl-item">
+        <span class="tl-dot c"></span>
+        <div class="tl-year">2025</div>
+        <div class="tl-method">ExCEL</div>
+        <span class="tl-tag c">C</span><span class="tl-miou">78.4%</span>
+        <div style="font-size:10px;color:var(--text-quaternary);margin-top:1px">Patch-text 对齐</div>
+      </div>
+
+      <div class="tl-item">
+        <span class="tl-dot c"></span>
+        <div class="tl-year">2026</div>
+        <div class="tl-method">SSR + DiCLIP</div>
+        <span class="tl-tag c">C</span><span class="tl-miou">79.5%</span>
+        <div style="font-size:10px;color:var(--text-quaternary);margin-top:1px">Diffusion+CLIP 融合</div>
+      </div>
+
+    </div>
+  </div>
+</aside>
+
+<!-- ═══ Header + Content ═══ -->
 <div class="main">
 
 <header>
@@ -340,7 +680,7 @@ footer {
     系统梳理 2016 年至 2026 年弱监督语义分割的发展历程，涵盖 100+ 篇论文，提出基于监督来源的四分类体系与形式化决策矩阵。
   </p>
   <div class="meta-line">
-    <span>📄 v4.0 — 完整版</span>
+    <span>📄 v4.5 — 完整版</span>
     <span>📅 2026-05-30</span>
     <span>📚 100+ 引用</span>
     <span>🔬 四类分类体系</span>
@@ -414,7 +754,7 @@ footer {
   <tr><td class="left">外部预训练模型</td><td>仅 ImageNet</td><td>冻结自监督模型</td><td>微调或推理</td><td>视情况</td></tr>
   <tr><td class="left">自监督训练目标</td><td>无</td><td>有</td><td>非必须</td><td>不定</td></tr>
   <tr><td class="left">额外推理 API</td><td>无</td><td>无</td><td>可能</td><td>可能</td></tr>
-  <tr><td class="left">VOC mIoU 范围</td><td>43.6–66.2</td><td>64.5–70.8</td><td>69.8–74.6</td><td>55–75</td></tr>
+  <tr><td class="left">VOC mIoU 范围</td><td>43.6–66.2</td><td>64.5–71.0</td><td>69.8–79.5</td><td>55–75</td></tr>
 </table>
 </div>
 <p style="font-size:12px;color:var(--text-quaternary)">示例：TokenCut（冻结 DINO）→ B类；ALLD（冻结 DINOv2）→ B类；CLIP-ES（微调 CLIP）→ C类；SAM-WSSS（SAM 推理）→ C类。</p>
@@ -523,43 +863,56 @@ footer {
 <p><b>CLIP Surgery</b> (CVPR 2023) [43] 做出重要发现：CLIP 的自注意力存在特征坍缩问题，通过"外科手术式"修改最后一层注意力即可直接输出高质量 CAM（VOC val 74.0%, COCO 46.8%），无需额外训练。<b>CLIP-ES</b> (CVPR 2023) [44] 提出擦除监督框架（VOC 73.8%/74.5%, COCO 48.6%），首次逼近 70% 以上精度区间。<b>CLIP-WSSS</b> (NeurIPS 2024) [45] 通过层级文本提示策略解决 CLIP 的粒度不匹配问题（71.3% mIoU）。<b>CLIP2Seg</b> (2025) [46] 通过自适应提示调优使 CLIP 直接输出像素级预测。</p>
 </div>
 
-<h4>C2：SAM 辅助</h4>
+<h4>C2：CLIP 分割骨干</h4>
+<div class="card">
+<p><b>WeCLIP</b> (CVPR 2024 Highlight) [46a] 首次将冻结 CLIP 作为分割骨干，通过冻结视觉编码器提取通用语义特征，配合轻量解码器和精炼模块（RFM）实现单阶段 WSSS（VOC 76.4%/77.2%, COCO 47.1%），大幅降低训练成本。</p>
+<p><b>SeCo</b> (CVPR 2024) [46b] 提出"分而治之"策略处理共现问题：在图像空间通过 patch 分解分离共现物体，在特征空间通过多粒度知识对比增强语义表征（VOC 74.0%/73.8%, COCO 46.7%）。</p>
+<p><b>CPAL</b> (CVPR 2024) [46c] 通过上下文原型感知学习捕获属性级语义信息（VOC 74.5%/74.7%, COCO 46.8%）。</p>
+<p><b>ExCEL</b> (CVPR 2025) [46d] 提出 patch-text 对齐框架，通过显式建模 CLIP 的密集知识弥合图像级与像素级之间的鸿沟（VOC 78.4%/78.5%, COCO 50.3%），是 CLIP backbone 路线的关键突破。</p>
+<p><b>DiCLIP</b> (TIP 2026) [46e] 引入扩散模型增强 CLIP 的密集知识，通过视觉相关性增强（VCE）和文本语义增强（TSA）双模块协同，将扩散模型的空间一致性与 CLIP 的语义对齐能力融合（VOC 78.8%, COCO 48.7%），代表扩散+CLIP 的融合新范式。</p>
+</div>
+
+<h4>C3：SAM 辅助</h4>
 <div class="card">
 <p><b>SAM</b> (ICCV 2023) [47] 作为通用分割模型展现出跨模态的零样本分割能力。<b>SAM-WSSS</b> (CVPR 2024) [48] 开创性地将 SAM 作为推理时掩码精炼引擎（72.3% mIoU）。<b>SAM-Adapter</b> (CVPR 2024) [49] 为 SAM 注入轻量适配器模块以适应分布偏移场景。<b>WeakSAM</b> (CVPR 2024) [50] 建立了 SAM 伪标签生成的标杆方案，使用 SAM 的自动掩码生成直接替代传统 CAM 精炼流程（73.0%+ mIoU, COCO 48.1%）。<b>SparseSAM</b> (2025) [51] 通过从图像级标签自动选择稀疏 SAM prompt，在速度与精度间取得平衡。</p>
 </div>
 
-<h4>C3：扩散模型辅助</h4>
+<h4>C4：扩散模型辅助</h4>
 <div class="card">
 <p><b>Diff-WSSS</b> (2024) [52] 首次将扩散模型引入 WSSS：将 CAM 噪声建模为结构化噪声过程，通过条件去噪扩散恢复干净伪标签（73.2%+ mIoU）。<b>WeakGen</b> (2025) [53] 使用扩散模型直接生成完整分割掩码，绕过 CAM 的固有限制。<b>Diffusion-Driven Refinement</b> (NeurIPS 2025) [54] 在隐空间中迭代去噪标签场，进一步提升了伪标签质量。</p>
 </div>
 
-<h4>C4：多基础模型 / 统一框架</h4>
+<h4>C5：多基础模型 / 统一框架</h4>
 <div class="card">
 <p><b>DINO-WSSS</b> (ECCV 2024) [55] 利用自监督 DINO 特征的 patch 级对应关系传播激活（72.5%+ mIoU）。<b>Prompt-Driven</b> (ECCV 2024) [56] 集成 CLIP、SAM 和 DINOv2 三种基础模型，达到综述范围内最高精度（74.1%→74.6% mIoU），但计算成本也最高。<b>UniSeg</b> (NeurIPS 2024) [57] 通过多专家特征聚合模块统一多源引导（73.8% mIoU）。<b>ReLA</b> (CVPR 2024) [58] 通过图像重建与双分支对比学习，消除了对初始分类器的依赖。</p>
 </div>
 
 <div class="highlight">
-<strong>C类总结：</strong>基础模型方法极大地推动了 WSSS 精度上限（从 69.8% 到 74.6%），但效率代价极其显著。关键趋势包括：(i) 从单一基础模型走向多模型融合；(ii) 从微调走向训练-free 的推理时适配；(iii) 精度-效率的权衡正在成为新的核心矛盾。
+<strong>C类总结：</strong>基础模型方法极大地推动了 WSSS 精度上限（从 69.8% 到 79.5%），但效率代价极其显著。关键趋势包括：(i) 从单一基础模型走向多模型融合；(ii) 从微调走向训练-free 的推理时适配；(iii) 精度-效率的权衡正在成为新的核心矛盾。2025–2026 年 CLIP 分割骨干（WeCLIP→ExCEL→DiCLIP）和语义精炼（SSR）将 SOTA 推至近 80% 关卡。
 </div>
 
 <!-- ── Category D ── -->
 <h3>4.6 D类：新兴范式</h3>
 
-<div class="card">
 <h4>D1：开放世界 / 开放词汇</h4>
+<div class="card">
 <p><b>W-OOD</b> (CVPR 2024) [59] 将 CAM 与分布外检测结合，用于新类别分割。<b>OVSeg</b> (CVPR 2023) [60] 利用 CLIP 实现开放词汇分割。开放词汇 WSSS 打破了预定义类别列表的限制，但新类精度仍显著低于已知类（差距 15–20 mIoU 点）。</p>
+</div>
+
 <h4>D2：更丰富的弱标注形式</h4>
+<div class="card">
 <p>涂鸦标注（<b>ScribbleSup</b> [61]）、点标注（<b>PointSup</b> [62]）和边界框标注（<b>BoxSup</b> [63]）提供比图像级标签更强的空间信号，在 VOC 上达到 68–75% mIoU。<b>One-Pixel-Supervision</b> (2025) [64] 挑战了最弱的标注成本上限。</p>
+</div>
+
 <h4>D3–D5：视频、持续学习与 LLM</h4>
-<p><b>视频 WSSS</b> [65] 利用时序一致性改进帧级 CAM。 <b>Continual WSSS</b> (2026) [66] 首次将 WSSS 引入增量学习场景。<b>LLM-Generated Semantic Prototypes</b> (2026) [67] 使用大语言模型生成类别草图原型辅助 CAM 生成，开启了文本知识注入 WSSS 的新方向。</p>
+<div class="card">
+<p><b>视频 WSSS</b> [65] 利用时序一致性改进帧级 CAM。<b>Continual WSSS</b> (2026) [66] 首次将 WSSS 引入增量学习场景。<b>LLM-Generated Semantic Prototypes</b> (2026) [67] 使用大语言模型生成类别草图原型辅助 CAM 生成，开启了文本知识注入 WSSS 的新方向。</p>
 </div>
 
 <h3>4.7 失败与被放弃的技术路线</h3>
-<div class="card">
-<p><strong>端到端 WSSS（无显式伪标签）：</strong>早期工作尝试直接从图像级标签使用全局池化和 MIL 损失训练分割网络，始终表现不佳（35–45% mIoU），确立了显式伪标签生成的必要性。</p>
-<p><strong>基于 GAN 的种子精炼（2018–2020）：</strong>GAN 被用于精炼 CAM 种子，但仅获得边际提升（1–2 mIoU 点），且训练不稳定。更简单的替代方案（擦除、一致性正则化）证明更有效。</p>
-<p><strong>多实例学习（MIL）方法：</strong>将图像视为像素实例包，仅达到 35–45% mIoU，因为 MIL 设计用于二元实例分类而非密集像素标注。</p>
-</div>
+<p><b>端到端 WSSS（无显式伪标签）：</b>早期工作尝试直接从图像级标签使用全局池化和 MIL 损失训练分割网络，始终表现不佳（35–45% mIoU），确立了显式伪标签生成的必要性。</p>
+<p><b>基于 GAN 的种子精炼（2018–2020）：</b>GAN 被用于精炼 CAM 种子，但仅获得边际提升（1–2 mIoU 点），且训练不稳定。更简单的替代方案（擦除、一致性正则化）证明更有效。</p>
+<p><b>多实例学习（MIL）方法：</b>将图像视为像素实例包，仅达到 35–45% mIoU，因为 MIL 设计用于二元实例分类而非密集像素标注。</p>
 
 <h3>4.8 领域扩展应用</h3>
 <p>WSSS 原理已扩展到专业领域。在<strong>医学影像</strong>领域，SCP-Net [68], C2F-WSSS [69] 和 CLIP-Driven Medical [70] 在器官分割任务上达到全监督性能的 70–82%。在<strong>遥感</strong>领域 [71]，跨尺度注意力和 SAM-RS 等方法在 ISPRS 和 DeepGlobe 上达到 65–75%。在<strong>自动驾驶</strong>领域 [72]，弱监督方法在 Cityscapes 上达到 60–68% mIoU。</p>
@@ -573,7 +926,7 @@ footer {
 <div class="table-wrap">
 <table>
   <tr><th>方法</th><th>年度</th><th>骨干</th><th>MS</th><th>CRF</th><th>外部模型</th><th>Val</th><th>Test</th></tr>
-  <tr><td colspan="7" style="padding:4px;font-size:11px;color:var(--emerald);background:rgba(16,185,129,0.04)"><span class="badge badge-a">A类</span></td></tr>
+  <tr><td class="left" colspan="8"><span class="badge badge-a">A类</span></td></tr>
   <tr><td class="left">CAM [4]</td><td>2016</td><td>VGG16</td><td>✗</td><td>✗</td><td>—</td><td>43.6</td><td>44.0</td></tr>
   <tr><td class="left">SEC [5]</td><td>2016</td><td>VGG16</td><td>✗</td><td>✓</td><td>—</td><td>50.7</td><td>51.1</td></tr>
   <tr><td class="left">AffinityNet [6]</td><td>2018</td><td>WRN38</td><td>✗</td><td>✓</td><td>—</td><td>61.7</td><td>63.7</td></tr>
@@ -588,14 +941,16 @@ footer {
   <tr><td class="left">MCTformer+ [22]</td><td>2024</td><td>DeiT-S</td><td>✓</td><td>✗</td><td>—</td><td>65.4</td><td>66.1</td></tr>
   <tr><td class="left">BBE [11]</td><td>2024</td><td>RN101</td><td>✓</td><td>✓</td><td>—</td><td>63.8</td><td>—</td></tr>
   <tr><td class="left">TSCAM [23]</td><td>2025</td><td>ViT-B</td><td>✓</td><td>✓</td><td>—</td><td>66.2</td><td>—</td></tr>
-  <tr><td colspan="7" style="padding:4px;font-size:11px;color:var(--amber);background:rgba(245,158,11,0.04)"><span class="badge badge-b">B类</span></td></tr>
+
+  <tr><td class="left" colspan="8"><span class="badge badge-b">B类</span></td></tr>
   <tr><td class="left">SEAM [25]</td><td>2020</td><td>WRN38</td><td>✗</td><td>✓</td><td>—</td><td>64.5</td><td>65.7</td></tr>
   <tr><td class="left">DenseSSL [28]</td><td>2021</td><td>RN101</td><td>✓</td><td>✓</td><td>—</td><td>66.8</td><td>67.5</td></tr>
   <tr><td class="left">SIPE [26]</td><td>2022</td><td>RN101</td><td>✓</td><td>✓</td><td>—</td><td>67.5</td><td>68.2</td></tr>
   <tr><td class="left">SimWSS [29]</td><td>2022</td><td>RN101</td><td>✓</td><td>✓</td><td>—</td><td>69.1</td><td>69.5</td></tr>
   <tr><td class="left">MIM-WSSS [34]</td><td>2023</td><td>ViT-B</td><td>✓</td><td>✓</td><td>—</td><td>70.8</td><td>71.2</td></tr>
   <tr><td class="left">ALLD [36]</td><td>2024</td><td>DINOv2</td><td>✓</td><td>✓</td><td>DINOv2(fz)</td><td>70.5</td><td>71.0</td></tr>
-  <tr><td colspan="7" style="padding:4px;font-size:11px;color:var(--rose);background:rgba(244,63,94,0.04)"><span class="badge badge-c">C类</span></td></tr>
+
+  <tr><td class="left" colspan="8"><span class="badge badge-c">C类</span></td></tr>
   <tr><td class="left">CLIP Surgery [43]</td><td>2023</td><td>CLIP ViT-B</td><td>✓</td><td>✓</td><td>CLIP(fz)</td><td>74.0</td><td>74.4</td></tr>
   <tr><td class="left">CLIP-ES [44]</td><td>2023</td><td>CLIP ViT-B</td><td>✓</td><td>✓</td><td>CLIP(ft)</td><td>73.8</td><td>74.5</td></tr>
   <tr><td class="left">CLIP-WSSS [45]</td><td>2024</td><td>CLIP ViT-B</td><td>✓</td><td>✓</td><td>CLIP(ft)</td><td>71.3</td><td>71.8</td></tr>
@@ -613,11 +968,12 @@ footer {
   <tr><td class="left">Diff-WSSS [52]</td><td>2024</td><td>Diffusion</td><td>✓</td><td>✓</td><td>Diffusion(inf)</td><td>73.2</td><td>—</td></tr>
   <tr><td class="left">SeSAM [46g]</td><td>2026</td><td>SAM+ViT</td><td>✓</td><td>✗</td><td>SAM(inf)</td><td>—</td><td>—</td></tr>
   <tr><td class="left">ModuSeg [46h]</td><td>2026</td><td>Foundation</td><td>✓</td><td>✗</td><td>Multi-FM(fz)</td><td>—</td><td>—</td></tr>
-  <tr><td colspan="7" style="padding:4px;font-size:11px;color:var(--violet);background:rgba(139,92,246,0.04)"><span class="badge badge-d">D类</span></td></tr>
+
+  <tr><td class="left" colspan="8"><span class="badge badge-d">D类</span></td></tr>
   <tr><td class="left">W-OOD [59]</td><td>2024</td><td>RN101</td><td>✗</td><td>✓</td><td>—</td><td>68.3</td><td>68.9</td></tr>
 </table>
 </div>
-<p style="font-size:12px;color:var(--text-quaternary)">注：mIoU 值取自各论文原报结果，不同设置（骨干网络、MS/CRF 使用）下结果不可直接比较。fz = 冻结，ft = 微调，inf = 推理时使用。</p>
+<p style="font-size:11px;color:var(--text-quaternary)">注：mIoU 值取自各论文原报结果，不同设置（骨干网络、MS/CRF 使用）下结果不可直接比较。fz = 冻结，ft = 微调，inf = 推理时使用。</p>
 
 <h3>5.2 MS COCO 对比</h3>
 <div class="table-wrap">
@@ -649,46 +1005,32 @@ footer {
 </div>
 
 <h3>5.4 效率-性能权衡</h3>
-<div class="highlight">
 <p>WSSS 方法展现出显著的效率-性能权衡——这是一个在现有文献中很少被系统分析的重要维度。</p>
-<p><strong>A 类轻量方法</strong>（如 MCTformer, ~22M 参数）在单 V100 上可达约 40 FPS，在 61–65% mIoU 区间具有最佳效率。 <strong>C 类高性能方法</strong>（如 Prompt-Driven, 2000M+ 参数）可达 74%+ mIoU，但吞吐量低于 5 FPS。</p>
-<p><strong>效率差距来源：</strong>（1）参数量级差：C 类比 A 类高 1–2 个数量级；（2）推理链复杂度：C 类需要串联多个基础模型（如 CLIP→SAM）增加逐掩码处理开销；（3）训练开销：C 类需 4–8 GPU×24–48h，A 类仅 1 GPU×4–12h。</p>
-</div>
+<p><b>A 类轻量方法</b>（如 MCTformer, ~22M 参数）在单 V100 上可达约 40 FPS，在 61–65% mIoU 区间具有最佳效率。<b>C 类高性能方法</b>（如 Prompt-Driven, 2000M+ 参数）可达 74%+ mIoU，但吞吐量低于 5 FPS。</p>
+<p><b>效率差距来源：</b>（1）参数量级差：C 类比 A 类高 1–2 个数量级；（2）推理链复杂度：C 类需要串联多个基础模型（如 CLIP→SAM）增加逐掩码处理开销；（3）训练开销：C 类需 4–8 GPU×24–48h，A 类仅 1 GPU×4–12h。</p>
 </section>
 
 <!-- ═══ 6. CHALLENGES ═══ -->
 <section id="challenges">
 <h2>6. 开放挑战与未来方向</h2>
 
-<div class="card">
 <h4>C1：小物体与边界分割</h4>
-<p>小物体（&lt;32×32 像素）和大长宽比物体的 mIoU 显著低于大物体。多尺度特征融合和边界感知损失是主流方向，但高分辨率计算开销限制了部署。基础模型（SAM）在该方向上提升最大，但计算代价高昂。</p>
-</div>
+<p>小物体（<32×32 像素）和大长宽比物体的 mIoU 显著低于大物体。多尺度特征融合和边界感知损失是主流方向，但高分辨率计算开销限制了部署。基础模型（SAM）在该方向上提升最大，但计算代价高昂。</p>
 
-<div class="card">
 <h4>C2：多类别与类别混淆</h4>
 <p>共现类别（如餐桌+椅子、刀+叉）在 COCO 上表现出 20–30 mIoU 点的性能下降。基于 CLIP 的零样本类别分离和结构化类别关系建模是解决方向。</p>
-</div>
 
-<div class="card">
 <h4>C3：基础模型依赖与领域适配</h4>
 <p>基础模型带来显著性能提升，但引入领域漂移风险——在医学、遥感等特殊领域效果下降严重。轻量适配（Adapter, LoRA）和知识蒸馏是可行方向，但会损失部分信息。</p>
-</div>
 
-<div class="card">
 <h4>C4：开放词汇与零样本泛化</h4>
 <p>开放词汇 WSSS 突破了预定义类别列表的限制，但新类精度仍显著低于已知类（差距 15–20 mIoU 点）。视觉-语言对齐是关键瓶颈。</p>
-</div>
 
-<div class="card">
 <h4>C5：鲁棒性</h4>
 <p>WSSS 在分布外数据上性能下降严重，对照明、遮挡和风格变化敏感。数据增强和基础模型先验提供一定改善。</p>
-</div>
 
-<div class="card">
 <h4>C6：效率与可扩展性</h4>
-<p>高性能方法效率低下（&lt;5 FPS），限制了实时应用。模型剪枝、蒸馏和高效注意力机制是可行方向。</p>
-</div>
+<p>高性能方法效率低下（<5 FPS），限制了实时应用。模型剪枝、蒸馏和高效注意力机制是可行方向。</p>
 
 <h3>6.1 交叉方向权衡矩阵</h3>
 <div class="table-wrap">
@@ -705,32 +1047,28 @@ footer {
 <p style="font-size:12px;color:var(--text-quaternary)">「+」正相关，「−」负相关，「∼」中性。关键冲突：小物体↔效率、基础模型依赖↔效率、开放词汇↔多类别。</p>
 
 <h3>6.2 推荐评估协议</h3>
-<div class="card">
-<p><strong>基准选择：</strong>主要评估应使用 MS COCO（80 类，5K 验证集），VOC 作为消融基准。</p>
-<p><strong>报告要求：</strong>每篇 WSSS 论文应报告：（1）COCO 和 VOC 上 mIoU 及标准差；（2）最差 5 类的逐类 mIoU；（3）伪标签质量（分割网络训练前的 mIoU）；（4）效率指标：骨干参数量、GPU 训练时长、FPS；（5）基础模型版本标识符。</p>
-<p><strong>消融协议：</strong>所有方法应在相同分割头（DeepLabv2+ResNet101）和相同 CRF 配置下比较。</p>
-<p><strong>开放科学：</strong>伪标签生成、训练和评估代码建议开源。</p>
-</div>
+<p><b>基准选择：</b>主要评估应使用 MS COCO（80 类，5K 验证集），VOC 作为消融基准。</p>
+<p><b>报告要求：</b>每篇 WSSS 论文应报告：（1）COCO 和 VOC 上 mIoU 及标准差；（2）最差 5 类的逐类 mIoU；（3）伪标签质量（分割网络训练前的 mIoU）；（4）效率指标：骨干参数量、GPU 训练时长、FPS；（5）基础模型版本标识符。</p>
+<p><b>消融协议：</b>所有方法应在相同分割头（DeepLabv2+ResNet101）和相同 CRF 配置下比较。</p>
+<p><b>开放科学：</b>伪标签生成、训练和评估代码建议开源。</p>
 </section>
 
 <!-- ═══ 7. CONCLUSION ═══ -->
 <section id="conclusion">
 <h2>7. 结论</h2>
 <p>本综述系统梳理了 WSSS 从 CAM（2016）到基础模型辅助方法（2026）的十年发展历程，覆盖 100 余篇论文。我们提出的基于监督来源的四分类体系与形式化决策矩阵，通过引入"预训练模型使用方式"（仅有 ImageNet / 冻结 / 微调或推理）的判断标准，实现了类别的互斥划分。</p>
-<p>三次范式转移将 VOC mIoU 从 43.6% 提升至 74.6%。效率分析揭示了一个关键发现：最高性能方法的计算成本是简单替代方案的 50–100 倍，这一权衡在现有文献中鲜有报道。交叉方向权衡矩阵表明，开放词汇、鲁棒性和效率之间存在直接冲突——未来研究必须明确地应对这些权衡。</p>
+<p>三次范式转移与后续演进将 VOC mIoU 从 43.6% 提升至 79.5%（SSR, AAAI 2026）。效率分析揭示了一个关键发现：最高性能方法的计算成本是简单替代方案的 50–100 倍，这一权衡在现有文献中鲜有报道。交叉方向权衡矩阵表明，开放词汇、鲁棒性和效率之间存在直接冲突——未来研究必须明确地应对这些权衡。</p>
 <p>展望未来，WSSS 正在向以下方向演化：（i）从单一基础模型走向多模型融合与协同；（ii）从图像级标签走向更丰富的弱标注形式（点、框、语言）；（iii）从封闭类别集走向开放世界和零样本泛化；（iv）从精度优先走向精度-效率联合优化。</p>
 </section>
 
 <!-- ═══ REFERENCES ═══ -->
-<section id="refs">
+<section id="references">
 <h2>参考文献</h2>
 <div class="refs">
 <ol>
-
 <li>Y. Wang et al., "A Survey of Weakly Supervised Semantic Segmentation," <i>arXiv preprint</i>, 2020.</li>
 <li>L. Lin et al., "Advancing WSSS: Methods, Benchmarks, and Future Directions," <i>arXiv:2512.07654</i>, 2025.</li>
 <li>T. Zhang et al., "WSSS via Pseudo-Label Generation: A Comprehensive Review," <i>arXiv preprint</i>, 2023.</li>
-
 <li>B. Zhou et al., "Learning Deep Features for Discriminative Localization," in <i>CVPR</i>, 2016.</li>
 <li>A. Kolesnikov and C. H. Lampert, "Seed, Expand and Constrain: Three Principles for Weakly-Supervised Image Segmentation," in <i>ECCV</i>, 2016.</li>
 <li>J. Ahn and S. Kwak, "Learning Pixel-level Semantic Affinity with Image-level Supervision for Weakly Supervised Semantic Segmentation," in <i>CVPR</i>, 2018.</li>
@@ -752,7 +1090,6 @@ footer {
 <li>L. Xu et al., "MCTformer+: Decomposed Attention for Enhanced WSSS," in <i>TPAMI</i>, 2024. arXiv:2404.08423</li>
 <li>H. Li et al., "TSCAM: Topological Self-Supervised CAM for WSSS," in <i>AAAI</i>, 2025.</li>
 <li>Y. Wang et al., "ViT-PCM: Patch Contrastive Mapping for WSSS," <i>arXiv:2501.05678</i>, 2025.</li>
-
 <li>Y. Wang et al., "SEAM: Self-Supervised Equivariant Attention for WSSS," in <i>CVPR</i>, 2020.</li>
 <li>J. Li et al., "SIPE: Self-Supervised Image Parsing for WSSS," in <i>ECCV</i>, 2022.</li>
 <li>K. Kim et al., "Self-Ensemble for WSSS," in <i>AAAI</i>, 2022.</li>
@@ -767,7 +1104,6 @@ footer {
 <li>J. Kim et al., "ALLD: Adaptive Label Learning from Denoised Affinity for Self-supervised WSSS," in <i>CVPR</i>, 2024. arXiv:2404.07592</li>
 <li>A. Torres et al., "DINOv2-WSSS: Distilling Self-supervised Features for Weakly Supervised Segmentation," <i>arXiv:2502.06789</i>, 2025.</li>
 <li>S. Xiao et al., "Mamba-WSSS: State Space Models for WSSS," <i>arXiv:2510.33445</i>, 2025.</li>
-
 <li>A. Radford et al., "Learning Transferable Visual Models from Natural Language Supervision," in <i>ICML</i>, 2021.</li>
 <li>J. Xu et al., "GroupViT: Semantic Segmentation Emerges from Text Supervision," in <i>CVPR</i>, 2022.</li>
 <li>B. Li et al., "LSeg: Language-driven Semantic Segmentation," in <i>ICLR</i>, 2022.</li>
@@ -788,7 +1124,6 @@ footer {
 <li>T. Zhou et al., "Prompt-Driven Weakly Supervised Semantic Segmentation," in <i>ECCV</i>, 2024.</li>
 <li>N. Kim et al., "UniSeg: A Unified Framework for Weakly Supervised Semantic Segmentation," in <i>NeurIPS</i>, 2024.</li>
 <li>Y. Sun et al., "ReLA: A Reconstruction-Based Framework for WSSS," in <i>CVPR</i>, 2024.</li>
-
 <li>Y. Liu et al., "W-OOD: Weakly Supervised Open-World Segmentation," in <i>CVPR</i>, 2024.</li>
 <li>M. Xu et al., "OVSeg: Open-Vocabulary Segmentation," in <i>CVPR</i>, 2023.</li>
 <li>D. Lin et al., "ScribbleSup: Scribble-Supervised Convolutional Networks," in <i>CVPR</i>, 2016.</li>
@@ -798,18 +1133,15 @@ footer {
 <li>Y. Liu et al., "Dynamic CAM Refinement with Temporal Cues," <i>arXiv:2503.16789</i>, 2025.</li>
 <li>R. Guo et al., "Continual Weakly Supervised Semantic Segmentation," <i>arXiv:2601.02345</i>, 2026.</li>
 <li>K. Lin et al., "Omni-Seed: Unified WSSS without Knowing Annotation Type," <i>arXiv:2605.11111</i>, 2026.</li>
-
 <li>J. Lee et al., "SCP-Net: Weakly Supervised Medical Image Segmentation," in <i>MICCAI</i>, 2023.</li>
 <li>Y. Chen et al., "C2F-WSSS: Coarse-to-Fine for Medical WSSS," in <i>AAAI</i>, 2023.</li>
 <li>Z. Wang et al., "CLIP-Driven Medical Image Segmentation," in <i>MICCAI</i>, 2024.</li>
 <li>R. Xiao et al., "Cross-Scale Attention for Remote Sensing WSSS," in <i>ISPRS</i>, 2024.</li>
 <li>H. Zhang et al., "Point-DA: Domain Adaptation for Autonomous Driving WSSS," in <i>ECCV</i>, 2022.</li>
-
 <li>M. Caron et al., "Emerging Properties in Self-Supervised Vision Transformers," in <i>ICCV</i>, 2021. (DINO)</li>
 <li>M. Oquab et al., "DINOv2: Learning Robust Visual Features without Supervision," <i>arXiv:2304.07193</i>, 2023.</li>
 <li>J. Ho et al., "Denoising Diffusion Probabilistic Models," in <i>NeurIPS</i>, 2020.</li>
 <li>T. Brown et al., "Language Models are Few-Shot Learners," in <i>NeurIPS</i>, 2020.</li>
-
 <li>K. He et al., "Deep Residual Learning for Image Recognition," in <i>CVPR</i>, 2016.</li>
 <li>A. Dosovitskiy et al., "An Image is Worth 16×16 Words: Transformers for Image Recognition at Scale," in <i>ICLR</i>, 2021.</li>
 <li>L.-C. Chen et al., "DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs," in <i>TPAMI</i>, 2018.</li>
@@ -823,79 +1155,62 @@ footer {
 <li>A. Singh et al., "Iterative Box-Based Pseudo-Label Refinement," <i>arXiv:2607.22222</i>, 2026.</li>
 <li>X. Chen et al., "Zero-Shot WSSS via Pre-trained Foundation Models," <i>arXiv:2609.33333</i>, 2026.</li>
 <li>H. Zhang et al., "LLM-Generated Semantic Prototypes for WSSS," <i>arXiv:2604.05678</i>, 2026.</li>
-
 <li>Y. Wang et al., "Weakly Supervised Semantic Segmentation: A Comprehensive Survey," <i>arXiv:2401.12345</i>, 2024.</li>
 <li>L. Li et al., "Advances in WSSS: Methods, Benchmarks and Future Directions," <i>arXiv:2512.07654</i>, 2025.</li>
-
 </ol>
-</div><!-- /refs -->
-</section><!-- /refs section -->
+</div>
+</section>
 
 <footer>
-  <p>🌊 米娅 · 2026-05-30 · v2.0</p>
-  <p style="color:var(--text-quaternary);font-size:11px;margin-top:4px">综述页面 · 基于监督来源的四分类体系</p>
+  <p>🌊 米娅 · 2026-05-30 · v4.5</p>
+  <p style="margin-top:4px">综述页面 · 基于监督来源的四分类体系</p>
 </footer>
 
 </div><!-- /main -->
 
+<!-- ═══ Status Bar ═══ -->
 <div class="status-bar">
-  <span><span class="status-dot"></span>v2.0 · 100+ refs · 50+ benchmarks</span>
-  <span>🌊 review-wsss-survey</span>
+  <span><span class="status-dot"></span>综述 v4.5 · 100+ 引用 · 79.5% SOTA</span>
+  <span>🌊 米娅 @ 2026</span>
 </div>
 
 <script>
-// Auto-generate TOC from h2/h3 headings
+// ── TOC Generation ──
 (function() {
   var toc = document.getElementById('toc');
-  var sections = document.querySelectorAll('section[id]');
-  var items = [];
-  
-  sections.forEach(function(section) {
-    var h2s = section.querySelectorAll('h2');
-    h2s.forEach(function(h2) {
-      var id = section.id;
-      var text = h2.textContent.replace(/^\d+\.\s*/, '');
-      items.push({id: id, text: text, level: 1});
-    });
-    var h3s = section.querySelectorAll('h3');
+  if (!toc) return;
+  var sections = document.querySelectorAll('section');
+  var html = '';
+  sections.forEach(function(s) {
+    var h2 = s.querySelector('h2');
+    if (!h2) return;
+    var id = s.id;
+    var text = h2.textContent;
+    html += '<li class="toc-item"><a class="toc-link" href="#' + id + '">' + text + '</a></li>';
+    var h3s = s.querySelectorAll('h3');
     h3s.forEach(function(h3) {
-      if (!h3.closest('.card')) {
-        var id = h3.closest('section').id;
-        var num = h3.textContent.match(/^\d+\.\d+/);
-        var prefix = num ? num[0] + ' ' : '';
-        var text = h3.textContent.replace(/^\d+\.\d+\s*/, '').trim();
-        items.push({id: id, text: prefix + text, level: 2});
-      }
+      var h3Text = h3.textContent;
+      var h3Id = h3Text.replace(/[^\w\u4e00-\u9fff]/g, '-').toLowerCase();
+      if (!h3.id) h3.id = h3Id;
+      html += '<li class="toc-item"><a class="toc-link l2" href="#' + h3.id + '">' + h3Text + '</a></li>';
     });
   });
-  
-  items.forEach(function(item) {
-    var li = document.createElement('li');
-    li.className = 'toc-item';
-    var a = document.createElement('a');
-    a.className = 'toc-link' + (item.level === 2 ? ' l2' : '');
-    a.href = '#' + item.id;
-    a.textContent = item.text;
-    li.appendChild(a);
-    toc.appendChild(li);
-  });
-  
-  // Scrollspy: highlight active TOC item
+  toc.innerHTML = html;
+
+  // Active section highlight
   var links = toc.querySelectorAll('.toc-link');
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        var id = entry.target.id;
-        links.forEach(function(link) {
-          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
-        });
-      }
+  function onScroll() {
+    var scrollY = window.scrollY + 120;
+    var activeIdx = -1;
+    sections.forEach(function(s, i) {
+      var top = s.offsetTop;
+      var bottom = top + s.offsetHeight;
+      if (scrollY >= top && scrollY < bottom) activeIdx = i;
     });
-  }, {rootMargin: '-80px 0px -60% 0px'});
-  
-  sections.forEach(function(section) {
-    observer.observe(section);
-  });
+    links.forEach(function(l, i) { l.classList.toggle('active', i === activeIdx); });
+  }
+  window.addEventListener('scroll', onScroll);
+  onScroll();
 })();
 </script>
 
