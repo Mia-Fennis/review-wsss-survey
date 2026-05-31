@@ -836,7 +836,7 @@ footer {
 
 <h4>B1：一致性正则化</h4>
 <div class="card">
-<p><b>SEAM</b> (CVPR 2020) [25] 引入等变注意力正则化——要求经过几何变换后的注意力图与原始注意力图保持一致——比非自监督方法（61.7%→64.5%）提升约 3 个百分点，是自监督辅助 WSSS 的开山之作。<b>SIPE</b> (ECCV 2022) [26] 使用自监督 DINO 特征进行递归图解析（67.5%→68.2% mIoU）。<b>Self-Ensemble</b> (AAAI 2022) [27] 通过 EMA 教师-学生蒸馏实现自集成（67.2% mIoU）。</p>
+<p><b>SEAM</b> (CVPR 2020) [25] 引入等变注意力正则化——要求经过几何变换后的注意力图与原始注意力图保持一致——比非自监督方法（61.7%→64.5%）提升约 3 个百分点，是自监督辅助 WSSS 的开山之作。<b>SIPE</b> (CVPR 2022) [26] 提出图像特定原型探索（Image-specific Prototype Exploration），为每张图像定制原型以捕获完整目标区域，结合通用-特定一致性损失实现自纠正（67.5%→68.2% mIoU）。<b>Self-Ensemble</b> (AAAI 2022) [27] 通过 EMA 教师-学生蒸馏实现自集成（67.2% mIoU）。</p>
 </div>
 
 <h4>B2：对比学习</h4>
@@ -952,7 +952,7 @@ footer {
   <tr><td class="left">MCTformer [20]</td><td>2022</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>61.4</td><td>★ Transformer CAM → 分割</td></tr>
   <tr><td class="left">TransCAM [21]</td><td>2022</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>62.3</td><td>多层注意力聚合 → 分割</td></tr>
   <tr><td class="left">C²AM [15]</td><td>2022</td><td>ECCV</td><td><span class="badge badge-a">A</span></td><td>63.4</td><td>条件概率 CAM → 分割</td></tr>
-  <tr><td class="left">SIPE [26]</td><td>2022</td><td>ECCV</td><td><span class="badge badge-b">B</span></td><td>67.5</td><td>CAM → DINO 递归图解析 → 分割</td></tr>
+  <tr><td class="left">SIPE [26]</td><td>2022</td><td>CVPR</td><td><span class="badge badge-b">B</span></td><td>67.5</td><td>图像特定原型探索 → IS-CAM → 分割</td></tr>
   <tr><td class="left">SimWSS [29]</td><td>2022</td><td>NeurIPS</td><td><span class="badge badge-b">B</span></td><td>69.1</td><td>CAM → SimCLR 对比 → 分割</td></tr>
   <tr><td class="left">AEFT [9]</td><td>2022</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>60.8</td><td>CAM → 特征级擦除 → 分割</td></tr>
   <tr><td class="left">MIM-WSSS [34]</td><td>2023</td><td>CVPR</td><td><span class="badge badge-b">B</span></td><td>70.8</td><td>★ CAM → 掩码建模 → 分割</td></tr>
@@ -1176,7 +1176,7 @@ footer {
 <li>H. Li et al., "TSCAM: Topological Self-Supervised CAM for WSSS," in <i>AAAI</i>, 2025.</li>
 <li>Y. Wang et al., "ViT-PCM: Patch Contrastive Mapping for WSSS," <i>arXiv:2501.05678</i>, 2025.</li>
 <li>Y. Wang et al., "SEAM: Self-Supervised Equivariant Attention for WSSS," in <i>CVPR</i>, 2020.</li>
-<li>J. Li et al., "SIPE: Self-Supervised Image Parsing for WSSS," in <i>ECCV</i>, 2022.</li>
+<li>J. Li et al., "SIPE: Self-supervised Image-specific Prototype Exploration for Weakly Supervised Semantic Segmentation," in <i>CVPR</i>, 2022. arXiv:2203.02909</li>
 <li>K. Kim et al., "Self-Ensemble for WSSS," in <i>AAAI</i>, 2022.</li>
 <li>Y. Liu et al., "DenseSSL: Dense Self-Supervised Learning for WSSS," in <i>ICCV</i>, 2021.</li>
 <li>X. Huang et al., "SimWSS: SimCLR-style Contrastive Learning for WSSS," in <i>NeurIPS</i>, 2022.</li>
