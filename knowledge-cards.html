@@ -29,6 +29,7 @@
     --cyan-soft: rgba(34, 211, 238, 0.1);
     --radius: 12px;
     --radius-sm: 8px;
+    --sidebar-width: 220px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,7 +42,74 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  .layout { display: flex; }
+
   .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--surface-2);
+    border-right: 1px solid var(--border);
+    padding: 32px 16px;
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .sidebar-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+    padding-left: 8px;
+  }
+  .sidebar a {
+    display: block;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: var(--text-2);
+    text-decoration: none;
+    transition: all 0.12s;
+    line-height: 1.4;
+  }
+  .sidebar a:hover {
+    background: var(--surface-3);
+    color: var(--text);
+  }
+  .sidebar a .num {
+    color: var(--text-3);
+    margin-right: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .sidebar a .yr {
+    font-size: 11px;
+    color: var(--text-3);
+    margin-left: 4px;
+  }
+  .sidebar .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-3);
+    padding: 16px 10px 4px;
+  }
+  .sidebar .sidebar-sub a {
+    padding: 5px 10px 5px 24px;
+    font-size: 12px;
+  }
+  .main-content {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    min-width: 0;
+  }
 
   /* ── Header ── */
   header {
@@ -297,6 +365,8 @@
 
   @media (max-width: 768px) {
     .container { padding: 0 20px; }
+    .sidebar { display: none; }
+    .main-content { margin-left: 0; }
     .paper-header { padding: 20px; }
     .paper-body { padding: 16px 20px 20px; }
     .paper-header h2 { font-size: 18px; }
@@ -305,6 +375,27 @@
 </style>
 </head>
 <body>
+<div class="layout">
+
+<nav class="sidebar">
+  <div class="sidebar-title">📖 论文导航</div>
+  <a href="#excel"><span class="num">#01</span>ExCEL<span class="yr">'25</span></a>
+  <a href="#clip-es"><span class="num">#02</span>CLIP-ES<span class="yr">'23</span></a>
+  <a href="#sipe"><span class="num">#03</span>SIPE<span class="yr">'22</span></a>
+  <a href="#dupl"><span class="num">#04</span>DuPL<span class="yr">'24</span></a>
+  <div class="section-label">快速跳转</div>
+  <div class="sidebar-sub">
+    <a href="#excel">ExCEL</a>
+    <a href="#clip-es">CLIP-ES</a>
+    <a href="#sipe">SIPE</a>
+    <a href="#dupl">DuPL</a>
+  </div>
+  <div style="margin-top: auto; padding: 16px 10px 0; border-top: 1px solid var(--border); margin-top: 24px;">
+    <a href="noise-test-design.html" style="font-size:12px;">← 噪声测试设计</a>
+  </div>
+</nav>
+
+<div class="main-content">
 
 <header>
   <div class="container">
@@ -704,6 +795,9 @@
     <p>用于噪声测试实验设计的参考材料 · 所有数据均来自论文正文</p>
   </div>
 </footer>
+
+</div><!-- /main-content -->
+</div><!-- /layout -->
 
 </body>
 </html>
