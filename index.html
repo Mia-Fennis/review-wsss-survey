@@ -932,23 +932,38 @@ footer {
 <p><b>劣势：</b>端到端优化困难，需精心设计损失函数；模型架构自由度受限于统一框架；参数量可能更大</p>
 </div>
 
-<h4>跨分类对照</h4>
+<h4>历时对照：多阶段方法</h4>
 <div class="table-wrap">
 <table>
-  <tr><th>方法</th><th>监督来源类</th><th>阶段数</th><th>VOC Val</th></tr>
-  <tr><td class="left">CAM [4]</td><td><span class="badge badge-a">A</span></td><td>多阶段</td><td>43.6</td></tr>
-  <tr><td class="left">AffinityNet [6]</td><td><span class="badge badge-a">A</span></td><td>多阶段</td><td>61.7</td></tr>
-  <tr><td class="left">SEAM [25]</td><td><span class="badge badge-b">B</span></td><td>多阶段</td><td>64.5</td></tr>
-  <tr><td class="left">MCTformer [20]</td><td><span class="badge badge-a">A</span></td><td>多阶段</td><td>61.4</td></tr>
-  <tr><td class="left">CLIP-ES [44]</td><td><span class="badge badge-c">C</span></td><td>多阶段</td><td>73.8</td></tr>
-  <tr><td class="left">CLIP Surgery [43]</td><td><span class="badge badge-c">C</span></td><td>单阶段</td><td>74.0</td></tr>
-  <tr><td class="left">WeCLIP [92]</td><td><span class="badge badge-c">C</span></td><td>单阶段</td><td>76.4</td></tr>
-  <tr><td class="left">ExCEL [95]</td><td><span class="badge badge-c">C</span></td><td>单阶段</td><td>78.4</td></tr>
-  <tr><td class="left">DiCLIP [96]</td><td><span class="badge badge-c">C</span></td><td>单阶段</td><td>78.8</td></tr>
-  <tr><td class="left">SSR [97]</td><td><span class="badge badge-c">C</span></td><td>单阶段</td><td><b>79.5</b></td></tr>
+  <tr><th>方法</th><th>年份</th><th>出处</th><th>监督类</th><th>VOC Val</th><th>备注</th></tr>
+  <tr><td class="left">CAM [4]</td><td>2016</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>43.6</td><td>WSSS 奠基之作</td></tr>
+  <tr><td class="left">SEC [5]</td><td>2016</td><td>ECCV</td><td><span class="badge badge-a">A</span></td><td>50.7</td><td>种子-扩展-约束范式</td></tr>
+  <tr><td class="left">AffinityNet [6]</td><td>2018</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>61.7</td><td>★ 可学习亲和度传播</td></tr>
+  <tr><td class="left">PSA [7]</td><td>2019</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>63.7</td><td>像素自适应核</td></tr>
+  <tr><td class="left">SEAM [25]</td><td>2020</td><td>CVPR</td><td><span class="badge badge-b">B</span></td><td>64.5</td><td>自监督正则化先驱</td></tr>
+  <tr><td class="left">MCTformer [20]</td><td>2022</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>61.4</td><td>★ Transformer CAM 先驱</td></tr>
+  <tr><td class="left">MIM-WSSS [34]</td><td>2023</td><td>CVPR</td><td><span class="badge badge-b">B</span></td><td>70.8</td><td>掩码图像建模</td></tr>
+  <tr><td class="left">CLIP-ES [44]</td><td>2023</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td><b>73.8</b></td><td>CLIP 擦除监督</td></tr>
+  <tr><td class="left">ALLD [36]</td><td>2024</td><td>CVPR</td><td><span class="badge badge-b">B</span></td><td>70.5</td><td>DINOv2 冻结特征</td></tr>
+  <tr><td class="left">MCTformer+ [22]</td><td>2024</td><td>TPAMI</td><td><span class="badge badge-a">A</span></td><td>65.4</td><td>分解注意力+自蒸馏</td></tr>
+  <tr><td class="left">WeakSAM [50]</td><td>2024</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td>73.0</td><td>SAM 掩码替代 CAM 精炼</td></tr>
 </table>
 </div>
-<p style="font-size:12px;color:var(--text-quaternary)">注：近年来 SOTA 方法呈现从多阶段向单阶段迁移的趋势。2024–2026 年最强性能方法（WeCLIP → ExCEL → DiCLIP → SSR）均为单阶段架构，表明端到端的 CLIP backbone 范式正在成为主流方向。</p>
+
+<h4>历时对照：单阶段方法</h4>
+<div class="table-wrap">
+<table>
+  <tr><th>方法</th><th>年份</th><th>出处</th><th>监督类</th><th>VOC Val</th><th>备注</th></tr>
+  <tr><td class="left">GroupViT [40]</td><td>2022</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td>42.3</td><td>文本监督分组 token</td></tr>
+  <tr><td class="left">CLIP Surgery [43]</td><td>2023</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td><b>74.0</b></td><td>训练-free 注意力修改</td></tr>
+  <tr><td class="left">ReLA [58]</td><td>2024</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td>—</td><td>重建+对比，免分类器</td></tr>
+  <tr><td class="left">WeCLIP [92]</td><td>2024✨</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td><b>76.4</b></td><td>★ 冻结 CLIP backbone 范式</td></tr>
+  <tr><td class="left">ExCEL [95]</td><td>2025</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td><b>78.4</b></td><td>Patch-text 对齐</td></tr>
+  <tr><td class="left">DiCLIP [96]</td><td>2026</td><td>TIP</td><td><span class="badge badge-c">C</span></td><td><b>78.8</b></td><td>扩散增强 CLIP 密集知识</td></tr>
+  <tr><td class="left">SSR [97]</td><td>2026</td><td>AAAI</td><td><span class="badge badge-c">C</span></td><td><b>79.5</b></td><td>语义+空间双矫正</td></tr>
+</table>
+</div>
+<p style="font-size:12px;color:var(--text-quaternary)"><b>时效性说明：</b>多阶段方法长期占据 WSSS 主流（2016–2023），2023 年后单阶段方法（尤其是基于 CLIP backbone 的端到端范式）开始突破并取得 SOTA。但多阶段方法在模块灵活性、伪标签可解释性和领域适配方面仍有不可替代的优势。两种路线在 2024–2026 年形成并行竞争格局，而非简单的取代关系。</p>
 
 <h3>4.8 失败与被放弃的技术路线</h3>
 <p><b>端到端 WSSS（无显式伪标签）：</b>早期工作尝试直接从图像级标签使用全局池化和 MIL 损失训练分割网络，始终表现不佳（35–45% mIoU），确立了显式伪标签生成的必要性。</p>
