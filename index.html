@@ -865,11 +865,11 @@ footer {
 
 <h4>C2：CLIP 分割骨干</h4>
 <div class="card">
-<p><b>WeCLIP</b> (CVPR 2024 Highlight) [46a] 首次将冻结 CLIP 作为分割骨干，通过冻结视觉编码器提取通用语义特征，配合轻量解码器和精炼模块（RFM）实现单阶段 WSSS（VOC 76.4%/77.2%, COCO 47.1%），大幅降低训练成本。</p>
-<p><b>SeCo</b> (CVPR 2024) [46b] 提出"分而治之"策略处理共现问题：在图像空间通过 patch 分解分离共现物体，在特征空间通过多粒度知识对比增强语义表征（VOC 74.0%/73.8%, COCO 46.7%）。</p>
-<p><b>CPAL</b> (CVPR 2024) [46c] 通过上下文原型感知学习捕获属性级语义信息（VOC 74.5%/74.7%, COCO 46.8%）。</p>
-<p><b>ExCEL</b> (CVPR 2025) [46d] 提出 patch-text 对齐框架，通过显式建模 CLIP 的密集知识弥合图像级与像素级之间的鸿沟（VOC 78.4%/78.5%, COCO 50.3%），是 CLIP backbone 路线的关键突破。</p>
-<p><b>DiCLIP</b> (TIP 2026) [46e] 引入扩散模型增强 CLIP 的密集知识，通过视觉相关性增强（VCE）和文本语义增强（TSA）双模块协同，将扩散模型的空间一致性与 CLIP 的语义对齐能力融合（VOC 78.8%, COCO 48.7%），代表扩散+CLIP 的融合新范式。</p>
+<p><b>WeCLIP</b> (CVPR 2024 Highlight) [92] 首次将冻结 CLIP 作为分割骨干，通过冻结视觉编码器提取通用语义特征，配合轻量解码器和精炼模块（RFM）实现单阶段 WSSS（VOC 76.4%/77.2%, COCO 47.1%），大幅降低训练成本。</p>
+<p><b>SeCo</b> (CVPR 2024) [93] 提出"分而治之"策略处理共现问题：在图像空间通过 patch 分解分离共现物体，在特征空间通过多粒度知识对比增强语义表征（VOC 74.0%/73.8%, COCO 46.7%）。</p>
+<p><b>CPAL</b> (CVPR 2024) [94] 通过上下文原型感知学习捕获属性级语义信息（VOC 74.5%/74.7%, COCO 46.8%）。</p>
+<p><b>ExCEL</b> (CVPR 2025) [95] 提出 patch-text 对齐框架，通过显式建模 CLIP 的密集知识弥合图像级与像素级之间的鸿沟（VOC 78.4%/78.5%, COCO 50.3%），是 CLIP backbone 路线的关键突破。</p>
+<p><b>DiCLIP</b> (TIP 2026) [96] 引入扩散模型增强 CLIP 的密集知识，通过视觉相关性增强（VCE）和文本语义增强（TSA）双模块协同，将扩散模型的空间一致性与 CLIP 的语义对齐能力融合（VOC 78.8%, COCO 48.7%），代表扩散+CLIP 的融合新范式。</p>
 </div>
 
 <h4>C3：SAM 辅助</h4>
@@ -957,17 +957,17 @@ footer {
   <tr><td class="left">SAM-WSSS [48]</td><td>2024</td><td>RN101+SAM</td><td>✓</td><td>✓</td><td>SAM(inf)</td><td>72.3</td><td>73.1</td></tr>
   <tr><td class="left">WeakSAM [50]</td><td>2024</td><td>CLIP+SAM-H</td><td>✓</td><td>✗</td><td>SAM(inf)</td><td>73.0</td><td>73.6</td></tr>
   <tr><td class="left">DINO-WSSS [55]</td><td>2024</td><td>DINO</td><td>✓</td><td>✓</td><td>DINO(fz)</td><td>72.5</td><td>73.0</td></tr>
-  <tr><td class="left">WeCLIP [46a]</td><td>2024✨</td><td>CLIP ViT-B</td><td>✓</td><td>✓</td><td>CLIP(fz)</td><td>76.4</td><td><b>77.2</b></td></tr>
-  <tr><td class="left">SeCo [46b]</td><td>2024</td><td>ViT-B</td><td>✓</td><td>✓</td><td>—</td><td>74.0</td><td>73.8</td></tr>
-  <tr><td class="left">CPAL [46c]</td><td>2024</td><td>RN101</td><td>✓</td><td>✓</td><td>CLIP(ft)</td><td>74.5</td><td>74.7</td></tr>
-  <tr><td class="left">ExCEL [46d]</td><td>2025</td><td>CLIP ViT-B</td><td>✓</td><td>✓</td><td>CLIP(ft)</td><td><b>78.4</b></td><td><b>78.5</b></td></tr>
-  <tr><td class="left">DiCLIP [46e]</td><td>2026</td><td>CLIP ViT-B</td><td>✓</td><td>✓</td><td>CLIP+SD</td><td><b>78.8</b></td><td>—</td></tr>
-  <tr><td class="left">SSR [46f]</td><td>2026</td><td>CLIP ViT-B</td><td>✓</td><td>✓</td><td>CLIP(ft)</td><td>79.5</td><td>—</td></tr>
+  <tr><td class="left">WeCLIP [92]</td><td>2024✨</td><td>CLIP ViT-B</td><td>✓</td><td>✓</td><td>CLIP(fz)</td><td>76.4</td><td><b>77.2</b></td></tr>
+  <tr><td class="left">SeCo [93]</td><td>2024</td><td>ViT-B</td><td>✓</td><td>✓</td><td>—</td><td>74.0</td><td>73.8</td></tr>
+  <tr><td class="left">CPAL [94]</td><td>2024</td><td>RN101</td><td>✓</td><td>✓</td><td>CLIP(ft)</td><td>74.5</td><td>74.7</td></tr>
+  <tr><td class="left">ExCEL [95]</td><td>2025</td><td>CLIP ViT-B</td><td>✓</td><td>✓</td><td>CLIP(ft)</td><td><b>78.4</b></td><td><b>78.5</b></td></tr>
+  <tr><td class="left">DiCLIP [96]</td><td>2026</td><td>CLIP ViT-B</td><td>✓</td><td>✓</td><td>CLIP+SD</td><td><b>78.8</b></td><td>—</td></tr>
+  <tr><td class="left">SSR [97]</td><td>2026</td><td>CLIP ViT-B</td><td>✓</td><td>✓</td><td>CLIP(ft)</td><td>79.5</td><td>—</td></tr>
   <tr><td class="left">Prompt-Driven [56]</td><td>2024</td><td>Multi-FM</td><td>✓</td><td>✓</td><td>CLIP+SAM+DINO</td><td>74.1</td><td>74.6</td></tr>
   <tr><td class="left">UniSeg [57]</td><td>2024</td><td>Multi-FM</td><td>✓</td><td>✓</td><td>Multi-FM</td><td>73.8</td><td>74.2</td></tr>
   <tr><td class="left">Diff-WSSS [52]</td><td>2024</td><td>Diffusion</td><td>✓</td><td>✓</td><td>Diffusion(inf)</td><td>73.2</td><td>—</td></tr>
-  <tr><td class="left">SeSAM [46g]</td><td>2026</td><td>SAM+ViT</td><td>✓</td><td>✗</td><td>SAM(inf)</td><td>—</td><td>—</td></tr>
-  <tr><td class="left">ModuSeg [46h]</td><td>2026</td><td>Foundation</td><td>✓</td><td>✗</td><td>Multi-FM(fz)</td><td>—</td><td>—</td></tr>
+  <tr><td class="left">SeSAM</td><td>2026</td><td>SAM+ViT</td><td>✓</td><td>✗</td><td>SAM(inf)</td><td>—</td><td>—</td></tr>
+  <tr><td class="left">ModuSeg</td><td>2026</td><td>Foundation</td><td>✓</td><td>✗</td><td>Multi-FM(fz)</td><td>—</td><td>—</td></tr>
 
   <tr><td class="left" colspan="8"><span class="badge badge-d">D类</span></td></tr>
   <tr><td class="left">W-OOD [59]</td><td>2024</td><td>RN101</td><td>✗</td><td>✓</td><td>—</td><td>68.3</td><td>68.9</td></tr>
@@ -1157,6 +1157,12 @@ footer {
 <li>H. Zhang et al., "LLM-Generated Semantic Prototypes for WSSS," <i>arXiv:2604.05678</i>, 2026.</li>
 <li>Y. Wang et al., "Weakly Supervised Semantic Segmentation: A Comprehensive Survey," <i>arXiv:2401.12345</i>, 2024.</li>
 <li>L. Li et al., "Advances in WSSS: Methods, Benchmarks and Future Directions," <i>arXiv:2512.07654</i>, 2025.</li>
+<li>B. Zhang et al., "Frozen CLIP: A Strong Backbone for Weakly Supervised Semantic Segmentation," in <i>CVPR</i>, 2024. <b>[WeCLIP]</b> arXiv:2406.11189</li>
+<li>Z. Yang et al., "Separate and Conquer: Decoupling Co-occurrence via Decomposition and Representation for Weakly Supervised Semantic Segmentation," in <i>CVPR</i>, 2024. <b>[SeCo]</b> arXiv:2402.18467</li>
+<li>F. Tang et al., "Hunting Attributes: Context Prototype-Aware Learning for Weakly Supervised Semantic Segmentation," in <i>CVPR</i>, 2024. <b>[CPAL]</b> arXiv:2403.07630</li>
+<li>Z. Yang et al., "Exploring CLIP's Dense Knowledge for Weakly Supervised Semantic Segmentation," in <i>CVPR</i>, 2025. <b>[ExCEL]</b> arXiv:2503.20826</li>
+<li>Z. Yang et al., "DiCLIP: Diffusion Model Enhances CLIP's Dense Knowledge for Weakly Supervised Semantic Segmentation," in <i>IEEE TIP</i>, 2026. arXiv:2605.04593</li>
+<li>X. Bi et al., "SSR: Semantic and Spatial Rectification for CLIP-based Weakly Supervised Segmentation," in <i>AAAI</i>, 2026. arXiv:2512.01701</li>
 </ol>
 </div>
 </section>
