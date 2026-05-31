@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WSSS 噪声测试 · 4 篇论文对比设计</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
+
+  :root {
+    --bg: #0a0a0b;
+    --surface: #121214;
+    --surface-2: #18181b;
+    --surface-3: #1f1f23;
+    --border: #27272a;
+    --border-focus: #3f3f46;
+    --text: #fafafa;
+    --text-2: #a1a1aa;
+    --text-3: #71717a;
+    --accent: #818cf8;
+    --accent-soft: rgba(129, 140, 248, 0.12);
+    --green: #4ade80;
+    --green-soft: rgba(74, 222, 128, 0.1);
+    --amber: #fbbf24;
+    --amber-soft: rgba(251, 191, 36, 0.1);
+    --rose: #fb7185;
+    --rose-soft: rgba(251, 113, 133, 0.1);
+    --cyan: #22d3ee;
+    --cyan-soft: rgba(34, 211, 238, 0.1);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Layout ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+  /* ── Header ── */
+  header {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+  }
+  header .container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  header h1 {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+  }
+  header .subtitle {
+    color: var(--text-2);
+    font-size: 16px;
+    font-weight: 400;
+    max-width: 600px;
+  }
+  header .meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--text-3);
+  }
+  header .meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* ── Section ── */
+  section { padding: 48px 0; }
+  section h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  section h2 .badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 999px;
+    color: var(--text-2);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+  }
+
+  /* ── Comparison Table ── */
+  .comp-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .comp-table thead th {
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-3);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0;
+    background: var(--bg);
+  }
+  .comp-table thead th:first-child { width: 120px; }
+  .comp-table tbody td {
+    padding: 16px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .comp-table tbody tr:last-child td { border-bottom: none; }
+  .comp-table tbody td:first-child {
+    font-weight: 500;
+    color: var(--text-2);
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  .comp-table tbody tr:hover td { background: var(--surface); }
+
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+  }
+  .tag-single { background: var(--cyan-soft); color: var(--cyan); border: 1px solid rgba(34,211,238,0.2); }
+  .tag-multi  { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(251,191,36,0.2); }
+  .tag-clip   { background: var(--accent-soft); color: var(--accent); border: 1px solid rgba(129,140,248,0.2); }
+  .tag-no-clip { background: var(--rose-soft); color: var(--rose); border: 1px solid rgba(251,113,133,0.2); }
+  .tag-high   { background: var(--green-soft); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+
+  .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+  .tag-row:last-child { margin-bottom: 0; }
+
+  /* ── Matrix ── */
+  .matrix-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .matrix-label-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .matrix-label-row:last-child { border-bottom: none; }
+  .matrix-label-row > div {
+    padding: 16px;
+    font-size: 13px;
+  }
+  .matrix-label-row > div:first-child {
+    font-weight: 500;
+    color: var(--text-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+  }
+  .matrix-cell {
+    border-right: 1px solid var(--border);
+    min-height: 100px;
+  }
+  .matrix-cell:last-child { border-right: none; }
+  .matrix-header {
+    background: var(--surface-2);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .matrix-method {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .matrix-method .name {
+    font-weight: 600;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .matrix-method .points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .matrix-method .points li {
+    font-size: 13px;
+    color: var(--text-2);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .matrix-method .points li::before {
+    content: "·";
+    position: absolute;
+    left: 2px;
+    color: var(--text-3);
+  }
+
+  .matrix-q {
+    margin-top: 6px;
+    padding: 8px 10px;
+    background: var(--accent-soft);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    color: var(--accent);
+    line-height: 1.5;
+  }
+
+  /* ── Attack cards ── */
+  .attack-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .attack-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: border-color 0.15s;
+  }
+  .attack-card:hover { border-color: var(--border-focus); }
+  .attack-card .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .attack-card .card-header .card-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .attack-card .card-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .attack-card .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .attack-card .card-body p {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.6;
+  }
+  .attack-card .card-body .noise-type {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 999px;
+    display: inline-block;
+    width: fit-content;
+  }
+
+  /* ── Section divider ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+  /* ── Footnotes ── */
+  .footnote {
+    padding: 32px 0 64px;
+    color: var(--text-3);
+    font-size: 13px;
+  }
+  .footnote p { margin-bottom: 6px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .container { padding: 0 20px; }
+    header { padding: 40px 0 32px; }
+    header h1 { font-size: 24px; }
+    section { padding: 32px 0; }
+    .attack-grid { grid-template-columns: 1fr; }
+    .matrix-label-row { grid-template-columns: 70px 1fr 1fr; }
+    .matrix-label-row > div { padding: 12px 10px; font-size: 12px; }
+    .matrix-method .points li { font-size: 12px; }
+    .comp-table tbody td { padding: 12px; font-size: 13px; }
+    .comp-table thead th { padding: 12px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>噪声测试 · 4 篇 WSSS 论文对比设计</h1>
+    <p class="subtitle">面向 2×2 对照矩阵的噪声鲁棒性实验方案，涵盖单/多阶段范式与 CLIP/非CLIP 方法</p>
+    <div class="meta">
+      <span>📄 选文：ExCEL · SIPE · CLIP-ES · DuPL</span>
+      <span>⏱ 生成：2026-05-31</span>
+      <span>🏷 #WSSS #噪声测试 #实验设计</span>
+    </div>
+  </div>
+</header>
+
+<!-- ════════ 1. 全景对比 ════════ -->
+<section>
+  <div class="container">
+    <h2>1. 全景对比表 <span class="badge">4 papers</span></h2>
+    <div style="overflow-x: auto;">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>维度</th>
+            <th>ExCEL</th>
+            <th>DuPL</th>
+            <th>CLIP-ES</th>
+            <th>SIPE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>范式</td>
+            <td><span class="tag tag-single">单阶段</span></td>
+            <td><span class="tag tag-single">单阶段</span></td>
+            <td><span class="tag tag-multi">多阶段</span></td>
+            <td><span class="tag tag-multi">多阶段</span></td>
+          </tr>
+          <tr>
+            <td>CLIP</td>
+            <td><span class="tag tag-clip">✅ 是</span></td>
+            <td><span class="tag tag-no-clip">❌ 否</span></td>
+            <td><span class="tag tag-clip">✅ 是</span></td>
+            <td><span class="tag tag-no-clip">❌ 否</span></td>
+          </tr>
+          <tr>
+            <td>骨干</td>
+            <td>ViT-B/16 (CLIP 冻结)</td>
+            <td>ResNet50 / ViT-B</td>
+            <td>ViT-B/16 (CLIP 冻结)</td>
+            <td>ResNet50</td>
+          </tr>
+          <tr>
+            <td>微调 CLIP</td>
+            <td>❌ 冻结</td>
+            <td>—</td>
+            <td>❌ 冻结</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>训练耗时</td>
+            <td><span class="tag tag-high">~90 min</span> (1×RTX3090)</td>
+            <td>—</td>
+            <td><span class="tag tag-high">~10% 传统</span></td>
+            <td>5 epoch (2×A100)</td>
+          </tr>
+          <tr>
+            <td>VOC mIoU (val)</td>
+            <td><strong>78.4%</strong></td>
+            <td>74.8%</td>
+            <td>76.4%</td>
+            <td>72.1% (seg)</td>
+          </tr>
+          <tr>
+            <td>核心机制</td>
+            <td>TSE + VC → patch-text 对齐</td>
+            <td>双学生 + 互学习 + GMM 滤波</td>
+            <td>Softmax-GradCAM + CAA + CGL</td>
+            <td>IPE + GSC 一致性损失</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ════════ 2. 噪声攻击点 ════════ -->
+<section>
+  <div class="container">
+    <h2>2. 噪声薄弱环节分析</h2>
+    <div class="attack-grid">
+
+      <div class="attack-card">
+        <div class="card-header">
+          <div class="card-icon" style="background:var(--accent-soft);color:var(--accent);">E</div>
+          <h3>ExCEL</h3>
+        </div>
+        <div class="card-body">
+          <span class="noise-type" style="background:var(--accent-soft);color:var(--accent);border:1px solid rgba(129,140,248,0.2);">🎯 CLIP 视觉编码器</span>
+          <p>TSE 文本语义丰富 + VC 视觉校准依赖 CLIP 的 patch-text 对齐质量。输入图像噪声会直接传递到对齐得分计算。</p>
+          <span class="noise-type" style="background:var(--rose-soft);color:var(--rose);border:1px solid rgba(251,113,133,0.2);">📝 Prompt 噪声</span>
+          <p>文本 prompt 的拼写错误/同义词替换会直接影响语义丰富化分支。</p>
+          <span class="noise-type" style="background:var(--amber-soft);color:var(--amber);border:1px solid rgba(251,191,36,0.2);">🔧 Adapter 微调</span>
+          <p>训练时在 adapter 特征中加入 Dropout 噪声，测试小样本适应能力。</p>
+        </div>
+      </div>
+
+      <div class="attack-card">
+        <div class="card-header">
+          <div class="card-icon" style="background:var(--rose-soft);color:var(--rose);">D</div>
+          <h3>DuPL</h3>
+        </div>
+        <div class="card-body">
+          <span class="noise-type" style="background:var(--green-soft);color:var(--green);border:1px solid rgba(74,222,128,0.2);">🏷 CAM 伪标签噪声</span>
+          <p>双学生框架的伪标签自训练中，噪声标签会通过正反馈循环被放大。GMM 滤波是关键防御机制。</p>
+          <span class="noise-type" style="background:var(--accent-soft);color:var(--accent);border:1px solid rgba(129,140,248,0.2);">⚖️ 双生差异度</span>
+          <p>改变 discrepancy loss 权重，观察两分支的差异演化对分割质量的影响。</p>
+        </div>
+      </div>
+
+      <div class="attack-card">
+        <div class="card-header">
+          <div class="card-icon" style="background:var(--amber-soft);color:var(--amber);">C</div>
+          <h3>CLIP-ES</h3>
+        </div>
+        <div class="card-body">
+          <span class="noise-type" style="background:var(--accent-soft);color:var(--accent);border:1px solid rgba(129,140,248,0.2);">📉 GradCAM 梯度噪声</span>
+          <p>Softmax-GradCAM 对类别混淆极其敏感。测试背景类别缺失/错误时 CAM 退化程度。</p>
+          <span class="noise-type" style="background:var(--cyan-soft);color:var(--cyan);border:1px solid rgba(34,211,238,0.2);">🕸 MHSA 亲和图噪声</span>
+          <p>CAA (跨层注意力亲和) 模块依赖 MHSA 输出。注意力 Dropout 会直接破坏亲和图传播。</p>
+          <span class="noise-type" style="background:var(--amber-soft);color:var(--amber);border:1px solid rgba(251,191,36,0.2);">🎯 CGL 置信度阈值</span>
+          <p>改变置信度判定阈值，观察像素级伪标签的信噪比变化。</p>
+        </div>
+      </div>
+
+      <div class="attack-card">
+        <div class="card-header">
+          <div class="card-icon" style="background:var(--cyan-soft);color:var(--cyan);">S</div>
+          <h3>SIPE</h3>
+        </div>
+        <div class="card-body">
+          <span class="noise-type" style="background:var(--amber-soft);color:var(--amber);border:1px solid rgba(251,191,36,0.2);">🌌 特征空间扰动</span>
+          <p>IPE 的结构种子定位依赖像素级特征相似度。特征空间的 t-SNE 分布偏移会破坏种子定位。</p>
+          <span class="noise-type" style="background:var(--rose-soft);color:var(--rose);border:1px solid rgba(251,113,133,0.2);">📐 结构相似度噪声</span>
+          <p>IPE 计算 IoU 时，逐像素相似度累积误差会随阶段加深放大。</p>
+          <span class="noise-type" style="background:var(--accent-soft);color:var(--accent);border:1px solid rgba(129,140,248,0.2);">🔗 多阶段传播</span>
+          <p>分别测试每个阶段（种子定位 → 背景原型 → 精炼）的噪声容忍度，评估传播放大效应。</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ════════ 3. 2×2 对照矩阵 ════════ -->
+<section>
+  <div class="container">
+    <h2>3. 2×2 对照矩阵 <span class="badge">实验设计</span></h2>
+    <div class="matrix-wrapper">
+      <!-- header row -->
+      <div class="matrix-label-row">
+        <div style="background:var(--surface-2);border-right:1px solid var(--border);font-weight:600;"></div>
+        <div class="matrix-header">CLIP-based</div>
+        <div class="matrix-header" style="border-right:none;">非 CLIP</div>
+      </div>
+      <!-- row 1 -->
+      <div class="matrix-label-row">
+        <div>单阶段</div>
+        <div class="matrix-cell">
+          <div class="matrix-method">
+            <div class="name"><span class="tag tag-clip">ExCEL</span></div>
+            <ul class="points">
+              <li>CLIP 视觉编码器噪声</li>
+              <li>Prompt 拼写/同义词噪声</li>
+              <li>Adapter 特征 Dropout 噪声</li>
+            </ul>
+            <div class="matrix-q">🧪 CLIP 冻结编码器对输入噪声鲁棒性如何？</div>
+          </div>
+        </div>
+        <div class="matrix-cell" style="border-right:none;">
+          <div class="matrix-method">
+            <div class="name"><span class="tag tag-no-clip">DuPL</span></div>
+            <ul class="points">
+              <li>CAM 伪标签注入噪声</li>
+              <li>GMM 自适应滤波能力上限</li>
+              <li>双生差异 loss 权重扫描</li>
+            </ul>
+            <div class="matrix-q">🧪 GMM 滤波是否能有效隔离标签噪声？</div>
+          </div>
+        </div>
+      </div>
+      <!-- row 2 -->
+      <div class="matrix-label-row" style="border-bottom:none;">
+        <div>多阶段</div>
+        <div class="matrix-cell">
+          <div class="matrix-method">
+            <div class="name"><span class="tag tag-clip">CLIP-ES</span></div>
+            <ul class="points">
+              <li>Softmax-GradCAM 梯度噪声</li>
+              <li>MHSA 注意力 Dropout</li>
+              <li>CGL 置信度阈值变化</li>
+            </ul>
+            <div class="matrix-q">🧪 多阶段 CLIP 方法对注意力噪声更敏感？</div>
+          </div>
+        </div>
+        <div class="matrix-cell" style="border-right:none;">
+          <div class="matrix-method">
+            <div class="name"><span class="tag tag-no-clip">SIPE</span></div>
+            <ul class="points">
+              <li>特征空间扰动</li>
+              <li>结构相似度计算噪声</li>
+              <li>多阶段串联传播放大</li>
+            </ul>
+            <div class="matrix-q">🧪 非 CLIP 多阶段 pipeline 的噪声累积效应</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 32px; display: flex; flex-direction: column; gap: 12px;">
+      <h2 style="font-size:16px;margin-bottom:0;">核心研究问题</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;">
+          <div style="font-size:13px;font-weight:500;margin-bottom:6px;">❓ Q1 · CLIP 越强，抗噪越弱？</div>
+          <div style="font-size:12px;color:var(--text-2);">
+            <strong>ExCEL vs DuPL</strong>（同单阶段，CLIP 有无对比）<br>
+            <strong>CLIP-ES vs SIPE</strong>（同多阶段，CLIP 有无对比）
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;">
+          <div style="font-size:13px;font-weight:500;margin-bottom:6px;">❓ Q2 · 单阶段 vs 多阶段，谁更抗噪？</div>
+          <div style="font-size:12px;color:var(--text-2);">
+            <strong>(ExCEL + DuPL) vs (CLIP-ES + SIPE)</strong><br>
+            比较不同范式对同样噪声类型的退化模式
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;">
+          <div style="font-size:13px;font-weight:500;margin-bottom:6px;">❓ Q3 · GMM 自适应滤波有效性</div>
+          <div style="font-size:12px;color:var(--text-2);">
+            DuPL 独有点：控制伪标签噪声比例 10%~50%，<br>
+            观察 GMM 滤波器的噪声过滤率变化
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;">
+          <div style="font-size:13px;font-weight:500;margin-bottom:6px;">❓ Q4 · 多阶段串联放大效应</div>
+          <div style="font-size:12px;color:var(--text-2);">
+            分别攻击 SIPE 的每个子阶段，<br>
+            测量前级噪声在后级传播中的放大/衰减率
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ════════ 4. 噪声注入方案 ════════ -->
+<section>
+  <div class="container">
+    <h2>4. 噪声注入方案总览</h2>
+    <div style="overflow-x:auto;">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>噪声类型</th>
+            <th>注入环节</th>
+            <th>受测方法</th>
+            <th>控制变量</th>
+            <th>评估指标</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>🖼 输入高斯噪声</td>
+            <td>数据增强 / 预处理</td>
+            <td>ExCEL, CLIP-ES</td>
+            <td>σ ∈ {0, 5, 10, 20, 50}</td>
+            <td>mIoU 退化率</td>
+          </tr>
+          <tr>
+            <td>📝 Prompt 拼写噪声</td>
+            <td>TSE 分支输入</td>
+            <td>ExCEL</td>
+            <td>失真率 10%~50%</td>
+            <td>TSE 得分变化</td>
+          </tr>
+          <tr>
+            <td>🏷 伪标签噪声</td>
+            <td>CAM 生成后</td>
+            <td>DuPL</td>
+            <td>噪声比例 10%~50%</td>
+            <td>GMM 过滤率, mIoU</td>
+          </tr>
+          <tr>
+            <td>📉 GradCAM 梯度掩码</td>
+            <td>梯度回传阶段</td>
+            <td>CLIP-ES</td>
+            <td>Dropout 率 0.1~0.5</td>
+            <td>CAM 质量, mIoU</td>
+          </tr>
+          <tr>
+            <td>🕸 注意力 Dropout</td>
+            <td>MHSA 层</td>
+            <td>CLIP-ES</td>
+            <td>p ∈ {0.1, 0.2, 0.4}</td>
+            <td>CAA 亲和传播</td>
+          </tr>
+          <tr>
+            <td>🌌 特征空间扰动</td>
+            <td>IPE 种子定位</td>
+            <td>SIPE</td>
+            <td>特征 Dropout / 加噪</td>
+            <td>种子定位 IoU</td>
+          </tr>
+          <tr>
+            <td>⚖️ 双生差异权重</td>
+            <td>Loss 函数</td>
+            <td>DuPL</td>
+            <td>λ ∈ {0.1, 0.5, 1.0, 2.0}</td>
+            <td>两分支差异度</td>
+          </tr>
+          <tr>
+            <td>🔗 阶段串联噪声</td>
+            <td>中间结果传播</td>
+            <td>SIPE, CLIP-ES</td>
+            <td>逐阶段注入</td>
+            <td>各级退化放大率</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footnote class="footnote">
+  <div class="container">
+    <p>📄 ExCEL: arXiv 2503.20826 · SIPE: arXiv 2203.02909 · CLIP-ES: arXiv 2212.09506 · DuPL: arXiv 2403.11184</p>
+    <p>💡 所有 PDF 已下载本地，支持逐篇复现验证。噪声测试代码待实现。</p>
+  </div>
+</footnote>
+
+</body>
+</html>
