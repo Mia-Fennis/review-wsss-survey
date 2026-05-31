@@ -935,35 +935,64 @@ footer {
 <h4>历时对照：多阶段方法</h4>
 <div class="table-wrap">
 <table>
-  <tr><th>方法</th><th>年份</th><th>出处</th><th>监督类</th><th>VOC Val</th><th>备注</th></tr>
-  <tr><td class="left">CAM [4]</td><td>2016</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>43.6</td><td>WSSS 奠基之作</td></tr>
-  <tr><td class="left">SEC [5]</td><td>2016</td><td>ECCV</td><td><span class="badge badge-a">A</span></td><td>50.7</td><td>种子-扩展-约束范式</td></tr>
-  <tr><td class="left">AffinityNet [6]</td><td>2018</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>61.7</td><td>★ 可学习亲和度传播</td></tr>
-  <tr><td class="left">PSA [7]</td><td>2019</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>63.7</td><td>像素自适应核</td></tr>
-  <tr><td class="left">SEAM [25]</td><td>2020</td><td>CVPR</td><td><span class="badge badge-b">B</span></td><td>64.5</td><td>自监督正则化先驱</td></tr>
-  <tr><td class="left">MCTformer [20]</td><td>2022</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>61.4</td><td>★ Transformer CAM 先驱</td></tr>
-  <tr><td class="left">MIM-WSSS [34]</td><td>2023</td><td>CVPR</td><td><span class="badge badge-b">B</span></td><td>70.8</td><td>掩码图像建模</td></tr>
-  <tr><td class="left">CLIP-ES [44]</td><td>2023</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td><b>73.8</b></td><td>CLIP 擦除监督</td></tr>
-  <tr><td class="left">ALLD [36]</td><td>2024</td><td>CVPR</td><td><span class="badge badge-b">B</span></td><td>70.5</td><td>DINOv2 冻结特征</td></tr>
-  <tr><td class="left">MCTformer+ [22]</td><td>2024</td><td>TPAMI</td><td><span class="badge badge-a">A</span></td><td>65.4</td><td>分解注意力+自蒸馏</td></tr>
-  <tr><td class="left">WeakSAM [50]</td><td>2024</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td>73.0</td><td>SAM 掩码替代 CAM 精炼</td></tr>
+  <tr><th>方法</th><th>年份</th><th>出处</th><th>监督类</th><th>VOC Val</th><th>流程简述</th></tr>
+  <tr><td class="left">CAM [4]</td><td>2016</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>43.6</td><td>GAP-CAM → CRF</td></tr>
+  <tr><td class="left">SEC [5]</td><td>2016</td><td>ECCV</td><td><span class="badge badge-a">A</span></td><td>50.7</td><td>种子 → CRF 扩展 → 约束</td></tr>
+  <tr><td class="left">AffinityNet [6]</td><td>2018</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>61.7</td><td>★ CAM → 亲和度传播 → 分割</td></tr>
+  <tr><td class="left">PSA [7]</td><td>2019</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>63.7</td><td>CAM → 像素自适应核 → 分割</td></tr>
+  <tr><td class="left">SEAM [25]</td><td>2020</td><td>CVPR</td><td><span class="badge badge-b">B</span></td><td>64.5</td><td>★ CAM → 等变正则 → 分割</td></tr>
+  <tr><td class="left">IRNet [17]</td><td>2020</td><td>ECCV</td><td><span class="badge badge-a">A</span></td><td>—</td><td>CAM → 实例亲和度 → 分割</td></tr>
+  <tr><td class="left">OAA [18]</td><td>2020</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>—</td><td>在线注意力累积 → 分割</td></tr>
+  <tr><td class="left">CONTA [12]</td><td>2021</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>60.2</td><td>CAM → 对比对齐 → 分割</td></tr>
+  <tr><td class="left">SCL [13]</td><td>2021</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>59.5</td><td>CAM → 语义上下文图 → 分割</td></tr>
+  <tr><td class="left">EPS [14]</td><td>2021</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>61.8</td><td>CAM → 端到端伪标签 → 分割</td></tr>
+  <tr><td class="left">DenseSSL [28]</td><td>2021</td><td>ICCV</td><td><span class="badge badge-b">B</span></td><td>66.8</td><td>CAM → 密集对比 → 分割</td></tr>
+  <tr><td class="left">NSROM [31]</td><td>2021</td><td>CVPR</td><td><span class="badge badge-b">B</span></td><td>66.3</td><td>CAM → 非显著区优化 → 分割</td></tr>
+  <tr><td class="left">ReCAM [8]</td><td>2022</td><td>ICLR</td><td><span class="badge badge-a">A</span></td><td>58.4</td><td>CAM → 擦除 → 分割</td></tr>
+  <tr><td class="left">MCTformer [20]</td><td>2022</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>61.4</td><td>★ Transformer CAM → 分割</td></tr>
+  <tr><td class="left">TransCAM [21]</td><td>2022</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>62.3</td><td>多层注意力聚合 → 分割</td></tr>
+  <tr><td class="left">C²AM [15]</td><td>2022</td><td>ECCV</td><td><span class="badge badge-a">A</span></td><td>63.4</td><td>条件概率 CAM → 分割</td></tr>
+  <tr><td class="left">SIPE [26]</td><td>2022</td><td>ECCV</td><td><span class="badge badge-b">B</span></td><td>67.5</td><td>CAM → DINO 递归图解析 → 分割</td></tr>
+  <tr><td class="left">SimWSS [29]</td><td>2022</td><td>NeurIPS</td><td><span class="badge badge-b">B</span></td><td>69.1</td><td>CAM → SimCLR 对比 → 分割</td></tr>
+  <tr><td class="left">AEFT [9]</td><td>2022</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>60.8</td><td>CAM → 特征级擦除 → 分割</td></tr>
+  <tr><td class="left">MIM-WSSS [34]</td><td>2023</td><td>CVPR</td><td><span class="badge badge-b">B</span></td><td>70.8</td><td>★ CAM → 掩码建模 → 分割</td></tr>
+  <tr><td class="left">CCAM [16]</td><td>2023</td><td>ICCV</td><td><span class="badge badge-a">A</span></td><td>64.1</td><td>跨类别注意力传播 → 分割</td></tr>
+  <tr><td class="left">CLIP-ES [44]</td><td>2023</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td><b>73.8</b></td><td>CLIP 擦除 → CAM 精炼 → 分割</td></tr>
+  <tr><td class="left">ACR [10]</td><td>2023</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>62.1</td><td>主动类精炼 → 分割</td></tr>
+  <tr><td class="left">GNN-Refine [35]</td><td>2023</td><td>NeurIPS</td><td><span class="badge badge-b">B</span></td><td>63.2</td><td>双图神经网络传播</td></tr>
+  <tr><td class="left">Self-Ensemble [27]</td><td>2022</td><td>AAAI</td><td><span class="badge badge-b">B</span></td><td>67.2</td><td>EMA 教师-学生蒸馏</td></tr>
+  <tr><td class="left">ALLD [36]</td><td>2024</td><td>CVPR</td><td><span class="badge badge-b">B</span></td><td>70.5</td><td>DINOv2 冻结特征 → 低秩解码</td></tr>
+  <tr><td class="left">MCTformer+ [22]</td><td>2024</td><td>TPAMI</td><td><span class="badge badge-a">A</span></td><td>65.4</td><td>分解注意力 → 自蒸馏</td></tr>
+  <tr><td class="left">BBE [11]</td><td>2024</td><td>CVPR</td><td><span class="badge badge-a">A</span></td><td>63.8</td><td>双向边界增强 → 分割</td></tr>
+  <tr><td class="left">SAM-WSSS [48]</td><td>2024</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td>72.3</td><td>CAM → SAM 掩码精炼 → 分割</td></tr>
+  <tr><td class="left">WeakSAM [50]</td><td>2024</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td>73.0</td><td>SAM 自动掩码 → 分割</td></tr>
+  <tr><td class="left">SAM-Adapter [49]</td><td>2024</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td>—</td><td>SAM + 适配器 → 分割</td></tr>
+  <tr><td class="left">DINO-WSSS [55]</td><td>2024</td><td>ECCV</td><td><span class="badge badge-c">C</span></td><td>72.5</td><td>DINO patch 对应 → 传播 → 分割</td></tr>
+  <tr><td class="left">Prompt-Driven [56]</td><td>2024</td><td>ECCV</td><td><span class="badge badge-c">C</span></td><td>74.1</td><td>CLIP+SAM+DINO 集成 → 分割</td></tr>
+  <tr><td class="left">UniSeg [57]</td><td>2024</td><td>NeurIPS</td><td><span class="badge badge-c">C</span></td><td>73.8</td><td>多专家特征聚合 → 分割</td></tr>
+  <tr><td class="left">Diff-WSSS [52]</td><td>2024</td><td>arXiv</td><td><span class="badge badge-c">C</span></td><td>73.2</td><td>扩散去噪伪标签 → 分割</td></tr>
+  <tr><td class="left">DINOv2-WSSS [37]</td><td>2025</td><td>arXiv</td><td><span class="badge badge-b">B</span></td><td>—</td><td>冻结 DINOv2 → 轻量激活头</td></tr>
+  <tr><td class="left">TSCAM [23]</td><td>2025</td><td>AAAI</td><td><span class="badge badge-a">A</span></td><td>66.2</td><td>拓扑自监督 CAM → 分割</td></tr>
 </table>
 </div>
 
 <h4>历时对照：单阶段方法</h4>
 <div class="table-wrap">
 <table>
-  <tr><th>方法</th><th>年份</th><th>出处</th><th>监督类</th><th>VOC Val</th><th>备注</th></tr>
-  <tr><td class="left">GroupViT [40]</td><td>2022</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td>42.3</td><td>文本监督分组 token</td></tr>
-  <tr><td class="left">CLIP Surgery [43]</td><td>2023</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td><b>74.0</b></td><td>训练-free 注意力修改</td></tr>
-  <tr><td class="left">ReLA [58]</td><td>2024</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td>—</td><td>重建+对比，免分类器</td></tr>
-  <tr><td class="left">WeCLIP [92]</td><td>2024✨</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td><b>76.4</b></td><td>★ 冻结 CLIP backbone 范式</td></tr>
-  <tr><td class="left">ExCEL [95]</td><td>2025</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td><b>78.4</b></td><td>Patch-text 对齐</td></tr>
-  <tr><td class="left">DiCLIP [96]</td><td>2026</td><td>TIP</td><td><span class="badge badge-c">C</span></td><td><b>78.8</b></td><td>扩散增强 CLIP 密集知识</td></tr>
-  <tr><td class="left">SSR [97]</td><td>2026</td><td>AAAI</td><td><span class="badge badge-c">C</span></td><td><b>79.5</b></td><td>语义+空间双矫正</td></tr>
+  <tr><th>方法</th><th>年份</th><th>出处</th><th>监督类</th><th>VOC Val</th><th>架构特点</th></tr>
+  <tr><td class="left">GroupViT [40]</td><td>2022</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td>42.3</td><td>文本监督分组 token → 直接分割</td></tr>
+  <tr><td class="left">CLIP Surgery [43]</td><td>2023</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td><b>74.0</b></td><td>★ 训练-free 注意力修改 → 直接 CAM</td></tr>
+  <tr><td class="left">CLIMS [42]</td><td>2022</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td>64.8</td><td>跨图像文本挖掘 → 直接 CAM</td></tr>
+  <tr><td class="left">SeCo [93]</td><td>2024</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td>74.0</td><td>★ 双教师-单学生解耦共现</td></tr>
+  <tr><td class="left">CPAL [94]</td><td>2024</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td>74.5</td><td>上下文原型感知统一框架</td></tr>
+  <tr><td class="left">WeCLIP [92]</td><td>2024✨</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td><b>76.4</b></td><td>★ 冻结 CLIP backbone + decoder</td></tr>
+  <tr><td class="left">ReLA [58]</td><td>2024</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td>—</td><td>图像重建 + 双分支对比</td></tr>
+  <tr><td class="left">ExCEL [95]</td><td>2025</td><td>CVPR</td><td><span class="badge badge-c">C</span></td><td><b>78.4</b></td><td>★ Patch-text 对齐 + LLM 知识库</td></tr>
+  <tr><td class="left">DiCLIP [96]</td><td>2026</td><td>TIP</td><td><span class="badge badge-c">C</span></td><td><b>78.8</b></td><td>★ 扩散 C 空间一致性 + CLIP 语义</td></tr>
+  <tr><td class="left">SSR [97]</td><td>2026</td><td>AAAI</td><td><span class="badge badge-c">C</span></td><td><b>79.5</b></td><td>★ 跨模态原型对齐 + 超像素修正</td></tr>
 </table>
 </div>
-<p style="font-size:12px;color:var(--text-quaternary)"><b>时效性说明：</b>多阶段方法长期占据 WSSS 主流（2016–2023），2023 年后单阶段方法（尤其是基于 CLIP backbone 的端到端范式）开始突破并取得 SOTA。但多阶段方法在模块灵活性、伪标签可解释性和领域适配方面仍有不可替代的优势。两种路线在 2024–2026 年形成并行竞争格局，而非简单的取代关系。</p>
+<p style="font-size:12px;color:var(--text-quaternary)"><b>时效性说明：</b>多阶段方法长期占据 WSSS 主流（2016–2023），涵盖 A/B/C 三类监督来源，泛用性最强。2023 年后单阶段方法（尤其是基于 CLIP backbone 的端到端范式）开始突破并刷新 SOTA。但多阶段方法在模块灵活性、伪标签可解释性、小样本和领域迁移方面仍有不可替代的优势。2024–2026 年两种路线形成<b>并行竞争</b>格局，目前单阶段在高资源场景（完整 VOC/COCO）占优，多阶段在低资源/跨域场景中依然不可或缺。</p>
 
 <h3>4.8 失败与被放弃的技术路线</h3>
 <p><b>端到端 WSSS（无显式伪标签）：</b>早期工作尝试直接从图像级标签使用全局池化和 MIL 损失训练分割网络，始终表现不佳（35–45% mIoU），确立了显式伪标签生成的必要性。</p>
