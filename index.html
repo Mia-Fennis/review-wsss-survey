@@ -909,12 +909,53 @@ footer {
 <p><b>视频 WSSS</b> [65] 利用时序一致性改进帧级 CAM。<b>Continual WSSS</b> (2026) [66] 首次将 WSSS 引入增量学习场景。<b>LLM-Generated Semantic Prototypes</b> (2026) [67] 使用大语言模型生成类别草图原型辅助 CAM 生成，开启了文本知识注入 WSSS 的新方向。</p>
 </div>
 
-<h3>4.7 失败与被放弃的技术路线</h3>
+<h3>4.7 单阶段 vs 多阶段范式</h3>
+<p>除监督来源分类外，WSSS 领域还存在另一条经典分界线：<b>流水线阶段数</b>。这种分类反映的是系统架构层面的设计选择。</p>
+
+<h4>多阶段方法（Multi-Stage）</h4>
+<div class="card">
+<p>多阶段方法将 WSSS 分解为 2–3 个独立的子任务，每个阶段使用独立网络或算法：</p>
+<p><b>阶段一：</b>训练分类网络 + 生成 CAM → 得到初始激活图（如 CAM, MCTformer）</p>
+<p><b>阶段二：</b>CAM 精炼 / 伪标签生成 → 通过亲和度传播（AffinityNet）、擦除（ReCAM, CLIP-ES）、自训练、或基础模型推理（SAM, CLIP Surgery）生成密集伪标签</p>
+<p><b>阶段三：</b>用伪标签训练全监督分割网络 → 获得最终分割模型（通常为 DeepLabv2 或 SegFormer）</p>
+<p><b>代表性方法：</b>AffinityNet, SEAM, MCTformer, CLIP-ES, SAM-WSSS, WeakSAM, ALLD, MIM-WSSS</p>
+<p><b>优势：</b>模块解耦，各阶段可独立优化；伪标签可反复迭代精炼；分割网络可使用强大架构</p>
+<p><b>劣势：</b>训练流程复杂（3+ 阶段），超参数多（阈值、迭代轮次）；阶段间误差累积；难以端到端联合优化</p>
+</div>
+
+<h4>单阶段方法（Single-Stage）</h4>
+<div class="card">
+<p>单阶段方法用单一网络端到端学习分割，跳过显式的伪标签生成阶段：</p>
+<p><b>核心思路：</b>设计统一损失函数（分类 + 分割/定位联合优化），在推理时直接从网络输出分割结果</p>
+<p><b>代表性方法：</b>WeCLIP (冻结 CLIP backbone + decoder), ExCEL (patch-text 对齐), DiCLIP (扩散+CLIP), SSR (语义空间精炼), ReLA (重建+对比), GroupViT (文本监督)</p>
+<p><b>优势：</b>流程简化，训练部署成本低；无伪标签质量瓶颈；部分方法（WeCLIP, ExCEL）达到甚至超越多阶段 SOTA</p>
+<p><b>劣势：</b>端到端优化困难，需精心设计损失函数；模型架构自由度受限于统一框架；参数量可能更大</p>
+</div>
+
+<h4>跨分类对照</h4>
+<div class="table-wrap">
+<table>
+  <tr><th>方法</th><th>监督来源类</th><th>阶段数</th><th>VOC Val</th></tr>
+  <tr><td class="left">CAM [4]</td><td><span class="badge badge-a">A</span></td><td>多阶段</td><td>43.6</td></tr>
+  <tr><td class="left">AffinityNet [6]</td><td><span class="badge badge-a">A</span></td><td>多阶段</td><td>61.7</td></tr>
+  <tr><td class="left">SEAM [25]</td><td><span class="badge badge-b">B</span></td><td>多阶段</td><td>64.5</td></tr>
+  <tr><td class="left">MCTformer [20]</td><td><span class="badge badge-a">A</span></td><td>多阶段</td><td>61.4</td></tr>
+  <tr><td class="left">CLIP-ES [44]</td><td><span class="badge badge-c">C</span></td><td>多阶段</td><td>73.8</td></tr>
+  <tr><td class="left">CLIP Surgery [43]</td><td><span class="badge badge-c">C</span></td><td>单阶段</td><td>74.0</td></tr>
+  <tr><td class="left">WeCLIP [92]</td><td><span class="badge badge-c">C</span></td><td>单阶段</td><td>76.4</td></tr>
+  <tr><td class="left">ExCEL [95]</td><td><span class="badge badge-c">C</span></td><td>单阶段</td><td>78.4</td></tr>
+  <tr><td class="left">DiCLIP [96]</td><td><span class="badge badge-c">C</span></td><td>单阶段</td><td>78.8</td></tr>
+  <tr><td class="left">SSR [97]</td><td><span class="badge badge-c">C</span></td><td>单阶段</td><td><b>79.5</b></td></tr>
+</table>
+</div>
+<p style="font-size:12px;color:var(--text-quaternary)">注：近年来 SOTA 方法呈现从多阶段向单阶段迁移的趋势。2024–2026 年最强性能方法（WeCLIP → ExCEL → DiCLIP → SSR）均为单阶段架构，表明端到端的 CLIP backbone 范式正在成为主流方向。</p>
+
+<h3>4.8 失败与被放弃的技术路线</h3>
 <p><b>端到端 WSSS（无显式伪标签）：</b>早期工作尝试直接从图像级标签使用全局池化和 MIL 损失训练分割网络，始终表现不佳（35–45% mIoU），确立了显式伪标签生成的必要性。</p>
 <p><b>基于 GAN 的种子精炼（2018–2020）：</b>GAN 被用于精炼 CAM 种子，但仅获得边际提升（1–2 mIoU 点），且训练不稳定。更简单的替代方案（擦除、一致性正则化）证明更有效。</p>
 <p><b>多实例学习（MIL）方法：</b>将图像视为像素实例包，仅达到 35–45% mIoU，因为 MIL 设计用于二元实例分类而非密集像素标注。</p>
 
-<h3>4.8 领域扩展应用</h3>
+<h3>4.9 领域扩展应用</h3>
 <p>WSSS 原理已扩展到专业领域。在<strong>医学影像</strong>领域，SCP-Net [68], C2F-WSSS [69] 和 CLIP-Driven Medical [70] 在器官分割任务上达到全监督性能的 70–82%。在<strong>遥感</strong>领域 [71]，跨尺度注意力和 SAM-RS 等方法在 ISPRS 和 DeepGlobe 上达到 65–75%。在<strong>自动驾驶</strong>领域 [72]，弱监督方法在 Cityscapes 上达到 60–68% mIoU。</p>
 </section>
 
