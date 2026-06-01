@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLIP-ES · 知识卡片 — CVPR 2023</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+:root { --bg:#0a0a0b; --surface:#121214; --surface-2:#18181b; --surface-3:#1f1f23; --border:#27272a; --text:#fafafa; --text-2:#a1a1aa; --text-3:#71717a; --accent:#818cf8; --accent-soft:rgba(129,140,248,0.12); --green:#4ade80; --amber:#fbbf24; --rose:#fb7185; --cyan:#22d3ee; --violet:#a78bfa; --sidebar-width:240px; --radius:10px; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter','Noto Sans SC',-apple-system,sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:15px; -webkit-font-smoothing:antialiased; }
+.layout { display:flex; min-height:100vh; }
+.sidebar { position:fixed; top:0; left:0; width:var(--sidebar-width); height:100vh; overflow-y:auto; background:var(--surface-2); border-right:1px solid var(--border); padding:28px 0; z-index:100; }
+.sidebar-brand { padding:0 20px 20px; border-bottom:1px solid var(--border); margin-bottom:12px; }
+.sidebar-brand h2 { font-size:14px; font-weight:600; color:var(--accent); line-height:1.4; }
+.sidebar-brand .meta { font-size:11px; color:var(--text-3); margin-top:4px; }
+.sidebar .sec-label { font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-3); padding:12px 20px 4px; }
+.sidebar a { display:block; padding:6px 20px; font-size:13px; color:var(--text-2); text-decoration:none; transition:all .15s; border-left:2px solid transparent; }
+.sidebar a:hover { color:var(--text); background:var(--surface-3); }
+.sidebar a.sub { padding-left:32px; font-size:12px; color:var(--text-3); }
+.sidebar a.back { margin-top:20px; font-size:12px; color:var(--accent); border-top:1px solid var(--border); padding-top:16px; }
+.main-content { margin-left:var(--sidebar-width); flex:1; min-width:0; }
+header { padding:64px 56px 40px; border-bottom:1px solid var(--border); }
+header h1 { font-size:30px; font-weight:600; letter-spacing:-0.03em; line-height:1.3; margin-bottom:12px; }
+header .meta-row { display:flex; flex-wrap:wrap; gap:16px 32px; margin-top:16px; font-size:13px; color:var(--text-3); }
+header .meta-row span { display:flex; align-items:center; gap:6px; }
+header .badge { display:inline-block; font-size:11px; font-weight:600; padding:3px 10px; border-radius:999px; background:var(--accent-soft); color:var(--accent); border:1px solid rgba(129,140,248,0.2); }
+header .badge.amber { background:rgba(251,191,36,0.1); color:var(--amber); border-color:rgba(251,191,36,0.2); }
+header .tagline { margin-top:16px; font-size:15px; color:var(--text-2); max-width:700px; font-style:italic; }
+section { padding:48px 56px; }
+section:nth-child(even) { background:var(--surface); }
+section h2 { font-size:22px; font-weight:600; margin-bottom:24px; letter-spacing:-0.02em; display:flex; align-items:center; gap:10px; }
+section h2 .num { font-size:13px; font-weight:500; color:var(--text-3); font-family:'JetBrains Mono',monospace; }
+section h3 { font-size:16px; font-weight:600; margin:24px 0 12px; color:var(--text); }
+section h4 { font-size:14px; font-weight:500; margin:16px 0 8px; color:var(--text-2); }
+section p { margin-bottom:14px; color:var(--text-2); }
+section ul, section ol { margin:8px 0 16px 20px; color:var(--text-2); }
+section li { margin-bottom:6px; }
+code { font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--surface-3); padding:2px 6px; border-radius:4px; color:var(--cyan); }
+.max-width { max-width:880px; }
+.table-wrap { overflow-x:auto; margin:16px 0; }
+table { width:100%; border-collapse:separate; border-spacing:0; font-size:13px; }
+table thead th { text-align:left; padding:10px 12px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-3); border-bottom:1px solid var(--border); background:var(--surface-2); white-space:nowrap; }
+table tbody td { padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--text-2); }
+table tbody tr:hover td { background:var(--surface-3); }
+table .hl { color:var(--accent); font-weight:600; }
+table .num-cell { font-family:'JetBrains Mono',monospace; text-align:right; }
+.tag { display:inline-block; font-size:10px; font-weight:600; padding:2px 7px; border-radius:4px; letter-spacing:0.02em; }
+.tag-clip { background:var(--accent-soft); color:var(--accent); border:1px solid rgba(129,140,248,0.2); }
+.tag-multi { background:rgba(251,191,36,0.1); color:var(--amber); border:1px solid rgba(251,191,36,0.2); }
+.info-box { background:var(--surface-3); border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin:16px 0; }
+.info-box .title { font-weight:600; font-size:13px; margin-bottom:8px; color:var(--accent); }
+.info-box p { font-size:13px; margin-bottom:6px; color:var(--text-2); }
+.pipeline { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:16px 0; padding:16px; background:var(--surface-3); border-radius:var(--radius); border:1px solid var(--border); }
+.pipeline .step { padding:8px 14px; background:var(--surface-2); border:1px solid var(--border); border-radius:6px; font-size:12px; font-weight:500; color:var(--text-2); }
+.pipeline .arrow { color:var(--text-3); font-size:16px; }
+.ref-list { list-style:none; padding:0; }
+.ref-list li { padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; color:var(--text-2); }
+.ref-list li:last-child { border-bottom:none; }
+.ref-list .ref-id { color:var(--accent); font-weight:500; }
+.status-bar { position:fixed; bottom:0; left:0; right:0; height:28px; background:var(--surface-2); border-top:1px solid var(--border); display:flex; align-items:center; padding:0 16px; font-size:10px; color:var(--text-3); font-family:'JetBrains Mono',monospace; z-index:200; gap:16px; }
+.status-bar .dot { width:6px; height:6px; border-radius:50%; background:var(--green); }
+@media (max-width:768px) { .sidebar{display:none;} .main-content{margin-left:0;} header{padding:40px 24px;} header h1{font-size:24px;} section{padding:32px 24px;} }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><h2>📄 CLIP-ES</h2><div class="meta">CVPR 2023 · 浙江大学</div></div>
+    <div class="sec-label">目录</div>
+    <a href="#meta">📋 元信息</a>
+    <a href="#motivation" class="sub">动机</a>
+    <a href="#method">⚙️ 核心方法</a>
+    <a href="#softmax" class="sub">Softmax GradCAM</a>
+    <a href="#text" class="sub">文本驱动策略</a>
+    <a href="#caa" class="sub">CAA 注意力亲和</a>
+    <a href="#cgl" class="sub">CGL 置信引导损失</a>
+    <a href="#pipeline" class="sub">Pipeline 流程</a>
+    <a href="#results">📊 实验结果</a>
+    <a href="#comparison">🔄 同类对比</a>
+    <a href="#noise">🎯 噪声实验视角</a>
+    <a href="#repro">🔧 复现要点</a>
+    <a href="../noise-test-design.html" class="back">← 返回噪声设计</a>
+  </nav>
+  <div class="main-content">
+    <header id="meta">
+      <div class="badge amber">CVPR 2023</div>
+      <h1>CLIP is Also an Efficient Segmenter:<br>A Text-Driven Approach for Weakly Supervised Semantic Segmentation</h1>
+      <div class="tagline">首个系统性地将 CLIP 引入 WSSS 的工作，仅需传统方法 10% 的时间生成伪标签</div>
+      <div class="meta-row">
+        <span>📄 arXiv: <a href="https://arxiv.org/abs/2212.09506" style="color:var(--accent);">2212.09506</a></span>
+        <span>🏫 浙江大学</span>
+        <span>📅 2022-12 (CVPR 2023)</span>
+        <span>💻 <a href="https://github.com/linyq2117/CLIP-ES" style="color:var(--accent);">GitHub</a></span>
+        <span>🏷️ <span class="tag tag-clip">CLIP-based</span> <span class="tag tag-multi">多阶段</span></span>
+      </div>
+      <div class="meta-row">
+        <span><b>作者：</b>Yuqi Lin, Minghao Chen, Wenxiao Wang, Boxi Wu, Ke Li, Binbin Lin, Haifeng Liu, Xiaofei He</span>
+      </div>
+    </header>
+
+    <section id="motivation">
+      <div class="max-width">
+        <h2><span class="num">01</span> 动机与核心思想</h2>
+        <h3>问题</h3>
+        <p>传统 WSSS 多阶段框架训练成本极高，且 CAM 对非目标类和背景的混淆严重。CLIP 展现了强大的零样本定位能力，但如何高效地从 CLIP 生成高质量分割掩码尚未被系统探索。</p>
+        <h3>CLIP-ES 的贡献</h3>
+        <p>CLIP-ES 是 <b>首个系统性地将 CLIP 用于 WSSS 各阶段</b> 的工作，对传统三阶段框架（CAM 生成 → CAM 精炼 → 分割训练）分别做了 CLIP 特化设计：</p>
+        <ul>
+          <li><b>阶段 1 (CAM 生成)：</b>Softmax GradCAM + 文本驱动策略（锐度提示选择 + 同义词融合）</li>
+          <li><b>阶段 2 (CAM 精炼)：</b>基于 CLIP 固有 MHSA 的 CAA 模块，实时生成亲和度，替代 IRN</li>
+          <li><b>阶段 3 (分割训练)：</b>置信引导损失 CGL，聚焦高置信区域训练</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="method">
+      <div class="max-width">
+        <h2><span class="num">02</span> 核心方法</h2>
+
+        <h3 id="softmax">2.1 Softmax GradCAM</h3>
+        <div class="info-box">
+          <div class="title">💡 核心思想</div>
+          <p>传统 GradCAM 用 ReLU 激活 → 只保留正响应 → 非目标类和背景被错误激活。用 softmax 替代 ReLU 将各 channel 的响应归一化为概率分布，抑制非目标类别。</p>
+        </div>
+        <p>传统 GradCAM 对类别 c 在像素 (i,j) 的激活值：$M_c^{\text{GradCAM}}(i,j) = \operatorname{ReLU}(\sum_k \alpha_k^c A_k(i,j))$</p>
+        <p>CLIP-ES 的 softmax GradCAM：$M_c^{\text{S-GradCAM}}(i,j) = \frac{\exp(\sum_k \alpha_k^c A_k(i,j))}{\sum_{c'} \exp(\sum_k \alpha_k^{c'} A_k(i,j))}$</p>
+        <p>同时利用 CLIP 的零样本能力，先用 CLIP 做零样本分类识别出图像中包含哪些类别，在 softmax 中 <b>排除</b> 不存在的类别 → 显著减少背景混淆。</p>
+
+        <h3 id="text">2.2 文本驱动策略</h3>
+        <div class="info-box">
+          <div class="title">💡 核心思想</div>
+          <p>CLIP 的文本输入对 CAM 质量敏感。提出两种策略优化文本 prompt，无需额外训练。</p>
+        </div>
+        <p><b>锐度驱动提示选择 (Sharpness-based Prompt Selection)：</b>候选文本模板集 $T = \{t_1, t_2, ..., t_m\}$，对每个模板计算 softmax GradCAM 的锐度（峰值响应），选择锐度最高的模板。</p>
+        <p><b>同义词融合 (Synonym Fusion)：</b>每个类别有多个同义词（如 "aeroplane"/"airplane"），分别生成 CAM 后融合。融合策略：对高置信区域取平均，低置信区域取最大值。</p>
+
+        <h3 id="caa">2.3 CAA — Class-Aware Attention-based Affinity</h3>
+        <div class="info-box">
+          <div class="title">💡 核心思想</div>
+          <p>利用 CLIP-ViT 固有的 MHSA 中的注意力图直接作为像素间亲和度，无需额外训练 IRN。</p>
+        </div>
+        <p>CLIP-ViT 的 MHSA 输出注意力图 $A \in \mathbb{R}^{H\times W \times H\times W}$，$A(p,q)$ 表示 patch p 对 patch q 的注意力权重。对类别 c，用 softmax GradCAM 图 $M_c$ 选择高置信种子区域，然后通过注意力传播种子到整个物体：</p>
+        <p>$$\text{Affinity}(p,q) = \frac{1}{N} \sum_{h=1}^N A_h(p,q)$$</p>
+        <p>其中 N 为注意力头数。CAA 的独特之处在于 <b>类别感知</b> — 只对当前类别的种子区域进行传播，避免跨类混淆。CAA 运行时间仅 <b>0.2秒/图</b>，而传统 IRN 需 12 秒/图。</p>
+
+        <h3 id="cgl">2.4 CGL — Confidence-Guided Loss</h3>
+        <div class="info-box">
+          <div class="title">💡 核心思想</div>
+          <p>训练分割网络时，对伪标签置信度高的像素赋予高权重，低置信度像素权重低，减少噪声传播。</p>
+        </div>
+        <p>对像素 i，以其在 softmax GradCAM 中的最大响应值 $w_i = \max_c M_c(i)$ 作为置信度权重：</p>
+        <p>$$L_{\text{CGL}} = -\frac{1}{N} \sum_i w_i \cdot \log P(\hat{y}_i | x_i)$$</p>
+        <p>其中 $\hat{y}_i$ 是伪标签，$P(\hat{y}_i | x_i)$ 是分割网络的预测概率。</p>
+
+        <h3>完整 Pipeline</h3>
+        <div class="pipeline">
+          <span class="step">① Softmax GradCAM<br><small>CLIP + 文本驱动 → CAM</small></span>
+          <span class="arrow">→</span>
+          <span class="step">② CAA 精炼<br><small>MHSA 亲和度 → 伪标签</small></span>
+          <span class="arrow">→</span>
+          <span class="step">③ 分割训练<br><small>CGL 损失 → DeepLabV2</small></span>
+        </div>
+      </div>
+    </section>
+
+    <section id="results">
+      <div class="max-width">
+        <h2><span class="num">03</span> 实验结果</h2>
+
+        <h3>分割性能 — VOC val / test</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>方法</th><th>会议</th><th>Backbone</th><th>Val</th><th>Test</th></tr></thead>
+            <tbody>
+              <tr><td>SEAM</td><td>CVPR'20</td><td>R38</td><td>64.5</td><td>65.7</td></tr>
+              <tr><td>AdvCAM</td><td>CVPR'21</td><td>R101</td><td>68.1</td><td>68.0</td></tr>
+              <tr><td>SIPE</td><td>CVPR'22</td><td>R101</td><td>68.8</td><td>69.7</td></tr>
+              <tr style="background:var(--accent-soft);"><td><b>CLIP-ES</b></td><td><b>CVPR'23</b></td><td><b>ViT-B/RN101</b></td><td><b class="hl">72.2</b></td><td><b class="hl">72.8</b></td></tr>
+              <tr><td>WeCLIP</td><td>CVPR'24 ✨</td><td>CLIP ViT-B</td><td>76.4</td><td>77.2</td></tr>
+              <tr><td>ExCEL</td><td>CVPR'25</td><td>CLIP ViT-B</td><td>78.4</td><td>78.5</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>注：CLIP-ES 的 RN101 结果用于公平对比（和之前非 CLIP 方法同 backbone），其 CLIP ViT-B 结果可达 73.8% val / 74.5% test。</p>
+
+        <h3>CAM 种子质量 — VOC train</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>方法</th><th>CAM mIoU</th><th>备注</th></tr></thead>
+            <tbody>
+              <tr><td>SIPE</td><td>58.6</td><td>传统多阶段 SOTA</td></tr>
+              <tr style="background:var(--accent-soft);"><td><b>CLIP-ES (训练-free)</b></td><td><b class="hl">70.8</b></td><td><b>仅用 CLIP 零样本，无训练</b></td></tr>
+              <tr><td>ExCEL (训练-free)</td><td>74.6</td><td>Patch-text 对齐</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>CLIP-ES 在训练-free 设置下就达到 70.8% CAM mIoU，远超传统方法的 58.6%。</p>
+
+        <h3>效率对比</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>方法</th><th>CAM 生成时间</th><th>CAM 精炼时间</th><th>总时间</th><th>GPU 显存</th></tr></thead>
+            <tbody>
+              <tr><td>MCTformer+</td><td>—</td><td>—</td><td>~1496 min</td><td>18.0 G</td></tr>
+              <tr><td>CLIP-ES (RN101)</td><td><b>0.2s/img</b></td><td><b>0.2s/img (CAA)</b></td><td><b>~420 min</b></td><td><b>12.0 G</b></td></tr>
+              <tr><td>IRN (对比)</td><td>—</td><td>~12s/img</td><td>—</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>CAA 仅需传统方法 (IRN) 1/60 的时间。</p>
+      </div>
+    </section>
+
+    <section id="comparison">
+      <div class="max-width">
+        <h2><span class="num">04</span> 同类对比 & 噪声实验视角</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>维度</th><th>CLIP-ES</th><th>ExCEL</th><th>SIPE</th><th>DuPL</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>范式</td><td>多阶段</td><td>单阶段</td><td>多阶段</td><td>单阶段</td></tr>
+              <tr><td>CLIP?</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
+              <tr><td>CAM 方式</td><td>Softmax GradCAM</td><td>Patch-text 余弦</td><td>图像特定原型</td><td>双学生渐进</td></tr>
+              <tr><td>Backbone</td><td>CLIP (微调) / RN101</td><td>CLIP (冻结)</td><td>ResNet</td><td>ViT-B</td></tr>
+              <tr><td>VOC val</td><td>72.2 / 73.8</td><td>78.4</td><td>68.8</td><td>73.3</td></tr>
+              <tr><td>效率</td><td>快（CAA 0.2s/img）</td><td>最快 (90min)</td><td>中 (5 epoch)</td><td>中 (508min)</td></tr>
+              <tr><td>对噪声敏感度</td><td><b>中</b>（微调 CLIP + CGL 缓解）</td><td>低</td><td>高</td><td>中</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box">
+          <div class="title">🎯 噪声实验启示</div>
+          <p>CLIP-ES 是 <b>CLIP × 多阶段</b> 象限的代表：</p>
+          <ul>
+            <li><b>CAA 是亮点：</b>利用 CLIP 固有注意力图做亲和传播，不引入额外参数，天生比 IRN 更抗噪</li>
+            <li><b>CGL 直接针对噪声设计：</b>置信度加权训练 → 低置信（高噪声）区域自动降权，噪声实验的天然 baseline</li>
+            <li><b>Softmax GradCAM 的关键：</b>用 CLIP 的零样本识别排除不存在的类别 → 从源头减少噪声</li>
+            <li><b>但微调 CLIP 有风险：</b>不同于 ExCEL 冻结 backbone，CLIP-ES 微调 CLIP → 对抗性噪声可能破坏预训练知识</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="repro">
+      <div class="max-width">
+        <h2><span class="num">05</span> 复现要点</h2>
+        <div class="info-box">
+          <div class="title">⚙️ 关键配置</div>
+          <p><b>Backbone：</b>CLIP ViT-B (微调) 或 ResNet101</p>
+          <p><b>CAM 生成：</b>Softmax GradCAM + 锐度提示选择 + 同义词融合，完全无需训练</p>
+          <p><b>CAA 精炼：</b>基于 CLIP-ViT 的 MHSA 注意力图，0.2s/img</p>
+          <p><b>分割网络：</b>DeepLabV2，CGL 损失训练</p>
+          <p><b>效率优势：</b>总运行时间约 420 min（VOC），远低于同类</p>
+          <p><b>代码：</b><a href="https://github.com/linyq2117/CLIP-ES" style="color:var(--accent);">github.com/linyq2117/CLIP-ES</a></p>
+        </div>
+        <h3>可能踩的坑</h3>
+        <ul>
+          <li><b>CLIP 版本敏感：</b>不同 CLIP 变体（ViT-B/16 vs ViT-B/32）的 MHSA 注意力图质量不同，需调优</li>
+          <li><b>文本模板选择：</b>锐度驱动提示选择依赖候选模板集的质量，换数据集需重新设计模板</li>
+          <li><b>同义词融合的阈值：</b>高/低置信区域的划分阈值需要调参</li>
+          <li><b>CGL 的权重设计：</b>直接用 softmax 最大值做权重可能在多类重叠区域出现高置信错误</li>
+          <li><b>验证过的 arXiv ID：</b>CLIP-ES 的 PDF 已下载到 papers/2212.09506.pdf ✅</li>
+        </ul>
+      </div>
+    </section>
+    <footer style="padding:24px 56px; border-top:1px solid var(--border);">
+      <p style="font-size:12px; color:var(--text-3);">知识卡片 · CLIP-ES (CVPR 2023) · 生成于 2026-06-01 · 仅供学习参考</p>
+    </footer>
+  </div>
+</div>
+<div class="status-bar">
+  <span class="dot"></span>
+  <span>CLIP-ES-knowledge-card</span>
+  <span>|</span>
+  <span>for noise experiment · paper 3/4</span>
+  <span>|</span>
+  <span>v1.0</span>
+</div>
+</body>
+</html>
