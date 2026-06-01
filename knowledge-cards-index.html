@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知识卡片 · 噪声实验论文 — 主页</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#0a0a0b; --surface:#121214; --surface-2:#18181b; --surface-3:#1f1f23; --border:#27272a; --text:#fafafa; --text-2:#a1a1aa; --text-3:#71717a; --accent:#818cf8; --accent-soft:rgba(129,140,248,0.12); --green:#4ade80; --amber:#fbbf24; --rose:#fb7185; --cyan:#22d3ee; --radius:12px; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter','Noto Sans SC',-apple-system,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+.container { max-width:960px; margin:0 auto; padding:0 24px; }
+header { padding:64px 0 40px; text-align:center; border-bottom:1px solid var(--border); }
+header h1 { font-size:32px; font-weight:600; letter-spacing:-0.03em; margin-bottom:12px; }
+header .subtitle { color:var(--text-2); font-size:15px; max-width:600px; margin:0 auto; }
+header .meta { color:var(--text-3); font-size:13px; margin-top:12px; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; padding:48px 0; }
+@media (max-width:640px) { .grid { grid-template-columns:1fr; } }
+.card { background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius); padding:24px; transition:all .2s; text-decoration:none; color:var(--text); display:flex; flex-direction:column; }
+.card:hover { border-color:var(--accent); transform:translateY(-2px); background:var(--surface-3); }
+.card .badge { display:inline-block; font-size:10px; font-weight:600; padding:3px 8px; border-radius:6px; margin-bottom:10px; width:fit-content; }
+.card .badge.cvpr23 { background:rgba(251,191,36,0.1); color:var(--amber); border:1px solid rgba(251,191,36,0.2); }
+.card .badge.cvpr22 { background:rgba(251,113,133,0.1); color:var(--rose); border:1px solid rgba(251,113,133,0.2); }
+.card .badge.cvpr24 { background:rgba(34,211,238,0.1); color:var(--cyan); border:1px solid rgba(34,211,238,0.2); }
+.card .badge.cvpr25 { background:rgba(129,140,248,0.1); color:var(--accent); border:1px solid rgba(129,140,248,0.2); }
+.card h2 { font-size:18px; font-weight:600; margin-bottom:6px; }
+.card .authors { font-size:12px; color:var(--text-3); margin-bottom:8px; }
+.card .tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+.card .tag { font-size:10px; font-weight:500; padding:2px 6px; border-radius:4px; background:var(--surface); border:1px solid var(--border); color:var(--text-2); }
+.card .desc { font-size:13px; color:var(--text-2); line-height:1.5; flex:1; }
+.card .arrow { margin-top:12px; font-size:13px; color:var(--accent); font-weight:500; }
+.matrix { background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:32px; }
+.matrix h3 { font-size:15px; font-weight:600; margin-bottom:16px; }
+.matrix-grid { display:grid; grid-template-columns:80px 1fr 1fr; gap:8px; font-size:13px; }
+.matrix-grid .label { display:flex; align-items:center; justify-content:center; font-weight:500; color:var(--text-3); padding:8px; }
+.matrix-grid .header { font-weight:600; color:var(--text-2); text-align:center; padding:8px; background:var(--surface-3); border-radius:6px; }
+.matrix-grid .cell { padding:12px; border-radius:6px; border:1px solid var(--border); text-align:center; text-decoration:none; color:var(--text); transition:all .15s; }
+.matrix-grid .cell:hover { border-color:var(--accent); background:var(--surface-3); }
+.matrix-grid .cell .name { font-weight:600; font-size:14px; }
+.matrix-grid .cell .score { font-size:12px; color:var(--accent); margin-top:4px; }
+.matrix-grid .cell .link { font-size:11px; color:var(--text-3); margin-top:4px; }
+footer { padding:32px 0; border-top:1px solid var(--border); text-align:center; font-size:12px; color:var(--text-3); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>📚 噪声实验 · 论文知识卡片</h1>
+    <p class="subtitle">4 篇论文 × 2×2 对照矩阵 — 单/多阶段 × CLIP/非CLIP，为噪声鲁棒性实验准备</p>
+    <p class="meta">review-wsss-survey · 2026-06-01</p>
+  </header>
+
+  <div class="matrix">
+    <h3>🧩 实验设计矩阵</h3>
+    <div class="matrix-grid">
+      <div class="label"></div>
+      <div class="header">✅ CLIP-based</div>
+      <div class="header">❌ 非 CLIP</div>
+
+      <div class="label">单阶段</div>
+      <a href="excel-knowledge-card.html" class="cell" style="background:rgba(129,140,248,0.06);">
+        <div class="name">ExCEL</div>
+        <div class="score">CVPR 2025 · 78.4%</div>
+        <div class="link">→ 查看卡片</div>
+      </a>
+      <a href="dupl-knowledge-card.html" class="cell" style="background:rgba(34,211,238,0.06);">
+        <div class="name">DuPL</div>
+        <div class="score">CVPR 2024 · 73.3%</div>
+        <div class="link">→ 查看卡片</div>
+      </a>
+
+      <div class="label">多阶段</div>
+      <a href="clip-es-knowledge-card.html" class="cell" style="background:rgba(129,140,248,0.06);">
+        <div class="name">CLIP-ES</div>
+        <div class="score">CVPR 2023 · 72.2%</div>
+        <div class="link">→ 查看卡片</div>
+      </a>
+      <a href="sipe-knowledge-card.html" class="cell" style="background:rgba(34,211,238,0.06);">
+        <div class="name">SIPE</div>
+        <div class="score">CVPR 2022 · 68.8%</div>
+        <div class="link">→ 查看卡片</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="grid">
+    <a href="excel-knowledge-card.html" class="card">
+      <span class="badge cvpr25">CVPR 2025</span>
+      <h2>ExCEL</h2>
+      <div class="authors">Zhiwei Yang et al. · 复旦大学</div>
+      <div class="tags"><span class="tag">CLIP</span><span class="tag">单阶段</span><span class="tag">冻结 backbone</span></div>
+      <div class="desc">Patch-text 对齐范式释放 CLIP 的密集知识。TSE (LLM 属性聚类) + SVC (Intra-correlation) + LVC (轻量适配器)。仅 90min 训练 + 3.2GB 显存达 SOTA 78.4%。</div>
+      <div class="arrow">📖 阅读卡片 →</div>
+    </a>
+
+    <a href="clip-es-knowledge-card.html" class="card">
+      <span class="badge cvpr23">CVPR 2023</span>
+      <h2>CLIP-ES</h2>
+      <div class="authors">Yuqi Lin et al. · 浙江大学</div>
+      <div class="tags"><span class="tag">CLIP</span><span class="tag">多阶段</span><span class="tag">Softmax GradCAM</span></div>
+      <div class="desc">首个系统将 CLIP 引入 WSSS 的工作。Softmax GradCAM + CAA (注意力亲和度) + CGL (置信引导损失)。零样本 CAM 达 70.8%，CAA 仅 0.2s/img。</div>
+      <div class="arrow">📖 阅读卡片 →</div>
+    </a>
+
+    <a href="dupl-knowledge-card.html" class="card">
+      <span class="badge cvpr24">CVPR 2024</span>
+      <h2>DuPL</h2>
+      <div class="authors">Yuanchen Wu et al. · 上海大学</div>
+      <div class="tags"><span class="tag">非CLIP</span><span class="tag">单阶段</span><span class="tag">Dual Student</span></div>
+      <div class="desc">双学生框架对抗确认偏误。DTA (动态阈值) + ANF (自适应噪声过滤 via GMM) + 每像素一致性正则化。四篇中唯一主动建模噪声的方法。</div>
+      <div class="arrow">📖 阅读卡片 →</div>
+    </a>
+
+    <a href="sipe-knowledge-card.html" class="card">
+      <span class="badge cvpr22">CVPR 2022</span>
+      <h2>SIPE</h2>
+      <div class="authors">Qi Chen et al. · 中山大学</div>
+      <div class="tags"><span class="tag">非CLIP</span><span class="tag">多阶段</span><span class="tag">原型探索</span></div>
+      <div class="desc">图像特定原型弥补 CAM 的「趋判别性」缺陷。Structure-aware Seed Locating + Background-aware Prototype Modeling + GSC 自监督一致性。前 CLIP 时代 SOTA。</div>
+      <div class="arrow">📖 阅读卡片 →</div>
+    </a>
+  </div>
+
+  <footer>
+    <p>知识卡片主页 · 噪声实验论文合集 · 生成于 2026-06-01</p>
+  </footer>
+</div>
+</body>
+</html>

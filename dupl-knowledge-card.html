@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DuPL · 知识卡片 — CVPR 2024</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+:root { --bg:#0a0a0b; --surface:#121214; --surface-2:#18181b; --surface-3:#1f1f23; --border:#27272a; --text:#fafafa; --text-2:#a1a1aa; --text-3:#71717a; --accent:#818cf8; --accent-soft:rgba(129,140,248,0.12); --green:#4ade80; --amber:#fbbf24; --rose:#fb7185; --cyan:#22d3ee; --violet:#a78bfa; --sidebar-width:240px; --radius:10px; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter','Noto Sans SC',-apple-system,sans-serif; background:var(--bg); color:var(--text); line-height:1.75; font-size:15px; -webkit-font-smoothing:antialiased; }
+.layout { display:flex; min-height:100vh; }
+.sidebar { position:fixed; top:0; left:0; width:var(--sidebar-width); height:100vh; overflow-y:auto; background:var(--surface-2); border-right:1px solid var(--border); padding:28px 0; z-index:100; }
+.sidebar-brand { padding:0 20px 20px; border-bottom:1px solid var(--border); margin-bottom:12px; }
+.sidebar-brand h2 { font-size:14px; font-weight:600; color:var(--accent); line-height:1.4; }
+.sidebar-brand .meta { font-size:11px; color:var(--text-3); margin-top:4px; }
+.sidebar .sec-label { font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-3); padding:12px 20px 4px; }
+.sidebar a { display:block; padding:6px 20px; font-size:13px; color:var(--text-2); text-decoration:none; transition:all .15s; border-left:2px solid transparent; }
+.sidebar a:hover { color:var(--text); background:var(--surface-3); }
+.sidebar a.sub { padding-left:32px; font-size:12px; color:var(--text-3); }
+.sidebar a.back { margin-top:20px; font-size:12px; color:var(--accent); border-top:1px solid var(--border); padding-top:16px; }
+.main-content { margin-left:var(--sidebar-width); flex:1; min-width:0; }
+header { padding:64px 56px 40px; border-bottom:1px solid var(--border); }
+header h1 { font-size:30px; font-weight:600; letter-spacing:-0.03em; line-height:1.3; margin-bottom:12px; }
+header .meta-row { display:flex; flex-wrap:wrap; gap:16px 32px; margin-top:16px; font-size:13px; color:var(--text-3); }
+header .meta-row span { display:flex; align-items:center; gap:6px; }
+header .badge { display:inline-block; font-size:11px; font-weight:600; padding:3px 10px; border-radius:999px; background:var(--accent-soft); color:var(--accent); border:1px solid rgba(129,140,248,0.2); }
+header .badge.amber { background:rgba(251,191,36,0.1); color:var(--amber); border-color:rgba(251,191,36,0.2); }
+header .tagline { margin-top:16px; font-size:15px; color:var(--text-2); max-width:700px; font-style:italic; }
+section { padding:48px 56px; }
+section:nth-child(even) { background:var(--surface); }
+section h2 { font-size:22px; font-weight:600; margin-bottom:24px; letter-spacing:-0.02em; display:flex; align-items:center; gap:10px; }
+section h2 .num { font-size:13px; font-weight:500; color:var(--text-3); font-family:'JetBrains Mono',monospace; }
+section h3 { font-size:16px; font-weight:600; margin:24px 0 12px; color:var(--text); }
+section h4 { font-size:14px; font-weight:500; margin:16px 0 8px; color:var(--text-2); }
+section p { margin-bottom:14px; color:var(--text-2); }
+section ul, section ol { margin:8px 0 16px 20px; color:var(--text-2); }
+section li { margin-bottom:6px; }
+code { font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--surface-3); padding:2px 6px; border-radius:4px; color:var(--cyan); }
+.max-width { max-width:880px; }
+.table-wrap { overflow-x:auto; margin:16px 0; }
+table { width:100%; border-collapse:separate; border-spacing:0; font-size:13px; }
+table thead th { text-align:left; padding:10px 12px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-3); border-bottom:1px solid var(--border); background:var(--surface-2); white-space:nowrap; }
+table tbody td { padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--text-2); }
+table tbody tr:hover td { background:var(--surface-3); }
+table .hl { color:var(--accent); font-weight:600; }
+.tag { display:inline-block; font-size:10px; font-weight:600; padding:2px 7px; border-radius:4px; letter-spacing:0.02em; }
+.tag-no-clip { background:rgba(251,113,133,0.1); color:var(--rose); border:1px solid rgba(251,113,133,0.2); }
+.tag-single { background:rgba(34,211,238,0.1); color:var(--cyan); border:1px solid rgba(34,211,238,0.2); }
+.info-box { background:var(--surface-3); border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin:16px 0; }
+.info-box .title { font-weight:600; font-size:13px; margin-bottom:8px; color:var(--accent); }
+.info-box p { font-size:13px; margin-bottom:6px; color:var(--text-2); }
+.pipeline { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:16px 0; padding:16px; background:var(--surface-3); border-radius:var(--radius); border:1px solid var(--border); }
+.pipeline .step { padding:8px 14px; background:var(--surface-2); border:1px solid var(--border); border-radius:6px; font-size:12px; font-weight:500; color:var(--text-2); }
+.pipeline .arrow { color:var(--text-3); font-size:16px; }
+.status-bar { position:fixed; bottom:0; left:0; right:0; height:28px; background:var(--surface-2); border-top:1px solid var(--border); display:flex; align-items:center; padding:0 16px; font-size:10px; color:var(--text-3); font-family:'JetBrains Mono',monospace; z-index:200; gap:16px; }
+.status-bar .dot { width:6px; height:6px; border-radius:50%; background:var(--green); }
+@media (max-width:768px) { .sidebar{display:none;} .main-content{margin-left:0;} header{padding:40px 24px;} header h1{font-size:24px;} section{padding:32px 24px;} }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><h2>📄 DuPL</h2><div class="meta">CVPR 2024 · 上海大学</div></div>
+    <div class="sec-label">目录</div>
+    <a href="#meta">📋 元信息</a>
+    <a href="#motivation" class="sub">动机</a>
+    <a href="#method">⚙️ 核心方法</a>
+    <a href="#dual" class="sub">Dual Student</a>
+    <a href="#progressive" class="sub">Progressive Learning</a>
+    <a href="#anf" class="sub">ANF 噪声过滤</a>
+    <a href="#every" class="sub">Every Pixel Matters</a>
+    <a href="#results">📊 实验结果</a>
+    <a href="#noise">🎯 噪声实验视角</a>
+    <a href="#repro">🔧 复现要点</a>
+    <a href="knowledge-cards-index.html" class="back">← 知识卡片主页</a>
+  </nav>
+  <div class="main-content">
+    <header id="meta">
+      <div class="badge amber">CVPR 2024</div>
+      <h1>DuPL: Dual Student with Trustworthy Progressive Learning<br>for Robust Weakly Supervised Semantic Segmentation</h1>
+      <div class="tagline">双学生互相监督 + 渐进式学习 + 自适应噪声过滤，专为对抗 CAM 确认偏误设计</div>
+      <div class="meta-row">
+        <span>📄 arXiv: <a href="https://arxiv.org/abs/2403.11184" style="color:var(--accent);">2403.11184</a></span>
+        <span>🏫 上海大学</span>
+        <span>📅 2024-03-17</span>
+        <span>💻 <a href="https://github.com/Wu0409/DuPL" style="color:var(--accent);">GitHub</a></span>
+        <span>🏷️ <span class="tag tag-no-clip">非 CLIP</span> <span class="tag tag-single">单阶段</span></span>
+      </div>
+      <div class="meta-row"><span><b>作者：</b>Yuanchen Wu, Xichen Ye, Kequan Yang, Jide Li, Xiaoqiang Li</span></div>
+    </header>
+
+    <section id="motivation">
+      <div class="max-width">
+        <h2><span class="num">01</span> 动机与核心思想</h2>
+        <h3>问题：CAM 确认偏误 (Confirmation Bias)</h3>
+        <p>单阶段 WSSS 中，分类网络生成的 CAM 伪标签直接用于训练分割头。由于 backbone 特征共享，<b>不准确的 CAM 不仅妨碍分割学习，更会反过来强化 CAM 的错误判断</b>，形成恶性循环。这种确认偏误随训练持续恶化。</p>
+        <div class="info-box"><div class="title">💡 核心洞察</div><p>传统方法用固定高阈值过滤不可靠伪标签 → 丢弃了大量可能正确的像素。DuPL 提出：<b>每个像素都重要</b>，即使不可靠的区域也应通过一致性正则化得到利用。</p></div>
+        <h3>三大组件</h3>
+        <ul>
+          <li><b>Dual Student 框架</b> — 双子网互相监督，从不同视角产生多样化 CAM，缓解确认偏误</li>
+          <li><b>Trustworthy Progressive Learning</b> — 动态阈值调整（余弦下降）+ 自适应噪声过滤（GMM），逐步引入更多像素</li>
+          <li><b>Every Pixel Matters</b> — 对过滤掉的区域做一致性正则化，不浪费任何像素</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="method">
+      <div class="max-width">
+        <h2><span class="num">02</span> 核心方法</h2>
+        <h3 id="dual">2.1 Dual Student 框架</h3>
+        <div class="info-box"><div class="title">💡 核心思想</div><p>两个相同架构的子网（ψ₁, ψ₂），参数独立不共享。表示层差异损失 $L_{\text{dis}}$ 强制二者特征多样化。子网 1 的 CAM 伪标签监督子网 2 的分割训练，反之亦然 → 交叉监督打破确认偏误。</p></div>
+        <p>差异损失：$D(f_1, f_2) = -\log(1 - \frac{f_1 \cdot f_2}{\|f_1\| \times \|f_2\|})$, $L_{\text{dis}} = D(f_1, \Delta(f_2)) + D(f_2, \Delta(f_1))$</p>
+        <p>分割损失（交叉监督）：$L_{\text{seg}} = \text{CE}(P_1, Y_2) + \text{CE}(P_2, Y_1)$</p>
+
+        <h3 id="progressive">2.2 Trustworthy Progressive Learning</h3>
+        <p><b>动态阈值调整 (DTA)：</b>背景阈值 $\tau_h$ 随训练余弦下降：$\tau_h(t) = \tau_h(0) - (\tau_h(0) - \tau_h(T)) \cdot \frac{1}{2}(1 - \cos(\frac{t\pi}{T}))$</p>
+
+        <h3 id="anf">2.3 自适应噪声过滤 (ANF)</h3>
+        <div class="info-box"><div class="title">💡 核心思想</div><p>基于「深度网络先拟合 clean labels 后记忆 noisy labels」的早停现象。用 GMM 拟合分割损失分布，高损失组分自动识别为噪声。</p></div>
+        <p>损失分布建模：$P(l^x) = w_c \mathcal{N}(l^x|\mu_c, \sigma_c^2) + w_n \mathcal{N}(l^x|\mu_n, \sigma_n^2)$</p>
+
+        <h3 id="every">2.4 Every Pixel Matters</h3>
+        <p>对被 ANF 过滤的不可靠区域，用强数据增强 $\phi$ 扰动后做一致性正则化。</p>
+        <h3>完整目标</h3>
+        <p>$L = L_{\text{cls}} + 0.1 L_{\text{dis}} + 0.1 L_{\text{seg}} + 0.05 L_{\text{reg}}$</p>
+      </div>
+    </section>
+
+    <section id="results">
+      <div class="max-width">
+        <h2><span class="num">03</span> 实验结果</h2>
+        <h3>分割性能 — VOC val/test / COCO val</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>方法</th><th>Backbone</th><th>VOC val</th><th>VOC test</th><th>COCO val</th></tr></thead>
+          <tbody>
+            <tr><td>ToCo</td><td>ViT-B</td><td>69.8</td><td>70.5</td><td>41.3</td></tr>
+            <tr style="background:var(--accent-soft);"><td><b>DuPL</b></td><td><b>ViT-B</b></td><td><b>72.2</b></td><td><b>71.6</b></td><td><b>43.5</b></td></tr>
+            <tr style="background:var(--accent-soft);"><td><b>DuPL†</b></td><td><b>ViT-B†</b></td><td><b class="hl">73.3</b></td><td><b class="hl">72.8</b></td><td><b class="hl">44.6</b></td></tr>
+          </tbody>
+        </table></div>
+        <p style="font-size:13px;color:var(--text-3);">†: ImageNet-21k pretrained. CAM 伪标签达 76.0%/74.1% (train/val)。</p>
+
+        <h3>消融 (Tab.4)</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>DS</th><th>$L_{\text{dis}}$</th><th>DTA</th><th>ANF</th><th>$L_{\text{reg}}$</th><th>Seg mIoU</th></tr></thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td><td></td><td>62.3</td></tr>
+            <tr><td>✓</td><td></td><td></td><td></td><td></td><td>63.8</td></tr>
+            <tr><td>✓</td><td>✓</td><td></td><td></td><td></td><td>64.1</td></tr>
+            <tr><td>✓</td><td>✓</td><td>✓</td><td></td><td></td><td>66.7</td></tr>
+            <tr><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td></td><td>68.2</td></tr>
+            <tr style="background:var(--accent-soft);"><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td><b class="hl">69.9</b></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <section id="noise">
+      <div class="max-width">
+        <h2><span class="num">04</span> 噪声实验视角</h2>
+        <div class="info-box">
+          <div class="title">🎯 四篇总结：2×2 矩阵</div>
+          <ul>
+            <li><b>ExCEL</b> (CLIP×单阶段): 冻结 backbone 被动抗噪，最高性能 (78.4) + 最高效率 (90min)</li>
+            <li><b>CLIP-ES</b> (CLIP×多阶段): CAA+CGL 抗噪设计，零样本 70.8% CAM，效率第二</li>
+            <li><b>DuPL</b> (非CLIP×单阶段): <b>四篇中唯一主动建模噪声的方法</b> — ANF 用 GMM 检测噪声像素</li>
+            <li><b>SIPE</b> (非CLIP×多阶段): 最传统，无专门抗噪设计，但对理解 CAM 与原型的关系有价值</li>
+          </ul>
+        </div>
+        <p>DuPL 的 ANF 模块对噪声实验最具直接参考价值：GMM 损失分布建模 → 区分 clean/noisy → 可在噪声实验中作为检测伪标签噪声的 tool。</p>
+      </div>
+    </section>
+
+    <section id="repro">
+      <div class="max-width">
+        <h2><span class="num">05</span> 复现要点</h2>
+        <div class="info-box">
+          <div class="title">⚙️ 关键配置</div>
+          <p><b>Backbone：</b>ViT-B，双子网独立参数 | <b>优化器：</b>AdamW, lr=6e-5</p>
+          <p><b>输入：</b>448×448, batch=4 (VOC) | <b>迭代：</b>20k (VOC) / 80k (COCO)</p>
+          <p><b>阈值：</b>$\tau_l$=0.25, $\tau_h(0)$=0.7, $\tau_h(T)$=0.55 | <b>ANF：</b>γ=0.9, η=1.0</p>
+          <p><b>Warm-up：</b>classifier 2k + seg head 6k | <b>代码：</b><a href="https://github.com/Wu0409/DuPL" style="color:var(--accent);">github.com/Wu0409/DuPL</a></p>
+        </div>
+      </div>
+    </section>
+    <footer style="padding:24px 56px; border-top:1px solid var(--border);">
+      <p style="font-size:12px; color:var(--text-3);">知识卡片 · DuPL (CVPR 2024) · 生成于 2026-06-01 · 仅供学习参考</p>
+    </footer>
+  </div>
+</div>
+<div class="status-bar"><span class="dot"></span><span>DuPL-knowledge-card</span><span>|</span><span>for noise experiment · paper 4/4</span><span>|</span><span>v1.0</span></div>
+</body>
+</html>
