@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIPE · 知识卡片 — CVPR 2022</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+:root {
+  --bg: #0a0a0b; --surface: #121214; --surface-2: #18181b;
+  --surface-3: #1f1f23; --border: #27272a;
+  --text: #fafafa; --text-2: #a1a1aa; --text-3: #71717a;
+  --accent: #818cf8; --accent-soft: rgba(129,140,248,0.12);
+  --green: #4ade80; --amber: #fbbf24; --rose: #fb7185;
+  --cyan: #22d3ee; --violet: #a78bfa;
+  --sidebar-width: 240px; --radius: 10px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;
+  background:var(--bg); color:var(--text);
+  line-height:1.75; font-size:15px; -webkit-font-smoothing:antialiased;
+}
+.layout { display:flex; min-height:100vh; }
+
+.sidebar {
+  position:fixed; top:0; left:0; width:var(--sidebar-width);
+  height:100vh; overflow-y:auto;
+  background:var(--surface-2); border-right:1px solid var(--border);
+  padding:28px 0; z-index:100;
+}
+.sidebar-brand { padding:0 20px 20px; border-bottom:1px solid var(--border); margin-bottom:12px; }
+.sidebar-brand h2 { font-size:14px; font-weight:600; color:var(--accent); line-height:1.4; }
+.sidebar-brand .meta { font-size:11px; color:var(--text-3); margin-top:4px; }
+.sidebar .sec-label { font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-3); padding:12px 20px 4px; }
+.sidebar a { display:block; padding:6px 20px; font-size:13px; color:var(--text-2); text-decoration:none; transition:all .15s; border-left:2px solid transparent; }
+.sidebar a:hover { color:var(--text); background:var(--surface-3); }
+.sidebar a.sub { padding-left:32px; font-size:12px; color:var(--text-3); }
+.sidebar a.back { margin-top:20px; font-size:12px; color:var(--accent); border-top:1px solid var(--border); padding-top:16px; }
+
+.main-content { margin-left:var(--sidebar-width); flex:1; min-width:0; }
+header { padding:64px 56px 40px; border-bottom:1px solid var(--border); }
+header h1 { font-size:30px; font-weight:600; letter-spacing:-0.03em; line-height:1.3; margin-bottom:12px; }
+header .meta-row { display:flex; flex-wrap:wrap; gap:16px 32px; margin-top:16px; font-size:13px; color:var(--text-3); }
+header .meta-row span { display:flex; align-items:center; gap:6px; }
+header .badge { display:inline-block; font-size:11px; font-weight:600; padding:3px 10px; border-radius:999px; background:var(--accent-soft); color:var(--accent); border:1px solid rgba(129,140,248,0.2); }
+header .badge.amber { background:rgba(251,191,36,0.1); color:var(--amber); border-color:rgba(251,191,36,0.2); }
+header .tagline { margin-top:16px; font-size:15px; color:var(--text-2); max-width:700px; font-style:italic; }
+
+section { padding:48px 56px; }
+section:nth-child(even) { background:var(--surface); }
+section h2 { font-size:22px; font-weight:600; margin-bottom:24px; letter-spacing:-0.02em; display:flex; align-items:center; gap:10px; }
+section h2 .num { font-size:13px; font-weight:500; color:var(--text-3); font-family:'JetBrains Mono',monospace; }
+section h3 { font-size:16px; font-weight:600; margin:24px 0 12px; color:var(--text); }
+section h4 { font-size:14px; font-weight:500; margin:16px 0 8px; color:var(--text-2); }
+section p { margin-bottom:14px; color:var(--text-2); }
+section ul,section ol { margin:8px 0 16px 20px; color:var(--text-2); }
+section li { margin-bottom:6px; }
+code { font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--surface-3); padding:2px 6px; border-radius:4px; color:var(--cyan); }
+.max-width { max-width:880px; }
+
+.table-wrap { overflow-x:auto; margin:16px 0; }
+table { width:100%; border-collapse:separate; border-spacing:0; font-size:13px; }
+table thead th { text-align:left; padding:10px 12px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-3); border-bottom:1px solid var(--border); background:var(--surface-2); white-space:nowrap; }
+table tbody td { padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--text-2); }
+table tbody tr:hover td { background:var(--surface-3); }
+table .hl { color:var(--accent); font-weight:600; }
+table .num-cell { font-family:'JetBrains Mono',monospace; text-align:right; }
+
+.tag { display:inline-block; font-size:10px; font-weight:600; padding:2px 7px; border-radius:4px; letter-spacing:0.02em; }
+.tag-no-clip { background:rgba(251,113,133,0.1); color:var(--rose); border:1px solid rgba(251,113,133,0.2); }
+.tag-multi { background:rgba(251,191,36,0.1); color:var(--amber); border:1px solid rgba(251,191,36,0.2); }
+.tag-high { background:rgba(74,222,128,0.1); color:var(--green); border:1px solid rgba(74,222,128,0.2); }
+
+.info-box { background:var(--surface-3); border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin:16px 0; }
+.info-box .title { font-weight:600; font-size:13px; margin-bottom:8px; color:var(--accent); }
+.info-box p { font-size:13px; margin-bottom:6px; color:var(--text-2); }
+
+.pipeline { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:16px 0; padding:16px; background:var(--surface-3); border-radius:var(--radius); border:1px solid var(--border); }
+.pipeline .step { padding:8px 14px; background:var(--surface-2); border:1px solid var(--border); border-radius:6px; font-size:12px; font-weight:500; color:var(--text-2); }
+.pipeline .arrow { color:var(--text-3); font-size:16px; }
+
+.ref-list { list-style:none; padding:0; }
+.ref-list li { padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; color:var(--text-2); }
+.ref-list li:last-child { border-bottom:none; }
+.ref-list .ref-id { color:var(--accent); font-weight:500; }
+
+.status-bar { position:fixed; bottom:0; left:0; right:0; height:28px; background:var(--surface-2); border-top:1px solid var(--border); display:flex; align-items:center; padding:0 16px; font-size:10px; color:var(--text-3); font-family:'JetBrains Mono',monospace; z-index:200; gap:16px; }
+.status-bar .dot { width:6px; height:6px; border-radius:50%; background:var(--green); }
+
+@media (max-width:768px) { .sidebar{display:none;} .main-content{margin-left:0;} header{padding:40px 24px;} header h1{font-size:24px;} section{padding:32px 24px;} }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <h2>📄 SIPE</h2>
+      <div class="meta">CVPR 2022 · 中山大学</div>
+    </div>
+    <div class="sec-label">目录</div>
+    <a href="#meta">📋 元信息</a>
+    <a href="#motivation" class="sub">动机</a>
+    <a href="#method">⚙️ 核心方法</a>
+    <a href="#seed" class="sub">Structure-aware Seed Locating</a>
+    <a href="#prototype" class="sub">Background-aware Prototype Modeling</a>
+    <a href="#gsc" class="sub">GSC 自监督一致性</a>
+    <a href="#results">📊 实验结果</a>
+    <a href="#ablation" class="sub">消融实验</a>
+    <a href="#comparison">🔄 同类对比</a>
+    <a href="#noise">🎯 噪声实验视角</a>
+    <a href="#repro">🔧 复现要点</a>
+    <a href="../noise-test-design.html" class="back">← 返回噪声设计</a>
+    <a href="excel-knowledge-card.html" class="back">← ExCEL 知识卡片</a>
+  </nav>
+
+  <div class="main-content">
+    <header id="meta">
+      <div class="badge amber">CVPR 2022</div>
+      <h1>Self-supervised Image-specific Prototype Exploration<br>for Weakly Supervised Semantic Segmentation</h1>
+      <div class="tagline">SIPE — 为每张图像量身定制原型，捕获比 CAM 更完整的物体区域</div>
+      <div class="meta-row">
+        <span>📄 arXiv: <a href="https://arxiv.org/abs/2203.02909" style="color:var(--accent);">2203.02909</a></span>
+        <span>🏫 中山大学 (SYSU)</span>
+        <span>📅 2022-03-06</span>
+        <span>💻 <a href="https://github.com/chenqi1126/SIPE" style="color:var(--accent);">GitHub</a></span>
+        <span>🏷️ <span class="tag tag-no-clip">非 CLIP</span> <span class="tag tag-multi">多阶段</span></span>
+      </div>
+      <div class="meta-row">
+        <span><b>作者：</b>Qi Chen, Lingxiao Yang, Jianhuang Lai, Xiaohua Xie</span>
+      </div>
+    </header>
+
+    <section id="motivation">
+      <div class="max-width">
+        <h2><span class="num">01</span> 动机与核心思想</h2>
+        <h3>问题</h3>
+        <p>传统 CAM 使用 <b>类中心</b>（classifier weight）作为全局表示来激活每个像素。但 t-SNE 可视化的作者发现：类中心总是给离它近的像素（判别性区域，如猫的脸）高激活，而忽视离它远的像素（如猫的身体）。这种 <b>不平衡激活</b> 导致定位图不完整。</p>
+        <div class="info-box">
+          <div class="title">💡 核心洞察</div>
+          <p>对每张图像，用其特征自身的质心（pink star）激活，比用全局类中心（green star）能探索更完整的区域。这就是 Image-Specific CAM (IS-CAM) 的由来。</p>
+        </div>
+        <h3>SIPE 的两大组件</h3>
+        <ul>
+          <li><b>IPE (Image-specific Prototype Exploration)</b> — 两步流程：① structure-aware seed locating ② background-aware prototype modeling，为每张图像定制原型</li>
+          <li><b>GSC (General-Specific Consistency)</b> — 自监督一致性损失，拉近 CAM 和 IS-CAM 的距离，优化特征表示</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="method">
+      <div class="max-width">
+        <h2><span class="num">02</span> 核心方法</h2>
+
+        <h3>背景：CAM 公式</h3>
+        <p>$$M_k = \operatorname{ReLU}(\theta_k^T F_s), \quad \forall k \in K$$</p>
+        <p>背景激活图通过衰减系数 $\alpha=0.5$ 估计：$M_b = \alpha(1 - \max_{1\le k\le K} M_k)$</p>
+
+        <h3 id="seed">2.1 Structure-aware Seed Locating</h3>
+        <div class="info-box">
+          <div class="title">💡 核心思想</div>
+          <p>CAM 虽然在判别区域最强，但也在其他区域产生弱激活。利用像素间语义相关性构建「结构图」，与 CAM 进行 IoU 匹配确定类别。</p>
+        </div>
+        <p><b>Step 1 — 语义相关性构建：</b>对像素 i，用其特征向量 $f^i$ 与所有像素点计算语义相关性：</p>
+        <p>$$S^i(j) = \operatorname{ReLU}\left(\frac{f^i \cdot F_s(j)}{\|f^i\| \cdot \|F_s(j)\|}\right)$$</p>
+        <p>高相关像素构成像素 i 的「空间结构」。</p>
+        <p><b>Step 2 — 结构相似度评估：</b>计算像素 i 的结构图与 k 类 CAM 的 IoU：</p>
+        <p>$$C_k^i = \frac{\sum_j M_k(j) S^i(j)}{\sum_j [M_k(j) + S^i(j) - M_k(j)S^i(j)]}$$</p>
+        <p><b>Step 3 — 类别分配：</b>像素 i 归属于相似度最高的类别。以此得到所有像素的种子区域 $R$。</p>
+
+        <h3 id="prototype">2.2 Background-aware Prototype Modeling</h3>
+        <div class="info-box">
+          <div class="title">💡 核心思想</div>
+          <p>背景没有特定语义，不适合在语义特征空间建模。为此提取多尺度层次特征，分别建模前景和背景原型。</p>
+        </div>
+        <p><b>层次特征提取：</b>修改 backbone 架构，在 4 个 stage 后各加一个卷积层提取多尺度输出，上采样到相同尺寸后拼接：$F_h = \text{Concat}(F_1, F_2, F_3, F_4)$。</p>
+        <p><b>图像特定原型：</b>前景/背景原型定义为种子区域在层次特征空间中的质心：</p>
+        <p>$$P_k = \frac{\sum_i F_h(i) \cdot \mathbb{1}(R_k^i = 1)}{\sum_i \mathbb{1}(R_k^i = 1)}$$</p>
+        <p><b>IS-CAM 生成：</b>用图像特定原型 $P_k$ 替代类中心，计算与每个像素的相关性：</p>
+        <p>$$\tilde{M}_k(j) = \operatorname{ReLU}\left(\frac{F_h(j) \cdot P_k}{\|F_h(j)\| \cdot \|P_k\|}\right)$$</p>
+
+        <h3 id="gsc">2.3 GSC — General-Specific Consistency 损失</h3>
+        <p>自监督信号，最小化原始 CAM（由类中心激活）和 IS-CAM（由图像特定原型激活）之间的差异：</p>
+        <p>$$L_{\text{gsc}} = \frac{1}{K+1} \| M - \tilde{M} \|_1$$</p>
+        <p>总损失：$L_{\text{total}} = L_{\text{cls}} + L_{\text{gsc}}$</p>
+        <p>这种一致性将图像特定知识注入特征表示，IS-CAM 迫使原始 CAM 关注缺失的物体区域，隐式缩小了判别性像素和缺失像素之间的特征距离。</p>
+
+        <h3>完整 Pipeline</h3>
+        <div class="pipeline">
+          <span class="step">① 训练分类网络<br><small>生成 CAM + 特征</small></span>
+          <span class="arrow">→</span>
+          <span class="step">② Structure-aware Seed<br><small>语义相关 → IoU匹配</small></span>
+          <span class="arrow">→</span>
+          <span class="step">③ Prototype Modeling<br><small>层次特征 → 原型 → IS-CAM</small></span>
+          <span class="arrow">→</span>
+          <span class="step">④ GSC 自监督<br><small>CAM ⇄ IS-CAM 一致性</small></span>
+          <span class="arrow">→</span>
+          <span class="step">⑤ 分割训练<br><small>伪标签 → DeepLabV2</small></span>
+        </div>
+      </div>
+    </section>
+
+    <section id="results">
+      <div class="max-width">
+        <h2><span class="num">03</span> 实验结果</h2>
+
+        <h3>定位图质量 (Tab.1) — VOC train</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>方法</th><th>会议</th><th>Local. Maps</th><th>+denseCRF</th></tr></thead>
+            <tbody>
+              <tr><td>Baseline</td><td>-</td><td>50.1</td><td>54.3</td></tr>
+              <tr><td>AdvCAM</td><td>CVPR'21</td><td>55.6</td><td>62.1</td></tr>
+              <tr><td>CSE</td><td>ICCV'21</td><td>56.0</td><td>62.8</td></tr>
+              <tr><td>ECS</td><td>ICCV'21</td><td>56.6</td><td>58.6</td></tr>
+              <tr style="background:var(--accent-soft);"><td><b>SIPE (Ours)</b></td><td><b>CVPR'22</b></td><td><b class="hl">58.6</b></td><td><b class="hl">64.7</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>分割性能 (Tab.2) — VOC val / test</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>方法</th><th>监督</th><th>Backbone</th><th>Val</th><th>Test</th></tr></thead>
+            <tbody>
+              <tr><td>SEAM</td><td>I</td><td>R38</td><td>64.5</td><td>65.7</td></tr>
+              <tr><td>AdvCAM</td><td>I</td><td>R101</td><td>68.1</td><td>68.0</td></tr>
+              <tr><td>CSE</td><td>I</td><td>R38</td><td>68.4</td><td>68.2</td></tr>
+              <tr><td>EPS</td><td>I+S</td><td>R101</td><td>71.0</td><td>71.8</td></tr>
+              <tr style="background:var(--accent-soft);"><td><b>SIPE (R38)</b></td><td><b>I</b></td><td><b>R38</b></td><td><b>68.2</b></td><td><b>69.5</b></td></tr>
+              <tr style="background:var(--accent-soft);"><td><b>SIPE (R101)</b></td><td><b>I</b></td><td><b>R101</b></td><td><b class="hl">68.8</b></td><td><b class="hl">69.7</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:13px;color:var(--text-3);">I: image-level labels, S: saliency maps. 虚线以上仅用图像级标签。</p>
+
+        <h3>MS COCO 2014 val (Tab.3)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>方法</th><th>Backbone</th><th>Val mIoU</th></tr></thead>
+            <tbody>
+              <tr><td>SEAM</td><td>R38</td><td>31.9</td></tr>
+              <tr><td>CSE</td><td>R38</td><td>36.4</td></tr>
+              <tr style="background:var(--accent-soft);"><td><b>SIPE</b></td><td><b>R38</b></td><td><b class="hl">43.6</b></td></tr>
+              <tr><td>SIPE</td><td>R101</td><td>40.6</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>在 COCO 上 SIPE 以 R38 达 43.6%，比之前 SOTA CSE 高出 7.2%。有趣的是 R38 比 R101 更好（43.6% vs 40.6%），作者解释为 R38 更轻量在 COCO 上泛化更好。</p>
+
+        <h3 id="ablation">消融实验 (Tab.4)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>CAM</th><th>IPE</th><th>GSC</th><th>mIoU</th></tr></thead>
+            <tbody>
+              <tr><td>✓</td><td></td><td></td><td>50.1</td></tr>
+              <tr><td>✓</td><td>✓</td><td></td><td>53.2 (+2.1)</td></tr>
+              <tr><td>✓</td><td>✓</td><td>✓</td><td><b>58.6</b> (+5.4)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>IPE 提升 2.1%（原型比类中心好），GSC 提升 5.4%（自监督一致性极大改善定位图）。</p>
+      </div>
+    </section>
+
+    <section id="comparison">
+      <div class="max-width">
+        <h2><span class="num">04</span> 同类对比 & 噪声实验视角</h2>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>维度</th><th>SIPE</th><th>ExCEL</th><th>CLIP-ES</th><th>DuPL</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>范式</td><td>多阶段</td><td>单阶段</td><td>多阶段</td><td>单阶段</td></tr>
+              <tr><td>CLIP?</td><td>❌</td><td>✅</td><td>✅</td><td>❌</td></tr>
+              <tr><td>Backbone</td><td>ResNet</td><td>CLIP ViT-B</td><td>CLIP/RN101</td><td>ViT-B</td></tr>
+              <tr><td>VOC val</td><td>68.8</td><td>78.4</td><td>72.2</td><td>73.3</td></tr>
+              <tr><td>训练方式</td><td>端到端训练分类网络</td><td>冻结 CLIP + adapter</td><td>微调 CLIP + 擦除</td><td>端到端双学生</td></tr>
+              <tr><td>计算需求</td><td>2×A100, 5 epochs</td><td>1×RTX 3090, 90min</td><td>~420min</td><td>~508min</td></tr>
+              <tr><td>对噪声敏感度</td><td><b>高</b>（CAM 质量直接受分类网络影响）</td><td>低（冻结 backbone）</td><td>中</td><td>中（双学生设计有一定鲁棒性）</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box">
+          <div class="title">🎯 噪声实验启示</div>
+          <p>SIPE 是噪声实验矩阵中 <b>非 CLIP × 多阶段</b> 象限的代表。它的关键特点是：</p>
+          <ul>
+            <li><b>CAM 质量 bottleneck：</b>完全依赖训练好的分类网络，分类网络的质量直接影响 IS-CAM</li>
+            <li><b>自监督一致性是双刃剑：</b>GSC 拉近 CAM 和 IS-CAM，但如果初始 CAM 质量差（高噪声），一致性可能传播误差而非修正</li>
+            <li><b>CRF 增益大：</b>从 58.6% → 64.7%（+6.1%），说明 SIPE 的原始定位图边界不够好，依赖后处理</li>
+            <li><b>与 CLIP-based 方法的对比：</b>SIPE 代表的是前 CLIP 时代的 SOTA，在噪声鲁棒性上可能不如冻结 backbond 的 ExCEL</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="repro">
+      <div class="max-width">
+        <h2><span class="num">05</span> 复现要点</h2>
+        <div class="info-box">
+          <div class="title">⚙️ 关键配置</div>
+          <p><b>Backbone：</b>ImageNet 预训练 ResNet50/101/38，output stride=16</p>
+          <p><b>分类器：</b>替换全连接层为 20 类输出</p>
+          <p><b>优化器：</b>SGD，momentum=0.9，weight decay=1e-4</p>
+          <p><b>学习率：</b>backbone=0.1，新增层=1.0，poly scheduler (power=0.9)</p>
+          <p><b>训练：</b>5 epochs，batch size=16，2×Nvidia A100</p>
+          <p><b>数据增强：</b>随机翻转、随机缩放、随机裁剪</p>
+          <p><b>分割网络：</b>DeepLabV2 + IRN 伪标签精炼</p>
+          <p><b>背景衰减系数：</b>α=0.5</p>
+          <p><b>代码：</b><a href="https://github.com/chenqi1126/SIPE" style="color:var(--accent);">github.com/chenqi1126/SIPE</a></p>
+        </div>
+
+        <h3>可能踩的坑</h3>
+        <ul>
+          <li><b>训练 epoch 极少：</b>仅 5 epochs，收敛速度依赖 backbone 的预训练质量。换 backbone 可能需要调 epoch</li>
+          <li><b>高学习率：</b>新增层 lr=1.0 极高，换不同架构时需谨慎</li>
+          <li><b>伪标签生成：</b>不同于其他方法在训练集上搜索最佳 mIoU 阈值，SIPE 直接计算伪标签，但这个流程需要调试</li>
+          <li><b>层次特征融合：</b>4 个 stage 的卷积层和上采样实现细节在论文中描述较简略，需参考代码</li>
+          <li><b>Structure-aware seed locating 计算量：</b>对每个像素计算全图语义相关性 → O(n²) 复杂度，大图可能较慢</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer style="padding:24px 56px; border-top:1px solid var(--border);">
+      <p style="font-size:12px; color:var(--text-3);">知识卡片 · SIPE (CVPR 2022) · 生成于 2026-06-01 · 仅供学习参考</p>
+    </footer>
+  </div>
+</div>
+<div class="status-bar">
+  <span class="dot"></span>
+  <span>SIPE-knowledge-card</span>
+  <span>|</span>
+  <span>for noise experiment · paper 2/4</span>
+  <span>|</span>
+  <span>v1.0</span>
+</div>
+</body>
+</html>
