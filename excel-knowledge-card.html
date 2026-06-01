@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExCEL · 知识卡片 — CVPR 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+:root {
+  --bg: #0a0a0b;
+  --surface: #121214;
+  --surface-2: #18181b;
+  --surface-3: #1f1f23;
+  --border: #27272a;
+  --text: #fafafa;
+  --text-2: #a1a1aa;
+  --text-3: #71717a;
+  --accent: #818cf8;
+  --accent-soft: rgba(129, 140, 248, 0.12);
+  --green: #4ade80;
+  --amber: #fbbf24;
+  --rose: #fb7185;
+  --cyan: #22d3ee;
+  --violet: #a78bfa;
+  --sidebar-width: 240px;
+  --radius: 10px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+.layout { display: flex; min-height: 100vh; }
+
+/* ── Sidebar ── */
+.sidebar {
+  position: fixed; top: 0; left: 0;
+  width: var(--sidebar-width);
+  height: 100vh; overflow-y: auto;
+  background: var(--surface-2);
+  border-right: 1px solid var(--border);
+  padding: 28px 0; z-index: 100;
+}
+.sidebar-brand {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+.sidebar-brand h2 {
+  font-size: 14px; font-weight: 600;
+  color: var(--accent); line-height: 1.4;
+}
+.sidebar-brand .meta {
+  font-size: 11px; color: var(--text-3); margin-top: 4px;
+}
+.sidebar .sec-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--text-3);
+  padding: 12px 20px 4px;
+}
+.sidebar a {
+  display: block; padding: 6px 20px;
+  font-size: 13px; color: var(--text-2);
+  text-decoration: none; transition: all .15s;
+  border-left: 2px solid transparent;
+}
+.sidebar a:hover { color: var(--text); background: var(--surface-3); }
+.sidebar a.sub { padding-left: 32px; font-size: 12px; color: var(--text-3); }
+.sidebar a.back {
+  margin-top: 20px; font-size: 12px; color: var(--accent);
+  border-top: 1px solid var(--border); padding-top: 16px;
+}
+
+/* ── Main ── */
+.main-content {
+  margin-left: var(--sidebar-width);
+  flex: 1; min-width: 0;
+}
+header {
+  padding: 64px 56px 40px;
+  border-bottom: 1px solid var(--border);
+}
+header h1 {
+  font-size: 30px; font-weight: 600;
+  letter-spacing: -0.03em; line-height: 1.3;
+  margin-bottom: 12px;
+}
+header .meta-row {
+  display: flex; flex-wrap: wrap; gap: 16px 32px;
+  margin-top: 16px; font-size: 13px; color: var(--text-3);
+}
+header .meta-row span { display: flex; align-items: center; gap: 6px; }
+header .badge {
+  display: inline-block; font-size: 11px; font-weight: 600;
+  padding: 3px 10px; border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent);
+  border: 1px solid rgba(129,140,248,0.2);
+}
+header .badge.green { background: rgba(74,222,128,0.1); color: var(--green); border-color: rgba(74,222,128,0.2); }
+header .tagline {
+  margin-top: 16px; font-size: 15px; color: var(--text-2);
+  max-width: 700px; font-style: italic;
+}
+
+/* ── Section ── */
+section { padding: 48px 56px; }
+section:nth-child(even) { background: var(--surface); }
+section h2 {
+  font-size: 22px; font-weight: 600;
+  margin-bottom: 24px; letter-spacing: -0.02em;
+  display: flex; align-items: center; gap: 10px;
+}
+section h2 .num {
+  font-size: 13px; font-weight: 500;
+  color: var(--text-3); font-family: 'JetBrains Mono', monospace;
+}
+section h3 {
+  font-size: 16px; font-weight: 600;
+  margin: 24px 0 12px; color: var(--text);
+}
+section h4 {
+  font-size: 14px; font-weight: 500;
+  margin: 16px 0 8px; color: var(--text-2);
+}
+section p { margin-bottom: 14px; color: var(--text-2); }
+section ul, section ol { margin: 8px 0 16px 20px; color: var(--text-2); }
+section li { margin-bottom: 6px; }
+section hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; background: var(--surface-3);
+  padding: 2px 6px; border-radius: 4px;
+  color: var(--cyan);
+}
+.max-width { max-width: 880px; }
+
+/* ── Tables ── */
+.table-wrap { overflow-x: auto; margin: 16px 0; }
+table {
+  width: 100%; border-collapse: separate;
+  border-spacing: 0; font-size: 13px;
+}
+table thead th {
+  text-align: left; padding: 10px 12px;
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--text-3);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2); white-space: nowrap;
+}
+table tbody td {
+  padding: 10px 12px; border-bottom: 1px solid var(--border);
+  vertical-align: top; color: var(--text-2);
+}
+table tbody tr:hover td { background: var(--surface-3); }
+table .hl { color: var(--accent); font-weight: 600; }
+table .hl-green { color: var(--green); font-weight: 600; }
+table .num-cell { font-family: 'JetBrains Mono', monospace; text-align: right; }
+
+/* ── Tags ── */
+.tag {
+  display: inline-block; font-size: 10px; font-weight: 600;
+  padding: 2px 7px; border-radius: 4px; letter-spacing: 0.02em;
+}
+.tag-clip { background: var(--accent-soft); color: var(--accent); border: 1px solid rgba(129,140,248,0.2); }
+.tag-single { background: rgba(34,211,238,0.1); color: var(--cyan); border: 1px solid rgba(34,211,238,0.2); }
+.tag-efficiency { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+
+/* ── Info Box ── */
+.info-box {
+  background: var(--surface-3); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; margin: 16px 0;
+}
+.info-box .title { font-weight: 600; font-size: 13px; margin-bottom: 8px; color: var(--accent); }
+.info-box p { font-size: 13px; margin-bottom: 6px; color: var(--text-2); }
+
+/* ── Pipeline ── */
+.pipeline {
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  margin: 16px 0; padding: 16px; background: var(--surface-3);
+  border-radius: var(--radius); border: 1px solid var(--border);
+}
+.pipeline .step {
+  padding: 8px 14px; background: var(--surface-2);
+  border: 1px solid var(--border); border-radius: 6px;
+  font-size: 12px; font-weight: 500; color: var(--text-2);
+}
+.pipeline .arrow { color: var(--text-3); font-size: 16px; }
+
+/* ── References ── */
+.ref-list { list-style: none; padding: 0; }
+.ref-list li {
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+  font-size: 13px; color: var(--text-2);
+}
+.ref-list li:last-child { border-bottom: none; }
+.ref-list .ref-id { color: var(--accent); font-weight: 500; }
+
+/* ── Status Bar ── */
+.status-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: 28px; background: var(--surface-2);
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 16px;
+  font-size: 10px; color: var(--text-3); font-family: 'JetBrains Mono', monospace;
+  z-index: 200; gap: 16px;
+}
+.status-bar .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main-content { margin-left: 0; }
+  header { padding: 40px 24px; }
+  header h1 { font-size: 24px; }
+  section { padding: 32px 24px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <h2>📄 ExCEL</h2>
+      <div class="meta">CVPR 2025 · 复旦</div>
+    </div>
+    <div class="sec-label">目录</div>
+    <a href="#meta">📋 元信息</a>
+    <a href="#motivation" class="sub">动机</a>
+    <a href="#method">⚙️ 核心方法</a>
+    <a href="#tse" class="sub">TSE 文本增强</a>
+    <a href="#svc" class="sub">SVC 静态校准</a>
+    <a href="#lvc" class="sub">LVC 动态校准</a>
+    <a href="#pipeline" class="sub">Pipeline 流程</a>
+    <a href="#results">📊 实验结果</a>
+    <a href="#ablation" class="sub">消融实验</a>
+    <a href="#efficiency" class="sub">效率分析</a>
+    <a href="#analysis">🔬 深入分析</a>
+    <a href="#comparison">🔄 同类对比</a>
+    <a href="#repro">🔧 复现要点</a>
+    <a href="#refs">📚 参考文献</a>
+    <a href="../noise-test-design.html" class="back">← 返回噪声设计</a>
+  </nav>
+
+  <div class="main-content">
+    <header id="meta">
+      <div class="badge green">CVPR 2025</div>
+      <h1>Exploring CLIP's Dense Knowledge for <br>Weakly Supervised Semantic Segmentation</h1>
+      <div class="tagline">ExCEL — 通过 patch-text 对齐范式释放 CLIP 的密集知识潜力</div>
+      <div class="meta-row">
+        <span>📄 arXiv: <a href="https://arxiv.org/abs/2503.20826" style="color:var(--accent);">2503.20826</a></span>
+        <span>🏫 复旦大学</span>
+        <span>📅 2025-03-26</span>
+        <span>💻 <a href="https://github.com/zwyang6/ExCEL" style="color:var(--accent);">GitHub</a></span>
+        <span>🏷️ <span class="tag tag-clip">CLIP-based</span> <span class="tag tag-single">单阶段</span> <span class="tag tag-efficiency">高效</span></span>
+      </div>
+      <div class="meta-row">
+        <span><b>作者：</b>Zhiwei Yang, Yucong Meng, Kexue Fu, Feilong Tang, Shuo Wang*, Zhijian Song*</span>
+      </div>
+    </header>
+
+    <section id="motivation">
+      <div class="max-width">
+        <h2><span class="num">01</span> 动机与核心思想</h2>
+        <h3>问题</h3>
+        <p>现有 CLIP-based WSSS 方法（CLIP-ES、WeCLIP 等）主要聚焦于 <b>全局图像-文本对齐</b>（image-text alignment），即利用 CLIP 的图像级分类能力生成 GradCAM。但 CLIP 的 <b>密集知识</b>（dense knowledge），即补丁-文本对齐（patch-text alignment）能力，在 WSSS 中尚未被充分探索。</p>
+        <h3>两个关键挑战</h3>
+        <ul>
+          <li><b>文本语义稀疏性</b>：模板 "a photo of [CLASS]" 只指示物体存在，缺乏定位所需的细节知识</li>
+          <li><b>视觉特征细粒度不足</b>：CLIP 的 image-text 配对预训练使其偏向全局表示，q-k 自注意力过度平滑，丢失细粒度空间信息</li>
+        </ul>
+        <h3>ExCEL 的解法</h3>
+        <p>提出 <b>patch-text 对齐范式</b>：直接计算文本嵌入与图像 patch token 之间的余弦相似度生成 CAM，取代传统的分类网络 + GAP 流程。对齐的障碍通过两大模块解决：</p>
+        <ul>
+          <li><b>TSE</b> (Text Semantic Enrichment) — 用 LLM 构建知识库，通过隐式属性聚类增强文本语义</li>
+          <li><b>VC</b> (Visual Calibration) — 包括 SVC（静态，无训练）和 LVC（动态，轻量适配器），校准 CLIP 视觉特征</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="method">
+      <div class="max-width">
+        <h2><span class="num">02</span> 核心方法</h2>
+
+        <h3 id="tse">2.1 TSE — 文本语义增强</h3>
+        <div class="info-box">
+          <div class="title">💡 核心思想</div>
+          <p>用 GPT-4 为每个类生成 n=20 条详细描述 → CLIP 文本编码器编码 → K-means 聚类为隐式属性空间 → 对每个类检索 TOP-K 最相关属性 → 加权聚合到最终文本表示</p>
+        </div>
+        <p><b>知识库构建：</b>设计 GPT-4 prompt 格式 "List n descriptions with key properties to describe the [CLASS] in terms of appearance, color, shape, size, or material, etc."，n×C 条描述编码为知识库 $T = \{\Phi(e_i)\}_{i=1}^{n\times C}$。</p>
+        <p><b>隐式属性狩猎：</b>K-means 聚类得 B 个质心 $A = \text{Kmeans}(T, B) = \{a_i\}_{i=1}^B$，每个类 c 用全局模板嵌入 $t_c$ 检索 TOP-K 近邻属性：</p>
+        <p>$$A_c = \{a_j : j \in \operatorname{argtopk}_{j=1}^B t_c^T a_j\}$$</p>
+        <p>最终文本表示：$T_c = t_c + \lambda \sum_{j=1}^K \operatorname{softmax}(t_c^T a_j) a_j$</p>
+
+        <h3 id="svc">2.2 SVC — 静态视觉校准</h3>
+        <div class="info-box">
+          <div class="title">💡 核心思想</div>
+          <p>CLIP 的 q-k 自注意力过度平滑→用 Intra-correlation 替换，在中间层各空间 {q,k,v} 内部计算相关性</p>
+        </div>
+        <p>对第 l 层，SVC 注意力图：</p>
+        <p>$$S_{\text{attn}}^l = \sum_i w_i \cdot \operatorname{SA}(O_i, O_i), \quad O_i \in \{q, k, v\}$$</p>
+        <p>其中 l ∈ {12-N, ..., 12}, N=5 为中间层数。每条注意力映射计算三个空间内的自相关性，避免 q-k 的平滑效应。最终从最后一层输出校准特征 $P_s$，与 $T_c$ 通过余弦相似度生成静态 CAM。</p>
+        <p>$$\text{CAM} = \operatorname{Norm}(\cos(P, T))$$</p>
+
+        <h3 id="lvc">2.3 LVC — 可学习视觉校准</h3>
+        <div class="info-box">
+          <div class="title">💡 核心思想</div>
+          <p>轻量适配器学习动态 token 关系，在 SVC 上叠加分布偏移，不改变 CLIP 预训练权重</p>
+        </div>
+        <p><b>动态特征提取：</b>从 CLIP 1-12 层提取冻结特征 $F_l$，通过独立 MLP $\delta(\cdot)$ 和卷积融合：</p>
+        <p>$$F_d = \operatorname{Conv}(\operatorname{Concat}_{l=1}^{12} [\delta(F_l)])$$</p>
+        <p><b>动态关系矩阵：</b>$r = \alpha(\cos(F_d, F_d) - \beta \overline{\cos(F_d, F_d)})$，经 ReLU 激活得 $R$。</p>
+        <p><b>优化注意力：</b>$L_{\text{attn}}^l = S_{\text{attn}}^l + \operatorname{softmax}(R)$</p>
+        <p><b>多样性损失：</b>利用静态 CAM 的像素亲和度监督动态特征的 token 关系多样性：</p>
+        <p>$$L_{\text{div}} = \frac{1}{N^+} \sum_{u^+ \in \hat{R}^+} (1-u^+) + \frac{1}{N^-} \sum_{u^- \in \hat{R}^-} u^-$$</p>
+        <p>总损失：$L_{\text{ExCEL}} = L_{\text{seg}} + \gamma L_{\text{div}}, \gamma=0.1$</p>
+
+        <h3 id="pipeline">2.4 完整 Pipeline</h3>
+        <div class="pipeline">
+          <span class="step">① TSE<br><small>LLM 知识库 → 属性聚类 → 文本增强</small></span>
+          <span class="arrow">→</span>
+          <span class="step">② SVC<br><small>Intra-correlation → 静态 CAM</small></span>
+          <span class="arrow">→</span>
+          <span class="step">③ LVC<br><small>Adapter → 动态 CAM</small></span>
+          <span class="arrow">→</span>
+          <span class="step">④ 分割训练<br><small>动态伪标签 → Decoder</small></span>
+        </div>
+        <p>单阶段架构：直接以冻结 CLIP ViT-B 为 backbone，配合轻量 Transformer 分割头 [43]，无需重新训练分类网络。</p>
+      </div>
+    </section>
+
+    <section id="results">
+      <div class="max-width">
+        <h2><span class="num">03</span> 实验结果</h2>
+
+        <h3>语义分割性能 (Tab.1)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>方法</th><th>会议</th><th>范式</th><th>Backbone</th><th>VOC val</th><th>VOC test</th><th>COCO val</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>ToCo</td><td>CVPR'23</td><td>单阶段</td><td>ViT-B</td><td>71.1</td><td>72.2</td><td>42.3</td></tr>
+              <tr><td>CLIP-ES</td><td>CVPR'23</td><td>多阶段</td><td>RN101</td><td>72.2</td><td>72.8</td><td>45.4</td></tr>
+              <tr><td>DuPL</td><td>CVPR'24</td><td>单阶段</td><td>ViT-B</td><td>73.3</td><td>72.8</td><td>44.6</td></tr>
+              <tr><td>SeCo</td><td>CVPR'24</td><td>单阶段</td><td>ViT-B</td><td>74.0</td><td>73.8</td><td>46.7</td></tr>
+              <tr><td>WeCLIP</td><td>CVPR'24 ✨</td><td>单阶段</td><td>CLIP ViT-B*</td><td>76.4</td><td>77.2</td><td>47.1</td></tr>
+              <tr style="background:var(--accent-soft);"><td><b>ExCEL</b></td><td><b>CVPR'25</b></td><td><b>单阶段</b></td><td><b>CLIP ViT-B*</b></td><td><b class="hl">78.4</b></td><td><b class="hl">78.5</b></td><td><b class="hl">50.3</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>ExCEL 在多阶段方法中也保持优势，比最佳多阶段方法 PSDPM(74.9%) 高出 3.6%。在无 CRF 条件下仍达 77.2%/77.3%/49.3%。</p>
+
+        <h3>CAM 种子质量 (Tab.2)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>方法</th><th>范式</th><th>监督</th><th>VOC train mIoU</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>CLIP-ES</td><td>多阶段</td><td>I+L</td><td>70.8</td></tr>
+              <tr><td>ExCEL* (training-free)</td><td>单阶段</td><td>I+L</td><td><b class="hl">74.6</b></td></tr>
+              <tr><td>ToCo</td><td>单阶段</td><td>I</td><td>71.6</td></tr>
+              <tr><td>DuPL</td><td>单阶段</td><td>I</td><td>75.0</td></tr>
+              <tr><td>SeCo</td><td>单阶段</td><td>I</td><td>74.8</td></tr>
+              <tr><td>WeCLIP</td><td>单阶段</td><td>I+L</td><td>75.4</td></tr>
+              <tr style="background:var(--accent-soft);"><td><b>ExCEL</b></td><td><b>单阶段</b></td><td><b>I+L</b></td><td><b class="hl">78.0</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>与全监督对比 (Tab.6)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>方法</th><th>监督</th><th>VOC val</th><th>相对比例</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>DeepLabV2 (全监督)</td><td>F</td><td>82.3</td><td>—</td></tr>
+              <tr><td>WeCLIP-Full (全监督)</td><td>F</td><td>81.6</td><td>—</td></tr>
+              <tr><td>WeCLIP</td><td>I+L</td><td>76.4</td><td>93.6%</td></tr>
+              <tr style="background:var(--accent-soft);"><td><b>ExCEL</b></td><td><b>I+L</b></td><td><b>78.4</b></td><td><b>96.1%</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>ExCEL 达到全监督性能的 <b>96.1%</b>，远超 WeCLIP 的 93.6%。</p>
+
+        <h3 id="ablation">消融实验 (Tab.3)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>SVC</th><th>TSE</th><th>LVC</th><th>Precision</th><th>Recall</th><th>mIoU</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>—</td><td>—</td><td>—</td><td>18.8</td><td>21.3</td><td>12.1</td></tr>
+              <tr><td>✓</td><td>—</td><td>—</td><td>81.2</td><td>86.2</td><td>72.5</td></tr>
+              <tr><td>✓</td><td>✓</td><td>—</td><td>80.7</td><td>89.8</td><td>74.7</td></tr>
+              <tr><td>✓</td><td>—</td><td>✓</td><td>83.7</td><td>86.3</td><td>75.1</td></tr>
+              <tr style="background:var(--accent-soft);"><td>✓</td><td>✓</td><td>✓</td><td><b>85.0</b></td><td><b>88.4</b></td><td><b>77.2</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>关键发现：SVC 单独从 baseline 12.1% 提升到 72.5%（证明 q-k attention 确实是瓶颈）；TSE 主要提升 recall（+3.6%）；LVC 提升 precision（+3.0%）和整体 mIoU。</p>
+      </div>
+    </section>
+
+    <section id="efficiency">
+      <div class="max-width">
+        <h2><span class="num">04</span> 训练效率分析</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>方法</th><th>训练时间</th><th>GPU 显存</th><th>CAM mIoU</th><th>Seg mIoU</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>MCTformer+</td><td>1496 min</td><td>18.0 G</td><td>68.8</td><td>74.0</td></tr>
+              <tr><td>CLIP-ES</td><td>420 min</td><td>12.0 G</td><td>70.8</td><td>72.2</td></tr>
+              <tr><td>ToCo</td><td>506 min</td><td>17.9 G</td><td>71.6</td><td>71.1</td></tr>
+              <tr><td>WeCLIP</td><td>270 min</td><td>6.2 G</td><td>75.4</td><td>76.4</td></tr>
+              <tr><td>ExCEL (training-free)</td><td><b>0</b></td><td><b>2.9 G</b></td><td><b>74.6</b></td><td>—</td></tr>
+              <tr style="background:var(--accent-soft);"><td><b>ExCEL (full)</b></td><td><b>90 min</b></td><td><b>3.2 G</b></td><td><b>78.0</b></td><td><b>78.4</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>ExCEL 仅需 <b>MCTformer+ 的 6% 训练时间</b>、<b>WeCLIP 的 33.3% 训练时间</b>，显存仅 3.2 GB（一张 RTX 3090 足矣）。其 training-free 模式（ExCEL*）已能超越 CLIP-ES 的 CAM 质量（74.6% vs 70.8%）。</p>
+      </div>
+    </section>
+
+    <section id="analysis">
+      <div class="max-width">
+        <h2><span class="num">05</span> 深入分析</h2>
+
+        <h3>属性数量影响 (Tab.4)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>属性数 B</th><th>None</th><th>32</th><th>64</th><th>112</th><th>144</th><th>196</th></tr></thead>
+            <tbody><tr><td>mIoU</td><td>75.1</td><td>75.8</td><td>76.2</td><td><b>77.2</b></td><td>77.0</td><td>76.5</td></tr></tbody>
+          </table>
+        </div>
+        <p>直接拼接（None）75.1% → 聚类后 77.2%（B=112），验证了隐式属性的有效性。196 属性时下降（过聚类导致类间混淆）。</p>
+
+        <h3>视觉校准消融 (Tab.5)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>设置</th><th>Precision</th><th>Recall</th><th>mIoU</th></tr></thead>
+            <tbody>
+              <tr><td>CLIP q-k</td><td>18.0</td><td>21.8</td><td>11.2</td></tr>
+              <tr><td>MaskCLIP (用 v)</td><td>77.1</td><td>80.9</td><td>65.8</td></tr>
+              <tr><td>I.C. (单层)</td><td>79.1</td><td>84.7</td><td>69.7</td></tr>
+              <tr><td>SVC (多层 M.C.)</td><td>82.2</td><td>88.2</td><td>74.6</td></tr>
+              <tr style="background:var(--accent-soft);"><td><b>ExCEL (SVC+LVC)</b></td><td><b>86.6</b></td><td><b>87.9</b></td><td><b>78.0</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>属性响应分析 (Fig.5)</h3>
+        <p>可视化 5 个隐式属性在 {aeroplane} 和 {train} 上的响应：不同属性激活物体的不同部分（如机翼 vs 机身、火车头 vs 车厢），证明 TSE 的属性狩猎机制确实捕获了互补的视觉特征。</p>
+
+        <h3>注意力特征对比 (Fig.6)</h3>
+        <p>CLIP q-k → 过度平滑的注意力 → MaskCLIP v-v → 保留了多样性但仍模糊 → SVC → 清晰边界 → ExCEL → 语义分组明确的 token 关系。</p>
+      </div>
+    </section>
+
+    <section id="comparison">
+      <div class="max-width">
+        <h2><span class="num">06</span> 同类方法对比与噪声实验视角</h2>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>维度</th><th>ExCEL</th><th>WeCLIP</th><th>CLIP-ES</th><th>ToCo</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>范式</td><td>单阶段</td><td>单阶段</td><td>多阶段</td><td>单阶段</td></tr>
+              <tr><td>Backbone</td><td>冻结 CLIP ViT-B</td><td>冻结 CLIP ViT-B</td><td>CLIP ViT-B (微调)</td><td>ViT-B (从头训练)</td></tr>
+              <tr><td>CAM 方式</td><td>Patch-text 余弦相似度</td><td>Decoder 特征</td><td>擦除 + GradCAM</td><td>Token 对比</td></tr>
+              <tr><td>文本增强</td><td>LLM + 属性聚类</td><td>无</td><td>无</td><td>无</td></tr>
+              <tr><td>对噪声的潜在敏感性</td><td>低（冻结 backbone）</td><td>低（冻结 backbone）</td><td>中（微调 CLIP）</td><td>高（端到端训练）</td></tr>
+              <tr><td>VOC val mIoU</td><td><b>78.4</b></td><td>76.4</td><td>72.2</td><td>71.1</td></tr>
+              <tr><td>训练成本</td><td><b>最低</b></td><td>低</td><td>中</td><td>中</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box">
+          <div class="title">🎯 噪声实验启示</div>
+          <p>ExCEL 作为一个 <b>单阶段 + 冻结 CLIP</b> 的方法，对伪标签噪声的鲁棒性可能天然优于需要完整端到端训练的多阶段方法。其 SVC 的 Intra-correlation 避免了 q-k 注意力的平滑效应，LVC 的多样性损失显式抑制 token 同质化——这些机制可能使 ExCEL 在噪声环境下比其他方法更具优势。</p>
+          <p>需要注意的是：ExCEL 依赖 LLM 生成的属性，这部分引入的外部知识可能在高噪声场景下提供更鲁棒的语义先验，但也可能带来新模态的噪声源（如 LLM 描述不准确）。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="repro">
+      <div class="max-width">
+        <h2><span class="num">07</span> 复现要点</h2>
+        <div class="info-box">
+          <div class="title">⚙️ 关键配置</div>
+          <p><b>Backbone：</b>CLIP ViT-B（冻结，不训练）</p>
+          <p><b>优化器：</b>AdamW，lr=1e-4，weight decay=1e-2</p>
+          <p><b>训练迭代：</b>VOC 30,000 / COCO 100,000</p>
+          <p><b>属性数 B：</b>VOC 112 / COCO 224</p>
+          <p><b>SVC 层数 N：</b>5（最后 5 层 Transformer）</p>
+          <p><b>缩放因子：</b>α=3.0, β=1.0, γ=0.1</p>
+          <p><b>Decoder：</b>简单 Transformer head [43]</p>
+          <p><b>LLM：</b>GPT-4，每类 20 条描述</p>
+          <p><b>显存需求：</b>3.2 GB（一张 RTX 3090）</p>
+          <p><b>训练时间：</b>~90 分钟（VOC）</p>
+          <p><b>代码：</b><a href="https://github.com/zwyang6/ExCEL" style="color:var(--accent);">github.com/zwyang6/ExCEL</a></p>
+        </div>
+
+        <h3>可能踩的坑</h3>
+        <ul>
+          <li><b>LLM 依赖：</b>需要 GPT-4 API key 来生成类描述（或可用开源 LLM 替代？论文未讨论）</li>
+          <li><b>K-means 超参数 B：</b>B=112 是在 VOC 20 类上调优的，其他数据集需重新搜索</li>
+          <li><b>CLIP 版本：</b>论文用 ViT-B，换了其他 CLIP 变体是否需要调参未知</li>
+          <li><b>Training-free 模式强但有限：</b>SVC 无需训练即可达 74.6%，但 LVC 的训练只提升~3.4%，如果复现时发现 training-free 好但 LVC 加不上，可能是适配器超参问题</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="refs">
+      <div class="max-width">
+        <h2><span class="num">08</span> 参考文献</h2>
+        <p>ExCEL 引用 49 篇，以下为关键条目：</p>
+        <ul class="ref-list">
+          <li><span class="ref-id">[20]</span> Lin et al. "CLIP is Also an Efficient Segmenter." CVPR 2023. arXiv:2212.09506</li>
+          <li><span class="ref-id">[24]</span> Radford et al. "Learning Transferable Visual Models from Natural Language Supervision." ICML 2021. <b>CLIP</b></li>
+          <li><span class="ref-id">[29]</span> Ru et al. "Token Contrast for Weakly-Supervised Semantic Segmentation." CVPR 2023. <b>ToCo</b></li>
+          <li><span class="ref-id">[35]</span> Wu et al. "DuPL: Dual Student with Trustworthy Progressive Learning." CVPR 2024. <b>DuPL</b></li>
+          <li><span class="ref-id">[39]</span> Yang et al. "Separate and Conquer: Decoupling Co-occurrence via Decomposition and Representation." CVPR 2024. <b>SeCo</b></li>
+          <li><span class="ref-id">[43]</span> Zhang et al. "Frozen CLIP: A Strong Backbone for Weakly Supervised Semantic Segmentation." CVPR 2024. <b>WeCLIP</b></li>
+          <li><span class="ref-id">[47]</span> Zhou et al. "Extract Free Dense Labels from CLIP." ECCV 2022. <b>MaskCLIP</b></li>
+        </ul>
+      </div>
+    </section>
+
+    <footer style="padding: 24px 56px; border-top: 1px solid var(--border);">
+      <p style="font-size: 12px; color: var(--text-3);">知识卡片 · ExCEL (CVPR 2025) · 生成于 2026-06-01 · 仅供学习参考</p>
+    </footer>
+  </div>
+</div>
+
+<div class="status-bar">
+  <span class="dot"></span>
+  <span>ExCEL-knowledge-card</span>
+  <span>|</span>
+  <span>for noise experiment · paper 1/4</span>
+  <span>|</span>
+  <span>v1.0</span>
+</div>
+</body>
+</html>
