@@ -1,0 +1,140 @@
+/* ex-ppt — ExCEL paper presentation, dark academic */
+.tpl-excel-ppt{
+  --bg:#0d1117;--bg-soft:#161b22;--surface:#161b22;--surface-2:#1c2230;
+  --border:rgba(139,148,158,.22);--border-strong:rgba(139,148,158,.4);
+  --text-1:#e6edf3;--text-2:#8b949e;--text-3:#6e7681;
+  --accent:#7ee787;--accent-2:#79c0ff;--accent-3:#f0883e;
+  --grad:linear-gradient(120deg,#7ee787 0%,#79c0ff 60%,#d2a8ff 100%);
+  --radius:14px;--radius-lg:20px;
+  --shadow:0 20px 60px rgba(0,0,0,.5);
+  font-family:'Inter','Noto Sans SC',sans-serif;
+}
+.tpl-excel-ppt{background:var(--bg);color:var(--text-1)}
+.tpl-excel-ppt .slide{padding:72px 96px;background:var(--bg);color:var(--text-1)}
+.tpl-excel-ppt .slide::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(60% 50% at 90% 10%,rgba(121,192,255,.1),transparent 60%),
+  radial-gradient(50% 50% at 10% 90%,rgba(126,231,135,.06),transparent 60%);
+  pointer-events:none;z-index:0}
+.tpl-excel-ppt .slide>*{position:relative;z-index:1}
+.tpl-excel-ppt .h1{font-size:68px;line-height:1.05;font-weight:800;letter-spacing:-.03em;color:#fff}
+.tpl-excel-ppt .h2{font-size:48px;font-weight:700;letter-spacing:-.025em;color:#fff}
+.tpl-excel-ppt h3,.tpl-excel-ppt h4{color:#fff}
+.tpl-excel-ppt .kicker{color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;text-transform:none;letter-spacing:.02em}
+.tpl-excel-ppt .kicker::before{content:"> "}
+.tpl-excel-ppt .mono{font-family:'JetBrains Mono','IBM Plex Mono',monospace}
+.tpl-excel-ppt .tc{text-align:center}
+.tpl-excel-ppt .dim{color:var(--text-2);font-size:14px;line-height:1.6}
+.tpl-excel-ppt .hl{color:var(--accent);font-weight:600}
+.tpl-excel-ppt .hl2{color:var(--accent-2);font-weight:600}
+.tpl-excel-ppt .mt-s{margin-top:12px}
+.tpl-excel-ppt .mt-m{margin-top:24px}
+.tpl-excel-ppt .mt-l{margin-top:36px}
+.tpl-excel-ppt .mb-s{margin-bottom:12px}
+
+/* Cards */
+.tpl-excel-ppt .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:none}
+.tpl-excel-ppt .card h4{margin-bottom:8px;font-size:15px;font-weight:600}
+.tpl-excel-ppt .card-accent{border-top:3px solid var(--accent)}
+.tpl-excel-ppt .card-warn{border-top:3px solid var(--accent-3)}
+
+/* Grid */
+.tpl-excel-ppt .grid{display:grid}
+.tpl-excel-ppt .g2{grid-template-columns:1fr 1fr;gap:28px}
+.tpl-excel-ppt .g3{grid-template-columns:1fr 1fr 1fr;gap:20px}
+.tpl-excel-ppt .stack{display:flex;flex-direction:column}
+.tpl-excel-ppt .row{display:flex;flex-wrap:wrap;gap:12px}
+
+/* Tags */
+.tpl-excel-ppt .tag{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2)}
+.tpl-excel-ppt .tag-full{display:flex;padding:10px 14px;font-family:'Inter','Noto Sans SC',sans-serif;font-size:13px;border-radius:8px;line-height:1.5;width:100%}
+.tpl-excel-ppt .tag-clip{background:rgba(121,192,255,.12);color:var(--accent-2);border-color:rgba(121,192,255,.3)}
+.tpl-excel-ppt .tag-single{background:rgba(126,231,135,.12);color:var(--accent);border-color:rgba(126,231,135,.3)}
+.tpl-excel-ppt .tag-eff{background:rgba(240,136,62,.12);color:var(--accent-3);border-color:rgba(240,136,62,.3)}
+.tpl-excel-ppt .tag-cvpr{background:rgba(210,168,255,.12);color:#d2a8ff;border-color:rgba(210,168,255,.3)}
+
+/* Pipeline */
+.tpl-excel-ppt .pipeline{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center;padding:24px;background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border)}
+.tpl-excel-ppt .pipe-step{text-align:center;padding:12px 20px;background:var(--surface-2);border-radius:var(--radius);border:1px solid var(--border);min-width:120px}
+.tpl-excel-ppt .pipe-num{font-size:22px;font-weight:700;color:var(--accent)}
+.tpl-excel-ppt .pipe-label{font-size:14px;font-weight:600;color:#fff;margin:4px 0}
+.tpl-excel-ppt .pipe-desc{font-size:11px;color:var(--text-3);line-height:1.4}
+.tpl-excel-ppt .pipe-arr{font-size:24px;color:var(--text-3);font-weight:300}
+
+/* Speaker / venue */
+.tpl-excel-ppt .speaker{display:flex;align-items:center;gap:14px;margin-top:28px}
+.tpl-excel-ppt .speaker .av{width:48px;height:48px;border-radius:50%;background:var(--grad)}
+.tpl-excel-ppt .speaker b{display:block;color:#fff;font-size:16px}
+.tpl-excel-ppt .speaker span{color:var(--text-3);font-size:12px}
+.tpl-excel-ppt .venu-row{display:flex;gap:8px;margin-top:24px}
+.tpl-excel-ppt .lede{color:var(--text-2);font-size:18px;line-height:1.5}
+
+/* Terminal */
+.tpl-excel-ppt .terminal{background:#010409;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6);font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7}
+.tpl-excel-ppt .terminal .bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#161b22;border-bottom:1px solid var(--border);font-size:12px;color:var(--text-3);font-family:'Inter',sans-serif}
+.tpl-excel-ppt .terminal .dot{width:10px;height:10px;border-radius:50%;background:#ff5f56}
+.tpl-excel-ppt .terminal .dot:nth-child(2){background:#ffbd2e}
+.tpl-excel-ppt .terminal .dot:nth-child(3){background:#27c93f}
+.tpl-excel-ppt .terminal pre{margin:0;padding:20px 24px;color:#e6edf3;overflow:auto;max-height:400px}
+.tpl-excel-ppt .kw{color:#ff7b72}
+.tpl-excel-ppt .fn{color:#d2a8ff}
+.tpl-excel-ppt .str{color:#a5d6ff}
+.tpl-excel-ppt .cmt{color:#8b949e;font-style:italic}
+.tpl-excel-ppt .num{color:var(--accent-2)}
+
+/* Tables */
+.tpl-excel-ppt .table-scroll{overflow-x:auto;width:100%}
+.tpl-excel-ppt .result-tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
+.tpl-excel-ppt .result-tbl thead th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3);border-bottom:1px solid var(--border-strong);background:var(--surface-2)}
+.tpl-excel-ppt .result-tbl tbody td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text-2);vertical-align:middle}
+.tpl-excel-ppt .result-tbl tr:hover td{background:var(--surface-2)}
+.tpl-excel-ppt .result-tbl .row-hl td{background:rgba(126,231,135,.08)}
+
+.tpl-excel-ppt .ablation-tbl{border-collapse:separate;border-spacing:0;font-size:13px}
+.tpl-excel-ppt .ablation-tbl th,.tpl-excel-ppt .ablation-tbl td{padding:8px 12px;border-bottom:1px solid var(--border);text-align:center}
+.tpl-excel-ppt .ablation-tbl th{color:var(--text-3);font-size:11px;font-weight:600;text-transform:uppercase;background:var(--surface-2)}
+.tpl-excel-ppt .ablation-tbl .row-hl td{background:rgba(126,231,135,.08)}
+
+/* Stat cards */
+.tpl-excel-ppt .stat-card{text-align:center;padding:20px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border)}
+.tpl-excel-ppt .stat-num{font-size:36px;font-weight:800;color:var(--accent);font-family:'JetBrains Mono',monospace;letter-spacing:-.03em}
+.tpl-excel-ppt .stat-label{font-size:13px;color:#fff;font-weight:600;margin:4px 0}
+.tpl-excel-ppt .stat-desc{font-size:11px;color:var(--text-3)}
+
+/* Efficiency bars */
+.tpl-excel-ppt .eff-bar{display:flex;align-items:center;gap:12px}
+.tpl-excel-ppt .eff-label{flex:none;width:100px;font-size:12px;font-weight:600;color:var(--text-2);text-align:right}
+.tpl-excel-ppt .eff-track{flex:1;height:28px;background:var(--surface-2);border-radius:14px;overflow:hidden;position:relative}
+.tpl-excel-ppt .eff-fill{display:flex;align-items:center;justify-content:flex-end;height:100%;background:var(--accent-2);border-radius:14px;font-size:10px;color:#fff;font-weight:600;padding-right:8px;min-width:fit-content;white-space:nowrap;opacity:.85}
+
+/* Agenda */
+.tpl-excel-ppt .agenda-row{display:flex;align-items:baseline;gap:20px;padding:16px 0;border-bottom:1px dashed var(--border)}
+.tpl-excel-ppt .agenda-row .num{color:var(--accent);flex:none;width:40px;font-family:'JetBrains Mono',monospace}
+.tpl-excel-ppt .agenda-row .t{color:#fff;font-size:22px;flex:1;font-weight:600}
+.tpl-excel-ppt .agenda-row .d{color:var(--text-3);font-size:12px;font-family:'JetBrains Mono',monospace}
+
+/* Term card */
+.tpl-excel-ppt .term-card{background:#010409;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.tpl-excel-ppt .term-card .bar{padding:10px 14px;background:#161b22;font-size:12px;font-weight:600;color:var(--accent-3);border-bottom:1px solid var(--border)}
+.tpl-excel-ppt .term-card .body{padding:16px 20px;font-size:14px;line-height:1.6}
+.tpl-excel-ppt .term-card .body b{color:#fff}
+
+/* Info box */
+.tpl-excel-ppt .info-box{background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--radius);padding:16px 20px}
+.tpl-excel-ppt .info-box p{font-size:13px;color:var(--text-2);line-height:1.6}
+
+/* Ablation card */
+.tpl-excel-ppt .ablation-card{background:var(--surface);border-radius:var(--radius-lg);padding:24px;border:1px solid var(--border)}
+
+/* Result card */
+.tpl-excel-ppt .result-card{background:var(--surface);border-radius:var(--radius-lg);padding:20px;border:1px solid var(--border)}
+
+/* Ref item */
+.tpl-excel-ppt .ref-item{padding:8px 0;font-size:13px;color:var(--text-2);border-bottom:1px solid var(--border)}
+.tpl-excel-ppt .ref-item .ref-id{color:var(--accent);font-weight:600;margin-right:8px}
+.tpl-excel-ppt .ref-item b{color:#fff}
+
+/* Center slide */
+.tpl-excel-ppt .slide.center{align-items:center;justify-content:center;display:flex}
+
+/* Deck footer */
+.tpl-excel-ppt .deck-footer{position:absolute;bottom:24px;left:96px;right:96px;display:flex;justify-content:space-between;font-size:12px;color:var(--text-3);z-index:1;pointer-events:none}
