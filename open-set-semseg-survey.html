@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开放集语义分割 · 研究现状调研</title>
+<style>
+:root {
+  --bg: #0f0f1a;
+  --card: #16162a;
+  --border: #2a2a45;
+  --accent: #7c6cf0;
+  --accent2: #5bc0be;
+  --accent3: #f0a86c;
+  --text: #d0d0e0;
+  --text-dim: #8888aa;
+  --tag-eccv: #f0a86c;
+  --tag-cvpr: #7c6cf0;
+  --tag-iclr: #5bc0be;
+  --tag-other: #8888aa;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, 'PingFang SC', 'Noto Sans SC', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  padding: 2rem;
+}
+.container { max-width: 960px; margin: 0 auto; }
+h1 { font-size: 1.8rem; margin-bottom: .3rem; color: #fff; }
+h1 span { color: var(--accent); }
+.subtitle { color: var(--text-dim); margin-bottom: 2rem; font-size: .9rem; }
+h2 {
+  font-size: 1.3rem;
+  color: var(--accent2);
+  margin: 2.5rem 0 1rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+h3 { color: var(--accent3); font-size: 1.05rem; margin: 1.5rem 0 .6rem; }
+p { margin-bottom: .8rem; color: var(--text); }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.tag {
+  display: inline-block;
+  font-size: .7rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-right: 4px;
+  font-weight: 600;
+}
+.tag-cvpr { background: var(--tag-cvpr); color: #fff; }
+.tag-iclr { background: var(--tag-iclr); color: #000; }
+.tag-eccv { background: var(--tag-eccv); color: #000; }
+.tag-other { background: var(--tag-other); color: #fff; }
+.paper-title { font-weight: 600; color: #fff; }
+.paper-authors { color: var(--text-dim); font-size: .85rem; }
+.paper-desc { font-size: .9rem; margin-top: .4rem; }
+.matrix {
+  display: grid;
+  grid-template-columns: 120px 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+.matrix > div { padding: .8rem 1rem; background: var(--card); }
+.matrix .header { font-weight: 600; color: var(--accent2); text-align: center; }
+.matrix .row-label { color: var(--accent3); font-weight: 600; text-align: center; }
+.matrix .cell { font-size: .85rem; }
+ul { margin: .5rem 0 .5rem 1.2rem; }
+li { margin-bottom: .3rem; }
+a { color: var(--accent2); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.lineage { position: relative; padding-left: 1.5rem; margin: .5rem 0; }
+.lineage::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.lineage-item { position: relative; padding: .3rem 0 .3rem .8rem; }
+.lineage-item::before {
+  content: '';
+  position: absolute;
+  left: -1.2rem;
+  top: .8rem;
+  width: .8rem;
+  height: 2px;
+  background: var(--accent);
+}
+.arrow { color: var(--accent2); margin: 0 .4rem; }
+.footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); color: var(--text-dim); font-size: .8rem; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>开放集语义分割 · <span>研究现状调研</span></h1>
+<p class="subtitle">调研日期：2026-07-02 · 开放集语义分割（Open-Set Semantic Segmentation）旨在分割图像中属于已知类的像素，同时检测和区分未知/新类别的像素。</p>
+
+<h2>一、问题定义与分类体系</h2>
+
+<p>开放集语义分割是语义分割从封闭集走向开放世界的自然延伸。根据任务设定，可分为以下几个子方向：</p>
+
+<div class="matrix">
+  <div class="header">方向</div>          <div class="header">核心目标</div>          <div class="header">代表性工作</div>
+  <div class="row-label">OSSS</div>       <div class="cell">分割已知类 + 检测未知类像素</div> <div class="cell">BUS (CVPR'24), Hyp2Former</div>
+  <div class="row-label">OVSS</div>       <div class="cell">基于任意文本描述分割新类别</div>    <div class="cell">CLIP-ES, WeCLIP, dinov3.seg</div>
+  <div class="row-label">Open-World</div>  <div class="cell">无限类别空间中分割+识别</div>    <div class="cell">WOW-Seg (ICLR'26)</div>
+  <div class="row-label">OS Panoptic</div><div class="cell">语义+实例：识别未知物体实例</div> <div class="cell">Hyp2Former, OVI-MAP</div>
+</div>
+
+<h2>二、时间线：关键里程碑</h2>
+
+<div class="card">
+<div class="lineage">
+  <div class="lineage-item"><span class="tag tag-other">2022</span> <b>MCTformer / CLIMS</b> 推动 CAM 质量提升，间接影响 OOD 检测能力</div>
+  <div class="lineage-item"><span class="tag tag-cvpr">2023</span> <b>CLIP-ES</b> 首次系统性地将 CLIP 用于 WSSS，<span class="arrow">→</span> 启发了 OVSS 方向</div>
+  <div class="lineage-item"><span class="tag tag-cvpr">2024</span> <b>BUS</b> 首次正式定义 OSDA-SS（开放集域适应语义分割），提出 Boundary-Unkown Shape 感知对比学习</div>
+  <div class="lineage-item"><span class="tag tag-cvpr">2025</span> <b>ExCEL</b> / <b>DiCLIP</b> WSSS 性能持续提升，OVSS 走向成熟</div>
+  <div class="lineage-item"><span class="tag tag-iclr">2026</span> <b>WOW-Seg</b> Word-free open world segmentation，Mask2Token 视觉提示模块</div>
+  <div class="lineage-item"><span class="tag tag-other">2026</span> <b>Hyp2Former</b> 双曲空间层次嵌入，首次将层次语义用于 OS Panoptic Segmentation</div>
+  <div class="lineage-item"><span class="tag tag-other">2026</span> <b>dinov3.seg</b> 用 DINOv3 做 OVSS，滑动窗口高分辨率推理</div>
+  <div class="lineage-item"><span class="tag tag-other">2026</span> <b>MM-OVSeg</b> 首个多模态（光学+SAR）开放词汇遥感分割</div>
+</div>
+</div>
+
+<h2>三、主要技术路线</h2>
+
+<h3>路线 A：基于 CLIP 的开放词汇分割（OVSS）</h3>
+<div class="card">
+<p>这是当前最活跃的方向。核心思想：利用 CLIP 的图文对齐能力，将分割问题转化为像素-文本相似度计算。</p>
+<ul>
+  <li><b>dinov3.seg</b> (2026) — 将 DINOv3 扩展为 OVSS 框架，联合 [CLS] token 全局语义和 patch-level 局部特征，双阶段精炼（早期+晚期），滑动窗口高分辨率推理</li>
+  <li><b>SCN</b> (ICSP 2026) — Semantic Calibration Network，通过 Class Disambiguation + Logits Fusion 解决类间语义歧义</li>
+  <li><b>MM-OVSeg</b> (CVPR 2026) — 多模态光学-SAR 融合，跨模态统一 + 双编码器融合，解决云雾遮挡下的 OVSS</li>
+  <li><b>EDA-PSeg</b> (CVPR 2026) — 全景分割的开放集域适应，Euler-Margin Attention + Graph Matching Adapter</li>
+</ul>
+</div>
+
+<h3>路线 B：未知类检测（Open-Set / Open-World）</h3>
+<div class="card">
+<p>更接近传统开放集识别的设定：模型需在推理时识别出不属于训练集类别的像素/物体。</p>
+<ul>
+  <li><b>BUS</b> (CVPR 2024) — 首个正式定义 OSDA-SS 的工作。提出 dilation-erosion contrastive loss 来判断已知/未知边界；OpenReMix 域混合增强</li>
+  <li><b>Hyp2Former</b> (2026) — 双曲空间的层次语义嵌入。未知物体自动归类到高层抽象（如"动物"而非"猫"），不解未知类别但保持语义接近</li>
+  <li><b>WOW-Seg</b> (ICLR 2026) — Word-free 开放世界分割。Mask2Token 将图像掩码转为视觉 token 对齐 VLLM 空间，Cascade Attention Mask 解耦实例。RR-7K 基准：7,662 类区域识别</li>
+</ul>
+</div>
+
+<h3>路线 C：开集域适应分割（OSDA-SS）</h3>
+<div class="card">
+<p>目标域中出现源域没有的新类别，模型需适应域迁移同时检测未知类。</p>
+<ul>
+  <li><b>BUS</b> (CVPR 2024) — 仍然是这个方向的 SOTA</li>
+  <li><b>EDA-PSeg</b> (CVPR 2026) — 从透视图训练、360°全景图测试，几何+语义双重域迁移</li>
+  <li><b>ROSETTA</b> (2026) — 开放集测试时自适应，通过角损失 + 特征范数损失抑制 csOOD logits，在 Cityscapes 验证分割有效性</li>
+</ul>
+</div>
+
+<h2>四、关键论文速览</h2>
+
+<div class="card">
+  <div class="paper-title">WOW-Seg: A Word-free Open World Segmentation Model</div>
+  <div class="paper-authors">Danyang Li, Tianhao Wu, Bin Li et al. · ICLR 2026</div>
+  <div class="paper-desc">
+    🏆 Open-world segmentation：Mask2Token 视觉提示 + Cascade Attention Mask。在 LVIS 上语义相似度 89.7 / sIoU 82.4，超越 SOTA 同时参数量仅为 1/8。释放 RR-7K 基准（7,662 类）。
+  </div>
+</div>
+
+<div class="card">
+  <div class="paper-title">Hyp2Former: Hierarchy-Aware Hyperbolic Embeddings for Open-Set Panoptic Segmentation</div>
+  <div class="paper-authors">Yao Lu, Rohit Mohan, Florian Drews et al. · 2026</div>
+  <div class="paper-desc">
+    首次在双曲空间中编码已知类别的层次语义关系。未知物体自动落入高层概念附近（如"动物"）。COCO / Cityscapes / Lost&Found 上达到 OPS SOTA。
+  </div>
+</div>
+
+<div class="card">
+  <div class="paper-title">BUS: Boundary and Unknown Shape-Aware Open-Set Domain Adaptation</div>
+  <div class="paper-authors">Seun-An Choe et al. · CVPR 2024</div>
+  <div class="paper-desc">
+    📌 首个正式定义 OSDA-SS 的工作。dilation-erosion contrastive loss 精确分离已知-未知边界，OpenReMix 域混合增强。是这个方向的基线里程碑。
+  </div>
+</div>
+
+<div class="card">
+  <div class="paper-title">dinov3.seg: Open-Vocabulary Semantic Segmentation with DINOv3</div>
+  <div class="paper-authors">Saikat Dutta, Biplab Banerjee, Hamid Rezatofighi · 2026</div>
+  <div class="paper-desc">
+    将 DINOv3 扩展到 OVSS。全局 [CLS] token + 局部 patch 特征双路径，早期+晚期双重精炼，滑动窗口高分辨率推理。5 个 OVSS 基准上超越 SOTA。
+  </div>
+</div>
+
+<div class="card">
+  <div class="paper-title">MLP Splatting: Object-Centric Neural Fields + Open-Set Instant Segmentation</div>
+  <div class="paper-authors">Shinjeong Kim et al. · 2026</div>
+  <div class="paper-desc">
+    MLP 原语表示的神经场，支持开放词汇场景交互和开放集即时分割。内存 1/15×，渲染 3× 加速。
+  </div>
+</div>
+
+<div class="card">
+  <div class="paper-title">MM-OVSeg: Multimodal Optical-SAR for Open-Vocabulary Segmentation</div>
+  <div class="paper-authors">Yimin Wei et al. · CVPR 2026</div>
+  <div class="paper-desc">
+    首个多模态（光学+SAR）开放词汇遥感分割。跨模态统一 + 双编码器融合，解决云雾遮挡下的 OVSS。
+  </div>
+</div>
+
+<div class="card">
+  <div class="paper-title">EDA-PSeg: Extrapolative Domain Adaptive Panoramic Segmentation</div>
+  <div class="paper-authors">Yuanfan Zheng et al. · CVPR 2026</div>
+  <div class="paper-desc">
+    Open-set 域适应的全景分割。从透视图学、全景图测试。Euler-Margin Attention + Graph Matching Adapter。
+  </div>
+</div>
+
+<div class="card">
+  <div class="paper-title">ROSETTA: Robust Open-Set Test-Time Adaptation</div>
+  <div class="paper-authors">Wenjie Zhao et al. · 2026</div>
+  <div class="paper-desc">
+    开放集测试时自适应。角损失 + 特征范数损失抑制 OOD logits，在 Cityscapes 分割任务验证有效。
+  </div>
+</div>
+
+<h2>五、核心挑战与开放问题</h2>
+
+<div class="card">
+<ul>
+  <li><b>未知类的定义不一致</b> — 不同工作对"未知"的界定差异大（像素级未知 vs. 实例级未知 vs. 未见类别 vs. OOD 样本），缺乏统一 benchmark</li>
+  <li><b>已知-未知权衡</b> — 提高未知类召回往往以损失已知类精度为代价（ROSETTA 工作直接研究这个 tradeoff）</li>
+  <li><b>层次化语义理解不足</b> — Hyp2Former 的双曲空间是一个方向，但大多数方法仍将类别视为扁平集合</li>
+  <li><b>现实场景远未解决</b> — 自动驾驶的 open-set 检测、遥感开放集分割等实际应用尚缺少成熟的评测标准</li>
+  <li><b>与 WSSS 的关系</b> — WSSS 本身就是处理标注噪声（一种特殊的"未知"），开放集分割中的不确定建模方法可能对 WSSS 噪声实验有参考价值</li>
+</ul>
+</div>
+
+<h2>六、相关基准数据集</h2>
+
+<div class="card">
+<table style="width:100%; border-collapse:collapse; font-size:.85rem;">
+<tr style="border-bottom:1px solid var(--border);"><th style="padding:6px; text-align:left; color:var(--accent2);">数据集</th><th style="padding:6px; text-align:left; color:var(--accent2);">用途</th><th style="padding:6px; text-align:left; color:var(--accent2);">类别数</th></tr>
+<tr><td style="padding:6px;">Pascal VOC 2012</td><td style="padding:6px;">语义分割标准基准</td><td style="padding:6px;">20+1（背景）</td></tr>
+<tr><td style="padding:6px;">MS COCO</td><td style="padding:6px;">大规模语义/全景分割</td><td style="padding:6px;">80（语义）133（全景）</td></tr>
+<tr><td style="padding:6px;">Cityscapes</td><td style="padding:6px;">自动驾驶场景</td><td style="padding:6px;">19</td></tr>
+<tr><td style="padding:6px;">Lost&amp;Found</td><td style="padding:6px;">开放集路径障碍物检测</td><td style="padding:6px;">未知物体</td></tr>
+<tr><td style="padding:6px;">RR-7K (WOW-Seg)</td><td style="padding:6px;">开放世界区域识别</td><td style="padding:6px;"><b>7,662</b></td></tr>
+<tr><td style="padding:6px;">LVIS</td><td style="padding:6px;">开放词汇分割</td><td style="padding:6px;">1,203</td></tr>
+</table>
+</div>
+
+<div class="footer">
+调研由米娅 (Hermes Agent) 执行 · 基于 arXiv / Semantic Scholar 检索 · 涵盖至 2026 年 7 月
+</div>
+
+</div>
+</body>
+</html>
